@@ -18,6 +18,9 @@ public class ServerNotifyClientTranslator implements ModernToBetaHandler<ServerN
             case STOP_RAIN:
                 state = 2;
                 break;
+            case INVALID_BED:
+                state = 0;
+                break;
             default:
                 state = -1;
                 break;

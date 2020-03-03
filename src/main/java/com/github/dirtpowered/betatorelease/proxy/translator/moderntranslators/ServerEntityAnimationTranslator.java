@@ -18,6 +18,9 @@ public class ServerEntityAnimationTranslator implements ModernToBetaHandler<Serv
             case DAMAGE:
                 status = 2;
                 break;
+            case LEAVE_BED:
+                status = 3;
+                break;
             default:
                 status = 0; /* no animation */
                 break;

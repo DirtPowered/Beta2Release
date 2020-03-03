@@ -79,6 +79,7 @@ import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.S
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerPlayerHealthTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerPlayerListEntryTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerPlayerPositionRotationTranslator;
+import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerPlayerUseBedTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerRespawnTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSetSlotTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnGlobalEntityTranslator;
@@ -115,6 +116,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerVehic
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerChangeHeldItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerUseBedPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnGlobalEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
@@ -245,6 +247,7 @@ public class Server implements Runnable {
         translatorRegistry.registerTranslator(ServerEntitySetPassengersPacket.class, new ServerEntitySetPassengersTranslator());
         translatorRegistry.registerTranslator(ServerPlayBuiltinSoundPacket.class, new ServerPlayBuiltinSoundTranslator());
         translatorRegistry.registerTranslator(ServerVehicleMovePacket.class, new ServerVehicleMoveTranslator());
+        translatorRegistry.registerTranslator(ServerPlayerUseBedPacket.class, new ServerPlayerUseBedTranslator());
 
         //global tick loop
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Server Thread"));
