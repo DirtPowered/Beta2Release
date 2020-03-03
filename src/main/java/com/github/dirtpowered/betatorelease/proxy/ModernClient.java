@@ -67,12 +67,16 @@ public class ModernClient implements Tickable {
             @Override
             public void connected(ConnectedEvent event) {
                 Logger.info("[modern] connected to remote server");
+                server.getOnlinePlayers().add(betaSession.getBetaPlayer());
+                Logger.info("[main] online: {}", betaSession.getServer().getOnlinePlayers().size());
             }
 
             @Override
             public void disconnected(DisconnectedEvent event) {
                 Logger.info("[modern] disconnected from remote server because: {}", event.getReason());
                 disconnect("§cdisconnected");
+                server.getOnlinePlayers().remove(betaSession.getBetaPlayer());
+                Logger.info("[main] online: {}", betaSession.getServer().getOnlinePlayers().size());
             }
         });
         client.getSession().connect();

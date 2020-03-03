@@ -8,9 +8,20 @@ public class BetaPlayer {
     private Session session;
     private Location location;
     private boolean onGround;
+    private boolean inVehicle;
+    private int vehicleEntityId;
 
     BetaPlayer(Session session) {
         this.session = session;
+    }
+
+    public boolean isInVehicle() {
+        return inVehicle;
+    }
+
+    public void setInVehicle(boolean inVehicle, int vehicleEntityId) {
+        this.inVehicle = inVehicle;
+        this.vehicleEntityId = vehicleEntityId;
     }
 
     public Session getSession() {
@@ -39,5 +50,9 @@ public class BetaPlayer {
 
     public void setEntityId(int entityId) {
         this.entityId = entityId;
+    }
+
+    public int getVehicleEntityId() {
+        return vehicleEntityId;
     }
 }

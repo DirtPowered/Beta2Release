@@ -47,6 +47,7 @@ import com.github.dirtpowered.betatorelease.network.handler.connection.UseEntity
 import com.github.dirtpowered.betatorelease.network.handler.connection.WindowClickPacketHandler;
 import com.github.dirtpowered.betatorelease.network.registry.MessageHandlerRegistry;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
+import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.LoginDisconnectTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerBlockChangeTranslator;
@@ -87,6 +88,7 @@ import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.S
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnPositionTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerUnloadChunkTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerUpdateTileEntityTranslator;
+import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerVehicleMoveTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerWindowItemsTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.UpdateTimeTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.registry.TranslatorRegistry;
@@ -109,6 +111,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntit
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityStatusPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityTeleportPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityVelocityPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerVehicleMovePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerChangeHeldItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
@@ -141,6 +144,8 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.pmw.tinylog.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -156,6 +161,7 @@ public class Server implements Runnable {
     private EntityCache entityCache;
     private PlayerCache playerCache;
     private Configuration configuration;
+    private List<BetaPlayer> onlinePlayers = new ArrayList<>();
 
     private boolean debugMode;
 
@@ -238,6 +244,7 @@ public class Server implements Runnable {
         translatorRegistry.registerTranslator(ServerPlayerListEntryPacket.class, new ServerPlayerListEntryTranslator());
         translatorRegistry.registerTranslator(ServerEntitySetPassengersPacket.class, new ServerEntitySetPassengersTranslator());
         translatorRegistry.registerTranslator(ServerPlayBuiltinSoundPacket.class, new ServerPlayBuiltinSoundTranslator());
+        translatorRegistry.registerTranslator(ServerVehicleMovePacket.class, new ServerVehicleMoveTranslator());
 
         //global tick loop
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Server Thread"));
@@ -314,5 +321,13 @@ public class Server implements Runnable {
 
     public PlayerCache getPlayerCache() {
         return playerCache;
+    }
+
+    public List<BetaPlayer> getOnlinePlayers() {
+        return onlinePlayers;
+    }
+
+    public BetaPlayer getPlayer(int entityId) {
+        return onlinePlayers.stream().filter(player -> player.getEntityId() == entityId).findFirst().orElse(null);
     }
 }

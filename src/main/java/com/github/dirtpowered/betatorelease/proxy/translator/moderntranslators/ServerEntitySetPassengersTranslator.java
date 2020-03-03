@@ -4,6 +4,7 @@ import com.github.dirtpowered.betaprotocollib.packet.data.AttachEntityPacketData
 import com.github.dirtpowered.betatorelease.Utils.Utils;
 import com.github.dirtpowered.betatorelease.data.entity.EntityVehicle;
 import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
+import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntitySetPassengersPacket;
@@ -22,12 +23,19 @@ public class ServerEntitySetPassengersTranslator implements ModernToBetaHandler<
         try {
             EntityVehicle vehicle = new EntityVehicle(vehicleEntityId);
             vehicle.setPassenger(passengerEntityIds[0]);
+            BetaPlayer player = betaSession.getServer().getPlayer(passengerEntityIds[0]);
+            if (player != null)
+                player.setInVehicle(true, vehicleEntityId);
 
             cache.addEntity(vehicle);
             betaSession.sendPacket(new AttachEntityPacketData(passengerEntityIds[0], vehicleEntityId));
         } catch (ArrayIndexOutOfBoundsException e) {
             EntityVehicle vehicle = ((EntityVehicle) cache.getEntityById(vehicleEntityId));
             if (vehicle != null) {
+                BetaPlayer player = betaSession.getServer().getPlayer(vehicle.getPassenger());
+
+                if (player != null)
+                    player.setInVehicle(false, -1);
                 betaSession.sendPacket(new AttachEntityPacketData(vehicle.getPassenger(), -1));
                 cache.removeEntity(vehicle.getEntityId());
             }
