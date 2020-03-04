@@ -47,6 +47,7 @@ public class OldMobType {
                 id = 57;
                 break;
             default:
+                id = 90; //all unknown entities should be visible anyway. Enderdragon too. Flying pig *_*
                 break;
         }
 

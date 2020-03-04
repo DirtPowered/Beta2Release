@@ -2,6 +2,7 @@ package com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators;
 
 import com.github.dirtpowered.betaprotocollib.packet.data.SetSlotPacketData;
 import com.github.dirtpowered.betaprotocollib.utils.BetaItemStack;
+import com.github.dirtpowered.betatorelease.Utils.Utils;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
@@ -24,7 +25,7 @@ public class ServerSetSlotTranslator implements ModernToBetaHandler<ServerSetSlo
             }
 
             assert itemStack != null;
-            int itemId = itemStack.getId();
+            int itemId = Utils.isItemAllowed(itemStack.getId()) ? itemStack.getId() : 1;
             int stackSize = itemStack.getAmount();
             int itemData = itemStack.getData();
 

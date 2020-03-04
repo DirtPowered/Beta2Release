@@ -10,6 +10,7 @@ public class ServerRespawnTranslator implements ModernToBetaHandler<ServerRespaw
     @Override
     public void translate(ServerRespawnPacket packet, Session betaSession) {
         int dimension = packet.getDimension();
+        betaSession.getBetaPlayer().setDimension(dimension);
         betaSession.sendPacket(new RespawnPacketData((byte) dimension));
     }
 }

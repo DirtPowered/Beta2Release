@@ -14,6 +14,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.ServerUnlockRecipe
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPropertiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerAbilitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerSetExperiencePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.scoreboard.ServerScoreboardObjectivePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerWorldBorderPacket;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
 import com.github.steveice10.packetlib.Client;
@@ -49,7 +50,8 @@ public class ModernClient implements Tickable {
                 ServerPlayerAbilitiesPacket.class,
                 ServerPlayerSetExperiencePacket.class,
                 ServerWorldBorderPacket.class,
-                ServerAdvancementsPacket.class
+                ServerAdvancementsPacket.class,
+                ServerScoreboardObjectivePacket.class
         ));
     }
 
@@ -74,7 +76,7 @@ public class ModernClient implements Tickable {
             @Override
             public void disconnected(DisconnectedEvent event) {
                 Logger.info("[modern] disconnected from remote server because: {}", event.getReason());
-                disconnect("§cdisconnected");
+                disconnect(event.getReason());
                 server.getOnlinePlayers().remove(betaSession.getBetaPlayer());
                 Logger.info("[main] online: {}", betaSession.getServer().getOnlinePlayers().size());
             }

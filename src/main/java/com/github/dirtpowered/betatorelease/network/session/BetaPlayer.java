@@ -10,6 +10,7 @@ public class BetaPlayer {
     private boolean onGround;
     private boolean inVehicle;
     private int vehicleEntityId;
+    private int dimension;
 
     BetaPlayer(Session session) {
         this.session = session;
@@ -54,5 +55,13 @@ public class BetaPlayer {
 
     public int getVehicleEntityId() {
         return vehicleEntityId;
+    }
+
+    public int getDimension() {
+        return dimension;
+    }
+
+    public void setDimension(int dimension) {
+        this.dimension = dimension;
     }
 }

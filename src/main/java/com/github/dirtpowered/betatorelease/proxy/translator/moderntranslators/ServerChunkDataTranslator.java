@@ -30,33 +30,39 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
 
         Chunk[] chunks = packet.getColumn().getChunks();
 
-        int index = 0;
-        while (index < chunks.length) {
-            Chunk chunk = chunks[index];
+        try {
+            int index = 0;
+            while (index < chunks.length) {
+                Chunk chunk = chunks[index];
 
-            if (chunk == null) {
-                index++;
-                continue;
-            }
+                if (chunk == null) {
+                    index++;
+                    continue;
+                }
 
-            final int columnCurrentHeight = index * 16; //(0-127)
-            if (betaSession.getServer().isDebugMode())
-                Logger.info("currentHeight: {}", columnCurrentHeight);
+                final int columnCurrentHeight = index * 16; //(0-127)
+                if (betaSession.getServer().isDebugMode())
+                    Logger.info("currentHeight: {}", columnCurrentHeight);
 
-            for (int x = 0; x < 16; x++) {
-                for (int y = 0; y < 16; y++) {
-                    for (int z = 0; z < 16; z++) {
-                        BlockState blockState = chunk.getBlocks().get(x, y, z);
-                        betaChunk.setBlock(x, y + columnCurrentHeight, z, Utils.isBlockAllowed(blockState.getId()) ? blockState.getId() : 1);
-                        betaChunk.setMetaData(x, y + columnCurrentHeight, z, blockState.getData());
-                        betaChunk.setBlockLight(x, z, y, chunk.getBlockLight().get(x, y, z));
-                        betaChunk.setSkyLight(x, z, y, chunk.getSkyLight().get(x, y, z));
+                for (int x = 0; x < 16; x++) {
+                    for (int y = 0; y < 16; y++) {
+                        for (int z = 0; z < 16; z++) {
+                            BlockState blockState = chunk.getBlocks().get(x, y, z);
+                            betaChunk.setBlock(x, y + columnCurrentHeight, z, Utils.isBlockAllowed(blockState.getId()) ? blockState.getId() : 1);
+                            betaChunk.setMetaData(x, y + columnCurrentHeight, z, blockState.getData());
+                            if (betaSession.getBetaPlayer().getDimension() == 0) { //there's no blocklight/skylight in end/nether
+                                betaChunk.setBlockLight(x, z, y, chunk.getBlockLight().get(x, y, z));
+                                betaChunk.setSkyLight(x, z, y, chunk.getSkyLight().get(x, y, z));
+                            }
+                        }
                     }
                 }
+                index++;
             }
-            index++;
-        }
 
-        betaSession.queueChunk(betaChunk);
+            betaSession.queueChunk(betaChunk);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            Logger.error("Chunk error: {}", e);
+        }
     }
 }

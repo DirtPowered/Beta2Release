@@ -53,6 +53,7 @@ import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.L
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerBlockChangeTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerChatTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerChunkDataTranslator;
+import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerCloseWindowTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerConfirmTransactionTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerDisconnectTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityAnimationTranslator;
@@ -123,6 +124,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.Serve
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPaintingPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerCloseWindowPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerConfirmTransactionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerOpenWindowPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerSetSlotPacket;
@@ -251,6 +253,7 @@ public class Server implements Runnable {
         translatorRegistry.registerTranslator(ServerVehicleMovePacket.class, new ServerVehicleMoveTranslator());
         translatorRegistry.registerTranslator(ServerPlayerUseBedPacket.class, new ServerPlayerUseBedTranslator());
         translatorRegistry.registerTranslator(ServerSpawnPaintingPacket.class, new ServerSpawnPaintingTranslator());
+        translatorRegistry.registerTranslator(ServerCloseWindowPacket.class, new ServerCloseWindowTranslator());
 
         //global tick loop
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Server Thread"));

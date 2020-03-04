@@ -17,6 +17,7 @@ public class ServerJoinGameTranslator implements ModernToBetaHandler<ServerJoinG
 
         Logger.info("Entity player joined (modern server) with id {}", entityId);
         betaPlayer.setEntityId(entityId);
+        betaPlayer.setDimension(dimension);
 
         betaSession.sendPacket(new LoginPacketData(entityId, "", 0, dimension));
     }

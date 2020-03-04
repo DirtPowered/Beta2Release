@@ -1,6 +1,7 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators;
 
 import com.github.dirtpowered.betaprotocollib.packet.data.EntityEquipmentPacketData;
+import com.github.dirtpowered.betatorelease.Utils.Utils;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
@@ -47,6 +48,10 @@ public class ServerEntityEquipmentTranslator implements ModernToBetaHandler<Serv
                 break;
         }
 
-        betaSession.sendPacket(new EntityEquipmentPacketData(entityId, betaSlot, itemId, itemData));
+        if (betaSlot == -1)
+            return;
+
+        betaSession.sendPacket(new EntityEquipmentPacketData(entityId,
+                betaSlot, Utils.isItemAllowed(itemId) ? itemId : 1, itemData));
     }
 }
