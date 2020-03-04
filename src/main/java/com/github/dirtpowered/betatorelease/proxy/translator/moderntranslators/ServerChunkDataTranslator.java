@@ -50,8 +50,9 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                             BlockState blockState = chunk.getBlocks().get(x, y, z);
                             betaChunk.setBlock(x, y + columnCurrentHeight, z, Utils.isBlockAllowed(blockState.getId()) ? blockState.getId() : 1);
                             betaChunk.setMetaData(x, y + columnCurrentHeight, z, blockState.getData());
-                            if (betaSession.getBetaPlayer().getDimension() == 0) { //there's no blocklight/skylight in end/nether
-                                betaChunk.setBlockLight(x, z, y, chunk.getBlockLight().get(x, y, z));
+                            betaChunk.setBlockLight(x, z, y, chunk.getBlockLight().get(x, y, z));
+
+                            if (betaSession.getBetaPlayer().getDimension() == 0) { //there's no skylight in end/nether
                                 betaChunk.setSkyLight(x, z, y, chunk.getSkyLight().get(x, y, z));
                             }
                         }

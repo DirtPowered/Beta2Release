@@ -93,6 +93,7 @@ import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.S
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerUpdateTileEntityTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerVehicleMoveTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerWindowItemsTranslator;
+import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerWindowPropertyTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.UpdateTimeTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.registry.TranslatorRegistry;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
@@ -129,6 +130,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerConfi
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerOpenWindowPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerSetSlotPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowPropertyPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerExplosionPacket;
@@ -254,6 +256,7 @@ public class Server implements Runnable {
         translatorRegistry.registerTranslator(ServerPlayerUseBedPacket.class, new ServerPlayerUseBedTranslator());
         translatorRegistry.registerTranslator(ServerSpawnPaintingPacket.class, new ServerSpawnPaintingTranslator());
         translatorRegistry.registerTranslator(ServerCloseWindowPacket.class, new ServerCloseWindowTranslator());
+        translatorRegistry.registerTranslator(ServerWindowPropertyPacket.class, new ServerWindowPropertyTranslator());
 
         //global tick loop
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Server Thread"));
