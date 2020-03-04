@@ -85,6 +85,7 @@ import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.S
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnGlobalEntityTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnMobTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnObjectTranslator;
+import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnPaintingTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnPlayerTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnPositionTranslator;
 import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerUnloadChunkTranslator;
@@ -120,6 +121,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.Serv
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnGlobalEntityPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPaintingPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnPlayerPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerConfirmTransactionPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerOpenWindowPacket;
@@ -248,6 +250,7 @@ public class Server implements Runnable {
         translatorRegistry.registerTranslator(ServerPlayBuiltinSoundPacket.class, new ServerPlayBuiltinSoundTranslator());
         translatorRegistry.registerTranslator(ServerVehicleMovePacket.class, new ServerVehicleMoveTranslator());
         translatorRegistry.registerTranslator(ServerPlayerUseBedPacket.class, new ServerPlayerUseBedTranslator());
+        translatorRegistry.registerTranslator(ServerSpawnPaintingPacket.class, new ServerSpawnPaintingTranslator());
 
         //global tick loop
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Server Thread"));
