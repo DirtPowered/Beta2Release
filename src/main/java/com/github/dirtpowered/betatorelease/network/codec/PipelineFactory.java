@@ -6,7 +6,7 @@ import io.netty.channel.ChannelInitializer;
 
 public class PipelineFactory extends ChannelInitializer {
 
-    private Server server;
+    private final Server server;
 
     public PipelineFactory(Server server) {
         this.server = server;

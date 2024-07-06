@@ -1,7 +1,7 @@
 package com.github.dirtpowered.betatorelease.proxy;
 
 import com.github.dirtpowered.betatorelease.Server;
-import com.github.dirtpowered.betatorelease.Utils.Tickable;
+import com.github.dirtpowered.betatorelease.utils.Tickable;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
@@ -33,8 +33,8 @@ import java.util.List;
 public class ModernClient implements Tickable {
     private final List<Class<? extends Packet>> skipTranslating = new ArrayList<>();
     private Client client;
-    private Session betaSession;
-    private Server server;
+    private final Session betaSession;
+    private final Server server;
 
     public ModernClient(Session betaSession) {
         this.betaSession = betaSession;
@@ -57,7 +57,7 @@ public class ModernClient implements Tickable {
 
     public void connect() {
         MinecraftProtocol protocol = new MinecraftProtocol(betaSession.getPlayerName());
-        client = new Client(server.getConfiguration().getRemoteAdress(), server.getConfiguration().getRemotePort(), protocol, new TcpSessionFactory());
+        client = new Client(server.getConfiguration().getRemoteAddress(), server.getConfiguration().getRemotePort(), protocol, new TcpSessionFactory());
         client.getSession().addListener(new SessionAdapter() {
             @Override
             public void packetReceived(PacketReceivedEvent event) {

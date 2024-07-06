@@ -11,7 +11,7 @@ public class ServerChatTranslator implements ModernToBetaHandler<ServerChatPacke
 
     @Override
     public void translate(ServerChatPacket packet, Session betaSession) {
-        if (packet.getType() != MessageType.SYSTEM)
+        if (packet.getType() == MessageType.NOTIFICATION) // skip action bar messages
             return;
 
         String messageJson = packet.getMessage().toJsonString();

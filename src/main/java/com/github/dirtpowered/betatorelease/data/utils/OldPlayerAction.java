@@ -11,26 +11,12 @@ public class OldPlayerAction {
          * Drop item 	     4
          * Shoot arrow 	     5
          */
-
-        PlayerAction playerAction;
-        switch (actionId) {
-            case 0:
-                playerAction = PlayerAction.START_DIGGING;
-                break;
-            case 2:
-                playerAction = PlayerAction.FINISH_DIGGING;
-                break;
-            case 4:
-                playerAction = PlayerAction.DROP_ITEM;
-                break;
-            case 5:
-                playerAction = PlayerAction.RELEASE_USE_ITEM;
-                break;
-            default:
-                playerAction = null;
-                break;
-        }
-
-        return playerAction;
+        return switch (actionId) {
+            case 0 -> PlayerAction.START_DIGGING;
+            case 2 -> PlayerAction.FINISH_DIGGING;
+            case 4 -> PlayerAction.DROP_ITEM;
+            case 5 -> PlayerAction.RELEASE_USE_ITEM;
+            default -> null;
+        };
     }
 }

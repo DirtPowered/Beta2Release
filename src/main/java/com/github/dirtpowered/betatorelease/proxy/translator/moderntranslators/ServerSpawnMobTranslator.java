@@ -1,11 +1,12 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.MobSpawnPacketData;
-import com.github.dirtpowered.betatorelease.Utils.Utils;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.MobSpawnPacketData;
+import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.dirtpowered.betatorelease.data.utils.OldMobType;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
+import com.google.common.collect.Lists;
 import org.pmw.tinylog.Logger;
 
 public class ServerSpawnMobTranslator implements ModernToBetaHandler<ServerSpawnMobPacket> {
@@ -26,6 +27,6 @@ public class ServerSpawnMobTranslator implements ModernToBetaHandler<ServerSpawn
         if (betaSession.getServer().isDebugMode()) {
             Logger.info("EntityType(id: {}): {} at x:{} y:{} z:{}", entityId, packet.getType(), x, y, z);
         }
-        betaSession.sendPacket(new MobSpawnPacketData(entityId, type, x, y, z, yaw, pitch));
+        betaSession.sendPacket(new MobSpawnPacketData(entityId, type, x, y, z, yaw, pitch, Lists.newArrayList()));
     }
 }

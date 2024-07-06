@@ -1,100 +1,18 @@
 package com.github.dirtpowered.betatorelease;
 
 import com.github.dirtpowered.betaprotocollib.BetaLib;
-import com.github.dirtpowered.betaprotocollib.packet.data.AnimationPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.BlockDigPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.BlockItemSwitchPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.BlockPlacePacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.ChatPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.CloseWindowPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.EntityActionPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.FlyingPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.HandshakePacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.KeepAlivePacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.KickDisconnectPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.LoginPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.PlayerLookMovePacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.PlayerLookPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.PlayerPositionPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.RespawnPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.TransactionPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.UpdateHealthPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.UseEntityPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.data.WindowClickPacketData;
+import com.github.dirtpowered.betaprotocollib.data.version.MinecraftVersion;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.*;
 import com.github.dirtpowered.betatorelease.configuration.Configuration;
 import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.data.entity.cache.PlayerCache;
 import com.github.dirtpowered.betatorelease.network.codec.PipelineFactory;
-import com.github.dirtpowered.betatorelease.network.handler.connection.AnimationPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.BlockDigPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.BlockItemSwitchPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.BlockPlacePacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.ChatPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.CloseWindowPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.EntityActionPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.FlyingPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.HandshakePacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.KeepAlivePacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.KickDisconnectPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.LoginPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.PlayerLookMovePacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.PlayerLookPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.PlayerPositionPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.RespawnPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.TransactionPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.UpdateHealthPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.UseEntityPacketHandler;
-import com.github.dirtpowered.betatorelease.network.handler.connection.WindowClickPacketHandler;
+import com.github.dirtpowered.betatorelease.network.handler.connection.*;
 import com.github.dirtpowered.betatorelease.network.registry.MessageHandlerRegistry;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.LoginDisconnectTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerBlockChangeTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerChatTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerChunkDataTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerCloseWindowTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerConfirmTransactionTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerDisconnectTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityAnimationTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityCollectItemTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityDestroyTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityEquipmentTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityHeadLookTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityMetadataTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityPositionRotationTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityPositionTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityRotationTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntitySetPassengersTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityStatusTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityTeleportTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerEntityVelocityTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerExplosionTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerJoinGameTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerKeepAliveTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerMultiBlockChangeTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerNotifyClientTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerOpenWindowTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerPlayBuiltinSoundTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerPlayerChangeHeldItemTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerPlayerHealthTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerPlayerListEntryTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerPlayerPositionRotationTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerPlayerUseBedTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerRespawnTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSetSlotTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnGlobalEntityTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnMobTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnObjectTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnPaintingTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnPlayerTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerSpawnPositionTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerUnloadChunkTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerUpdateTileEntityTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerVehicleMoveTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerWindowItemsTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.ServerWindowPropertyTranslator;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.UpdateTimeTranslator;
+import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.*;
 import com.github.dirtpowered.betatorelease.proxy.translator.registry.TranslatorRegistry;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerDisconnectPacket;
@@ -131,16 +49,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerOpenW
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerSetSlotPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowPropertyPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockChangePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerExplosionPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerMultiBlockChangePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerNotifyClientPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerPlayBuiltinSoundPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerSpawnPositionPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUnloadChunkPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTileEntityPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerUpdateTimePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.*;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginDisconnectPacket;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -150,6 +59,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import lombok.Getter;
 import org.pmw.tinylog.Logger;
 
 import java.util.ArrayList;
@@ -161,16 +71,30 @@ import java.util.concurrent.TimeUnit;
 public class Server implements Runnable {
     private final MessageHandlerRegistry messageHandlerRegistry;
     private final SessionRegistry sessionRegistry;
-    private final TranslatorRegistry translatorRegistry;
-    private final ScheduledExecutorService scheduledExecutorService;
-    private EventLoopGroup bossGroup = new NioEventLoopGroup();
-    private EventLoopGroup workerGroup = new NioEventLoopGroup();
-    private Server server;
-    private EntityCache entityCache;
-    private PlayerCache playerCache;
-    private Configuration configuration;
-    private List<BetaPlayer> onlinePlayers = new ArrayList<>();
 
+    @Getter
+    private final TranslatorRegistry translatorRegistry;
+
+    @Getter
+    private final ScheduledExecutorService scheduledExecutorService;
+
+    private final EventLoopGroup bossGroup = new NioEventLoopGroup();
+    private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+    private final Server server;
+
+    @Getter
+    private final EntityCache entityCache;
+
+    @Getter
+    private final PlayerCache playerCache;
+
+    @Getter
+    private final Configuration configuration;
+
+    @Getter
+    private final List<BetaPlayer> onlinePlayers = new ArrayList<>();
+
+    @Getter
     private boolean debugMode;
 
     Server() {
@@ -206,9 +130,10 @@ public class Server implements Runnable {
         messageHandlerRegistry.registerHandler(WindowClickPacketData.class, new WindowClickPacketHandler());
         messageHandlerRegistry.registerHandler(TransactionPacketData.class, new TransactionPacketHandler());
         messageHandlerRegistry.registerHandler(UseEntityPacketData.class, new UseEntityPacketHandler());
+        messageHandlerRegistry.registerHandler(UpdateSignPacketData.class, new UpdateSignPacketHandler());
 
         //register packets
-        BetaLib.inject();
+        BetaLib.inject(MinecraftVersion.B_1_7_3);
 
         //register translators
         translatorRegistry.registerTranslator(ServerChatPacket.class, new ServerChatTranslator());
@@ -257,6 +182,7 @@ public class Server implements Runnable {
         translatorRegistry.registerTranslator(ServerSpawnPaintingPacket.class, new ServerSpawnPaintingTranslator());
         translatorRegistry.registerTranslator(ServerCloseWindowPacket.class, new ServerCloseWindowTranslator());
         translatorRegistry.registerTranslator(ServerWindowPropertyPacket.class, new ServerWindowPropertyTranslator());
+        translatorRegistry.registerTranslator(ServerPlayEffectPacket.class, new ServerPlayEffectTranslator());
 
         //global tick loop
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Server Thread"));
@@ -295,10 +221,6 @@ public class Server implements Runnable {
         }
     }
 
-    public Configuration getConfiguration() {
-        return configuration;
-    }
-
     void stop() {
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
@@ -311,32 +233,8 @@ public class Server implements Runnable {
         return server;
     }
 
-    public TranslatorRegistry getTranslatorRegistry() {
-        return translatorRegistry;
-    }
-
-    public ScheduledExecutorService getScheduledExecutorService() {
-        return scheduledExecutorService;
-    }
-
-    public boolean isDebugMode() {
-        return debugMode;
-    }
-
     private void setDebugMode(boolean debugMode) {
         this.debugMode = debugMode;
-    }
-
-    public EntityCache getEntityCache() {
-        return entityCache;
-    }
-
-    public PlayerCache getPlayerCache() {
-        return playerCache;
-    }
-
-    public List<BetaPlayer> getOnlinePlayers() {
-        return onlinePlayers;
     }
 
     public BetaPlayer getPlayer(int entityId) {

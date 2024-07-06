@@ -1,7 +1,7 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.EntityEquipmentPacketData;
-import com.github.dirtpowered.betatorelease.Utils.Utils;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.EntityEquipmentPacketData;
+import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.data.game.entity.EquipmentSlot;
@@ -22,36 +22,18 @@ public class ServerEntityEquipmentTranslator implements ModernToBetaHandler<Serv
         int itemId = itemStack.getId();
         int itemData = itemStack.getData();
 
-        int betaSlot;
-
-        switch (slot) {
-            case MAIN_HAND:
-                betaSlot = 0;
-                break;
-            case OFF_HAND:
-                betaSlot = -1;
-                break;
-            case BOOTS:
-                betaSlot = 1;
-                break;
-            case LEGGINGS:
-                betaSlot = 2;
-                break;
-            case CHESTPLATE:
-                betaSlot = 3;
-                break;
-            case HELMET:
-                betaSlot = 4;
-                break;
-            default:
-                betaSlot = -1;
-                break;
-        }
+        int betaSlot = switch (slot) {
+            case MAIN_HAND -> 0;
+            case BOOTS -> 1;
+            case LEGGINGS -> 2;
+            case CHESTPLATE -> 3;
+            case HELMET -> 4;
+            default -> -1;
+        };
 
         if (betaSlot == -1)
             return;
 
-        betaSession.sendPacket(new EntityEquipmentPacketData(entityId,
-                betaSlot, Utils.isItemAllowed(itemId) ? itemId : 1, itemData));
+        betaSession.sendPacket(new EntityEquipmentPacketData(entityId, betaSlot, BlockMappings.getFixedItemId(itemId), itemData));
     }
 }

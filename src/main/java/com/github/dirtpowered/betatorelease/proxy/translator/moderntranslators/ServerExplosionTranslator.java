@@ -1,7 +1,7 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.ExplosionPacketData;
-import com.github.dirtpowered.betaprotocollib.utils.Location;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.ExplosionPacketData;
+import com.github.dirtpowered.betaprotocollib.utils.BlockLocation;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerExplosionPacket;
@@ -17,7 +17,7 @@ public class ServerExplosionTranslator implements ModernToBetaHandler<ServerExpl
         int y = (int) packet.getY();
         int z = (int) packet.getZ();
         float radius = packet.getRadius();
-        List<Location> locations = packet.getExploded().stream().map(block -> new Location(block.getX(), block.getY(), block.getZ())).collect(Collectors.toList());
+        List<BlockLocation> locations = packet.getExploded().stream().map(block -> new BlockLocation(block.getX(), block.getY(), block.getZ())).collect(Collectors.toList());
 
         betaSession.sendPacket(new ExplosionPacketData(x, y, z, radius, locations));
     }

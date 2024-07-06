@@ -9,30 +9,13 @@ public class OldBlockFace {
      * Offset 	-Y 	+Y 	-Z 	+Z 	-X 	+X
      */
     public static BlockFace translateBlockFace(int face) {
-        BlockFace blockFace;
-        switch (face) {
-            case 0:
-                blockFace = BlockFace.DOWN;
-                break;
-            case 1:
-                blockFace = BlockFace.UP;
-                break;
-            case 2:
-                blockFace = BlockFace.NORTH;
-                break;
-            case 3:
-                blockFace = BlockFace.SOUTH;
-                break;
-            case 4:
-                blockFace = BlockFace.WEST;
-                break;
-            case 5:
-                blockFace = BlockFace.EAST;
-                break;
-            default:
-                blockFace = BlockFace.DOWN;
-                break;
-        }
-        return blockFace;
+        return switch (face) {
+            case 1 -> BlockFace.UP;
+            case 2 -> BlockFace.NORTH;
+            case 3 -> BlockFace.SOUTH;
+            case 4 -> BlockFace.WEST;
+            case 5 -> BlockFace.EAST;
+            default -> BlockFace.DOWN;
+        };
     }
 }

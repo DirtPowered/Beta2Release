@@ -1,11 +1,12 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.VehicleSpawnPacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.VehicleSpawnPacketData;
 import com.github.dirtpowered.betaprotocollib.utils.Location;
-import com.github.dirtpowered.betatorelease.Utils.Utils;
 import com.github.dirtpowered.betatorelease.data.entity.EntityItem;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
+import com.github.dirtpowered.betatorelease.utils.Utils;
+import com.github.steveice10.mc.protocol.data.game.entity.type.object.FallingBlockData;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
 
 public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSpawnObjectPacket> {
@@ -37,29 +38,31 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 betaSession.getServer().getEntityCache().addEntity(entityItem);
                 break;
             case TIPPED_ARROW:
-                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 60, x, y, z, velocityX, velocityY, velocityZ));
+                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 60, x, y, z, 0, velocityX, velocityY, velocityZ));
                 break;
             case PRIMED_TNT:
-                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 50, x, y, z, velocityX, velocityY, velocityZ));
+                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 50, x, y, z, 0, velocityX, velocityY, velocityZ));
                 break;
             case SNOWBALL:
-                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 61, x, y, z, velocityX, velocityY, velocityZ));
+                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 61, x, y, z, 0, velocityX, velocityY, velocityZ));
                 break;
             case EGG:
-                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 62, x, y, z, velocityX, velocityY, velocityZ));
+                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 62, x, y, z, 0, velocityX, velocityY, velocityZ));
                 break;
             case FISH_HOOK:
-                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 90, x, y, z, velocityX, velocityY, velocityZ));
+                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 90, x, y, z, 0, velocityX, velocityY, velocityZ));
                 break;
             case BOAT:
-                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 1, x, y, z, velocityX, velocityY, velocityZ));
+                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 1, x, y, z, 0, velocityX, velocityY, velocityZ));
                 break;
             case GHAST_FIREBALL:
-                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 63, x, y, z, velocityX, velocityY, velocityZ));
+                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 63, x, y, z, 0, velocityX, velocityY, velocityZ));
                 break;
             case FALLING_BLOCK:
-                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 70, x, y, z, velocityX, velocityY, velocityZ));
-                //TODO: Somehow check if block is gravel
+                FallingBlockData data = (FallingBlockData) packet.getData();
+                int entityType = data.getId() == 13 ? 71 : 70;
+
+                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, entityType, x, y, z, 0, velocityX, velocityY, velocityZ));
                 break;
         }
     }

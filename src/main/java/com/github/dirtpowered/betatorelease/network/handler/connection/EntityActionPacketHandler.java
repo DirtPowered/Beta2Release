@@ -1,6 +1,6 @@
 package com.github.dirtpowered.betatorelease.network.handler.connection;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.EntityActionPacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.EntityActionPacketData;
 import com.github.dirtpowered.betatorelease.network.handler.BetaToModernHandler;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
@@ -13,22 +13,13 @@ public class EntityActionPacketHandler implements BetaToModernHandler<EntityActi
     public void handlePacket(Session session, EntityActionPacketData packetClass) {
         int entityId = packetClass.getEntityId();
         int state = packetClass.getState();
-        PlayerState playerState;
 
-        switch (state) {
-            case 1:
-                playerState = PlayerState.START_SNEAKING;
-                break;
-            case 2:
-                playerState = PlayerState.STOP_SNEAKING;
-                break;
-            case 3:
-                playerState = PlayerState.LEAVE_BED;
-                break;
-            default:
-                playerState = null;
-                break;
-        }
+        PlayerState playerState = switch (state) {
+            case 1 -> PlayerState.START_SNEAKING;
+            case 2 -> PlayerState.STOP_SNEAKING;
+            case 3 -> PlayerState.LEAVE_BED;
+            default -> null;
+        };
 
         if (playerState == null)
             return;

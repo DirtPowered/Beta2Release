@@ -1,7 +1,7 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.NamedEntitySpawnPacketData;
-import com.github.dirtpowered.betatorelease.Utils.Utils;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.NamedEntitySpawnPacketData;
+import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.dirtpowered.betatorelease.data.entity.EntityPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;

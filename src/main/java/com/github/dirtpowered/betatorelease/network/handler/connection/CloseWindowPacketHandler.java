@@ -1,6 +1,6 @@
 package com.github.dirtpowered.betatorelease.network.handler.connection;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.CloseWindowPacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.CloseWindowPacketData;
 import com.github.dirtpowered.betatorelease.network.handler.BetaToModernHandler;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.steveice10.mc.protocol.packet.ingame.client.window.ClientCloseWindowPacket;

@@ -4,10 +4,10 @@ import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 
 public class Configuration {
 
-    private String bindAdress;
-    private int bindPort;
-    private String remoteAdress;
-    private int remotePort;
+    private final String bindAdress;
+    private final int bindPort;
+    private final String remoteAddress;
+    private final int remotePort;
 
     public Configuration() {
         //TODO: Make it more useful and fix that bad code below :]
@@ -29,7 +29,7 @@ public class Configuration {
 
         this.bindAdress = config.get("bind-address");
         this.bindPort = config.get("bind-port");
-        this.remoteAdress = config.get("remote-address");
+        this.remoteAddress = config.get("remote-address");
         this.remotePort = config.get("remote-port");
         config.close();
     }
@@ -42,8 +42,8 @@ public class Configuration {
         return bindPort;
     }
 
-    public String getRemoteAdress() {
-        return remoteAdress;
+    public String getRemoteAddress() {
+        return remoteAddress;
     }
 
     public int getRemotePort() {

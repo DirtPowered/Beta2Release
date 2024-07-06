@@ -1,8 +1,8 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.PickupSpawnPacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.PickupSpawnPacketData;
 import com.github.dirtpowered.betaprotocollib.utils.Location;
-import com.github.dirtpowered.betatorelease.Utils.Utils;
+import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.dirtpowered.betatorelease.data.entity.EntityItem;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;

@@ -1,6 +1,6 @@
 package com.github.dirtpowered.betatorelease.network.handler.connection;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.BlockDigPacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.BlockDigPacketData;
 import com.github.dirtpowered.betatorelease.data.utils.OldBlockFace;
 import com.github.dirtpowered.betatorelease.data.utils.OldPlayerAction;
 import com.github.dirtpowered.betatorelease.network.handler.BetaToModernHandler;

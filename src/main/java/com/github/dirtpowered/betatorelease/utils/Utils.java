@@ -1,7 +1,8 @@
-package com.github.dirtpowered.betatorelease.Utils;
+package com.github.dirtpowered.betatorelease.utils;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.SetSlotPacketData;
-import com.github.dirtpowered.betaprotocollib.utils.BetaItemStack;
+import com.github.dirtpowered.betaprotocollib.data.BetaItemStack;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.SetSlotPacketData;
+import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.opennbt.conversion.builtin.StringTagConverter;
@@ -22,17 +23,12 @@ public class Utils {
         return "0x" + String.format("%2s", Integer.toHexString(i)).replace(' ', '0');
     }
 
-    public static boolean isBlockAllowed(int blockId) {
-        return blockId < 97;
-    }
-
     public static boolean isItemAllowed(int itemId) {
         return itemId < 360;
     }
 
     public static BetaItemStack[] convertItemStacks(ItemStack[] itemStacks) {
-        return Arrays.stream(itemStacks).map(itemStack -> new BetaItemStack(Utils.isItemAllowed(itemStack.getId())
-                ? itemStack.getId() : 1, itemStack.getAmount(), itemStack.getData())).toArray(BetaItemStack[]::new);
+        return Arrays.stream(itemStacks).map(itemStack -> new BetaItemStack(BlockMappings.getFixedItemId(itemStack.getId()), itemStack.getAmount(), itemStack.getData())).toArray(BetaItemStack[]::new);
     }
 
     public static ItemStack betaItemStackToItemStack(BetaItemStack itemStack) {
@@ -40,7 +36,7 @@ public class Utils {
     }
 
     public static BetaItemStack itemStackToBetaItemStack(ItemStack itemStack) {
-        return new BetaItemStack(isItemAllowed(itemStack.getId()) ? itemStack.getId() : 1, itemStack.getAmount(), itemStack.getData());
+        return new BetaItemStack(BlockMappings.getFixedItemId(itemStack.getId()), itemStack.getAmount(), itemStack.getData());
     }
 
     public static void updateInventory(Session session, BetaItemStack currentItem) {

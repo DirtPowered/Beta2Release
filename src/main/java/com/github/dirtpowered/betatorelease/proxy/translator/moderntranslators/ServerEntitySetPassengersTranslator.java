@@ -1,7 +1,7 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.AttachEntityPacketData;
-import com.github.dirtpowered.betatorelease.Utils.Utils;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.AttachEntityPacketData;
+import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.dirtpowered.betatorelease.data.entity.EntityVehicle;
 import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;

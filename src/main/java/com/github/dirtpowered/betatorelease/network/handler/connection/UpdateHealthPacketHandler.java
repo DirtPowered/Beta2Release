@@ -1,6 +1,6 @@
 package com.github.dirtpowered.betatorelease.network.handler.connection;
 
-import com.github.dirtpowered.betaprotocollib.packet.data.UpdateHealthPacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.UpdateHealthPacketData;
 import com.github.dirtpowered.betatorelease.network.handler.BetaToModernHandler;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 

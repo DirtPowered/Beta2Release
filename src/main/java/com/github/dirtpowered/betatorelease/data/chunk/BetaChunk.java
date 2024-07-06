@@ -1,5 +1,7 @@
 package com.github.dirtpowered.betatorelease.data.chunk;
 
+import lombok.Getter;
+
 import java.util.Arrays;
 
 /**
@@ -17,10 +19,11 @@ public class BetaChunk {
     /**
      * The coordinates of this chunk.
      */
+    @Getter
     private final int x, z;
 
     /**
-     * The data in this chunk representing all of the blocks and their state.
+     * The data in this chunk representing all the blocks and their state.
      */
     private final byte[] types, metaData, skyLight, blockLight;
 
@@ -38,25 +41,7 @@ public class BetaChunk {
         this.skyLight = new byte[WIDTH * HEIGHT * DEPTH];
         this.blockLight = new byte[WIDTH * HEIGHT * DEPTH];
 
-        Arrays.fill(blockLight, (byte) 15); //fill array, cuz updating blocklight is slow
-    }
-
-    /**
-     * Gets the X coordinate of this chunk.
-     *
-     * @return The X coordinate of this chunk.
-     */
-    public int getX() {
-        return x;
-    }
-
-    /**
-     * Gets the Z coordinate of this chunk.
-     *
-     * @return The Z coordinate of this chunk.
-     */
-    public int getZ() {
-        return z;
+        Arrays.fill(blockLight, (byte) 15); // fill an array, cuz updating block light is slow
     }
 
     public void setBlock(final int x, final int y, final int z, final int type) {
@@ -85,12 +70,12 @@ public class BetaChunk {
     }
 
     /**
-     * Sets the sky light level of a block within this chunk.
+     * Sets the skylight level of a block within this chunk.
      *
      * @param x        The X coordinate.
      * @param z        The Z coordinate.
      * @param y        The Y coordinate.
-     * @param skyLight The sky light level.
+     * @param skyLight The skylight level.
      */
     public void setSkyLight(int x, int z, int y, int skyLight) {
         if (skyLight < 0 || skyLight >= 16)
