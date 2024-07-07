@@ -4,7 +4,7 @@ import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.PlayerLoo
 import com.github.dirtpowered.betatorelease.network.handler.BetaToModernHandler;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
-import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerRotationPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.client.world.ClientVehicleMovePacket;
 
 public class PlayerLookMovePacketHandler implements BetaToModernHandler<PlayerLookMovePacketData> {
@@ -27,7 +27,7 @@ public class PlayerLookMovePacketHandler implements BetaToModernHandler<PlayerLo
         boolean isOnGround = packetClass.isOnGround();
 
         if (!player.isInVehicle()) {
-            session.getModernClient().sendModernPacket(new ClientPlayerRotationPacket(isOnGround, yaw, pitch));
+            session.getModernClient().sendModernPacket(new ClientPlayerPositionRotationPacket(isOnGround, x, y, z, yaw, pitch));
         } else {
             session.getModernClient().sendModernPacket(new ClientVehicleMovePacket(x, y, z, yaw, pitch));
         }
