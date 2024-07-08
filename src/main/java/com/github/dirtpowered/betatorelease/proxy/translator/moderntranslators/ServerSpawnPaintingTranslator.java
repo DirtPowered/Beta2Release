@@ -13,9 +13,27 @@ public class ServerSpawnPaintingTranslator implements ModernToBetaHandler<Server
     public void translate(ServerSpawnPaintingPacket packet, Session betaSession) {
         int entityId = packet.getEntityId();
         Position position = packet.getPosition();
+
         int direction = MagicValues.value(Integer.class, packet.getDirection());
         String title = MagicValues.value(String.class, packet.getPaintingType());
 
-        betaSession.sendPacket(new PaintingPacketData(entityId, position.getX(), position.getY(), position.getZ(), direction, title));
+        int x = position.getX();
+        int y = position.getY();
+        int z = position.getZ();
+
+        switch (direction) {
+            case 0 -> {
+                direction = 2;
+                z -= 1;
+            }
+            case 1 -> x += 1;
+            case 2 -> {
+                direction = 0;
+                z += 1;
+            }
+            case 3 -> x -= 1;
+        }
+
+        betaSession.sendPacket(new PaintingPacketData(entityId, x, y, z, direction, title));
     }
 }
