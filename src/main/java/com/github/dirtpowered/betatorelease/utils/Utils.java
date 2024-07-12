@@ -19,16 +19,14 @@ import org.pmw.tinylog.Logger;
 import java.util.Arrays;
 
 public class Utils {
+    public static final ItemStack AIR = new ItemStack(0, 0, 0);
+
     public static String toHex(int i) {
         return "0x" + String.format("%2s", Integer.toHexString(i)).replace(' ', '0');
     }
 
-    public static boolean isItemAllowed(int itemId) {
-        return itemId < 360;
-    }
-
     public static BetaItemStack[] convertItemStacks(ItemStack[] itemStacks) {
-        return Arrays.stream(itemStacks).map(itemStack -> new BetaItemStack(BlockMappings.getFixedItemId(itemStack.getId()), itemStack.getAmount(), itemStack.getData())).toArray(BetaItemStack[]::new);
+        return Arrays.stream(itemStacks).map(Utils::itemStackToBetaItemStack).toArray(BetaItemStack[]::new);
     }
 
     public static ItemStack betaItemStackToItemStack(BetaItemStack itemStack) {
@@ -36,6 +34,9 @@ public class Utils {
     }
 
     public static BetaItemStack itemStackToBetaItemStack(ItemStack itemStack) {
+        if (itemStack == null)
+            return new BetaItemStack(0, 0, 0);
+
         return new BetaItemStack(BlockMappings.getFixedItemId(itemStack.getId()), itemStack.getAmount(), itemStack.getData());
     }
 

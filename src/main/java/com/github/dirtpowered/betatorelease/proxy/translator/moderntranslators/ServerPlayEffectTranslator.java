@@ -3,7 +3,6 @@ package com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.SoundEffectPacketData;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
-import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.world.effect.BreakBlockEffectData;
 import com.github.steveice10.mc.protocol.data.game.world.effect.ParticleEffect;
@@ -13,7 +12,6 @@ public class ServerPlayEffectTranslator implements ModernToBetaHandler<ServerPla
 
     @Override
     public void translate(ServerPlayEffectPacket packet, Session betaSession) {
-        Utils.debug(packet);
         Position position = packet.getPosition();
 
         if (packet.getEffect() == ParticleEffect.BREAK_BLOCK && packet.getData() instanceof BreakBlockEffectData data) {

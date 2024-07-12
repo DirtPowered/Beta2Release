@@ -22,7 +22,7 @@ public class WindowClickPacketHandler implements BetaToModernHandler<WindowClick
         if (packetClass.getItemStack() != null) {
             itemStack = Utils.betaItemStackToItemStack(packetClass.getItemStack());
         } else {
-            itemStack = new ItemStack(0);
+            itemStack = null;
         }
 
         WindowAction windowAction = WindowAction.CLICK_ITEM;
@@ -37,6 +37,5 @@ public class WindowClickPacketHandler implements BetaToModernHandler<WindowClick
             return;
 
         session.getModernClient().sendModernPacket(new ClientWindowActionPacket(windowId, action, inventorySlot, itemStack, windowAction, rightClick ? ClickItemParam.RIGHT_CLICK : ClickItemParam.LEFT_CLICK));
-        Utils.debug(packetClass);
     }
 }

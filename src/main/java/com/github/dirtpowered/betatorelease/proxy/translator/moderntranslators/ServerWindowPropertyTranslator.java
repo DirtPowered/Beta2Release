@@ -11,7 +11,7 @@ public class ServerWindowPropertyTranslator implements ModernToBetaHandler<Serve
     public void translate(ServerWindowPropertyPacket packet, Session betaSession) {
         int progressbar = packet.getRawProperty();
         int progressbarValue = progressbar == 0 ? (packet.getValue() * 200) / 1600 : packet.getValue();
-        //TODO: Furnace cache (fuel time value)
-        betaSession.sendPacket(new UpdateProgressPacketData(0 /* always 0 */, progressbar == 0 ? 1 : 0, progressbarValue));
+
+        betaSession.sendPacket(new UpdateProgressPacketData(packet.getWindowId(), progressbar == 0 ? 1 : 0, progressbarValue));
     }
 }
