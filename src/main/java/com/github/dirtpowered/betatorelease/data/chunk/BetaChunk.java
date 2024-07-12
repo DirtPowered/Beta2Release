@@ -2,8 +2,6 @@ package com.github.dirtpowered.betatorelease.data.chunk;
 
 import lombok.Getter;
 
-import java.util.Arrays;
-
 /**
  * Represents a chunk of the map.
  *
@@ -40,13 +38,12 @@ public class BetaChunk {
         this.metaData = new byte[WIDTH * HEIGHT * DEPTH];
         this.skyLight = new byte[WIDTH * HEIGHT * DEPTH];
         this.blockLight = new byte[WIDTH * HEIGHT * DEPTH];
-
-        Arrays.fill(blockLight, (byte) 15); // fill an array, cuz updating block light is slow
     }
 
     public void setBlock(final int x, final int y, final int z, final int type) {
         if (type < 0 || type >= 97)
             throw new IllegalArgumentException();
+
         this.types[getIndex(x, y, z)] = (byte) type;
     }
 
@@ -58,11 +55,11 @@ public class BetaChunk {
      * @param y        The Y coordinate.
      * @param metaData The metadata.
      */
-    public void setMetaData(int x, int z, int y, int metaData) {
+    public void setMetaData(int x, int y, int z, int metaData) {
         if (metaData < 0 || metaData >= 16)
             throw new IllegalArgumentException();
 
-        this.metaData[getIndex(x, z, y)] = (byte) metaData;
+        this.metaData[getIndex(x, y, z)] = (byte) metaData;
     }
 
     private int getIndex(final int x, final int y, final int z) {
@@ -77,11 +74,11 @@ public class BetaChunk {
      * @param y        The Y coordinate.
      * @param skyLight The skylight level.
      */
-    public void setSkyLight(int x, int z, int y, int skyLight) {
+    public void setSkyLight(int x, int y, int z, int skyLight) {
         if (skyLight < 0 || skyLight >= 16)
             throw new IllegalArgumentException();
 
-        this.skyLight[getIndex(x, z, y)] = (byte) skyLight;
+        this.skyLight[getIndex(x, y, z)] = (byte) skyLight;
     }
 
     /**
@@ -96,7 +93,7 @@ public class BetaChunk {
         if (blockLight < 0 || blockLight >= 16)
             throw new IllegalArgumentException();
 
-        this.blockLight[getIndex(x, z, y)] = (byte) blockLight;
+        this.blockLight[getIndex(x, y, z)] = (byte) blockLight;
     }
 
     /**
@@ -105,24 +102,30 @@ public class BetaChunk {
      * @return The byte array populated with the tile data.
      */
     public byte[] serializeTileData() {
-        byte[] dest = new byte[((WIDTH * HEIGHT * DEPTH * 5) / 2)];
+        byte[] data = new byte[((WIDTH * HEIGHT * DEPTH * 5) / 2)];
 
-        System.arraycopy(types, 0, dest, 0, types.length);
+        System.arraycopy(types, 0, data, 0, types.length);
 
         int pos = types.length;
 
-        pos = getData(dest, pos, metaData);
-        pos = getData(dest, pos, skyLight);
-        pos = getData(dest, pos, blockLight);
-        return dest;
-    }
+        for (int i = 0; i < metaData.length; i += 2) {
+            byte meta1 = metaData[i];
+            byte meta2 = metaData[i + 1];
+            data[pos++] = (byte) ((meta2 << 4) | meta1);
+        }
 
-    private int getData(byte[] dest, int pos, byte[] skyLight) {
         for (int i = 0; i < skyLight.length; i += 2) {
             byte light1 = skyLight[i];
             byte light2 = skyLight[i + 1];
-            dest[pos++] = (byte) ((light2 << 4) | light1);
+            data[pos++] = (byte) ((light2 << 4) | light1);
         }
-        return pos;
+
+        for (int i = 0; i < blockLight.length; i += 2) {
+            byte light1 = blockLight[i];
+            byte light2 = blockLight[i + 1];
+            data[pos++] = (byte) ((light2 << 4) | light1);
+        }
+
+        return data;
     }
 }
