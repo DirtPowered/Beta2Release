@@ -11,10 +11,16 @@ public class ServerWindowItemsTranslator implements ModernToBetaHandler<ServerWi
 
     @Override
     public void translate(ServerWindowItemsPacket packet, Session betaSession) {
-        betaSession.getServer().getScheduledExecutorService().execute(() -> {
-            ItemStack[] stacks = packet.getItems();
-            int windowId = packet.getWindowId();
-            betaSession.sendPacket(new WindowItemsPacketData(windowId, Utils.convertItemStacks(stacks)));
-        });
+        ItemStack[] items = packet.getItems();
+        int windowId = packet.getWindowId();
+
+        if (items.length == 46) { // skip offhand slot
+            ItemStack[] newStacks = new ItemStack[45];
+
+            System.arraycopy(items, 0, newStacks, 0, 44);
+            betaSession.sendPacket(new WindowItemsPacketData(windowId, Utils.convertItemStacks(newStacks)));
+            return;
+        }
+        betaSession.sendPacket(new WindowItemsPacketData(windowId, Utils.convertItemStacks(items)));
     }
 }

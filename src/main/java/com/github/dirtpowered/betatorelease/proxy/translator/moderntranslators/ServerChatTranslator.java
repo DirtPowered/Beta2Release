@@ -17,17 +17,18 @@ public class ServerChatTranslator implements ModernToBetaHandler<ServerChatPacke
         String messageJson = packet.getMessage().toJsonString();
         String formattedMessage = TextComponent.toLegacyText(ComponentSerializer.parse(messageJson));
 
-        String old = null;
-        String additionalStr = null;
-
-        if (formattedMessage.length() > 119) {
-            old = formattedMessage.substring(0, 119);
-            additionalStr = formattedMessage.substring(119);
+        // we need to split the message if it's too long
+        if (formattedMessage.length() > 100) {
+            int index = 0;
+            while (index < formattedMessage.length()) {
+                int endIndex = Math.min(index + 100, formattedMessage.length());
+                String part = formattedMessage.substring(index, endIndex);
+                betaSession.sendMessage(part);
+                index = endIndex;
+            }
+            return;
         }
 
-        betaSession.sendMessage(old != null ? old : formattedMessage);
-        if (additionalStr != null) {
-            betaSession.sendMessage(additionalStr);
-        }
+        betaSession.sendMessage(formattedMessage);
     }
 }
