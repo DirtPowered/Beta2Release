@@ -17,7 +17,6 @@ public class UpdateSignPacketHandler implements BetaToModernHandler<UpdateSignPa
         String[] lines = packetClass.getSignLines();
         Position position = new Position(x, y, z);
 
-        // FIXME: updates the sign, but still no text is displayed
         session.getModernClient().sendModernPacket(new ClientUpdateSignPacket(position, lines));
     }
 }

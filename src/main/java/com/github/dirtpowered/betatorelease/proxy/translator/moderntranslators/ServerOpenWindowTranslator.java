@@ -12,6 +12,8 @@ public class ServerOpenWindowTranslator implements ModernToBetaHandler<ServerOpe
         int slotsCount = packet.getSlots();
         String windowTitle = packet.getName();
 
+        betaSession.getBetaPlayer().cacheWindowType(packet.getWindowId(), packet.getType());
+
         int inventoryType = switch (packet.getType()) {
             case CRAFTING_TABLE -> 1;
             case CHEST -> 0;

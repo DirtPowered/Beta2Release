@@ -19,7 +19,6 @@ import org.pmw.tinylog.Logger;
 import java.util.Arrays;
 
 public class Utils {
-    public static final ItemStack AIR = new ItemStack(0, 0, 0);
 
     public static String toHex(int i) {
         return "0x" + String.format("%2s", Integer.toHexString(i)).replace(' ', '0');

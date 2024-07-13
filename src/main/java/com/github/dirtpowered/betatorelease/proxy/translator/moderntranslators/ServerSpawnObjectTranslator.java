@@ -14,6 +14,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
     @Override
     public void translate(ServerSpawnObjectPacket packet, Session betaSession) {
         int entityId = packet.getEntityId();
+
         int x = Utils.toAbsolutePos(packet.getX());
         int y = Utils.toAbsolutePos(packet.getY());
         int z = Utils.toAbsolutePos(packet.getZ());
@@ -59,9 +60,10 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 63, x, y, z, 0, velocityX, velocityY, velocityZ));
                 break;
             case FALLING_BLOCK:
-                FallingBlockData data = (FallingBlockData) packet.getData();
-                int entityType = data.getId() == 13 ? 71 : 70;
+                if (!(packet.getData() instanceof FallingBlockData data))
+                    return;
 
+                int entityType = data.getId() == 13 ? 71 : 70;
                 betaSession.sendPacket(new VehicleSpawnPacketData(entityId, entityType, x, y, z, 0, velocityX, velocityY, velocityZ));
                 break;
         }
