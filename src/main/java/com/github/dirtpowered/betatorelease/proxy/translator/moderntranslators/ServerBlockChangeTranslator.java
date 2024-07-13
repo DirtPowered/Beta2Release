@@ -1,6 +1,7 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators;
 
-import com.github.dirtpowered.betatorelease.data.chunk.Block;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.BlockChangePacketData;
+import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
@@ -23,6 +24,6 @@ public class ServerBlockChangeTranslator implements ModernToBetaHandler<ServerBl
         int blockId = block.getId();
         int blockData = block.getData();
 
-        betaSession.queueBlock(new Block(x, y, z, blockId, blockData));
+        betaSession.sendPacket(new BlockChangePacketData(x, y, z, BlockMappings.getFixedBlockId(blockId), blockData));
     }
 }

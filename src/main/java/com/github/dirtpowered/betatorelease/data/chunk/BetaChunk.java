@@ -89,7 +89,7 @@ public class BetaChunk {
      * @param y          The Y coordinate.
      * @param blockLight The block light level.
      */
-    public void setBlockLight(int x, int z, int y, int blockLight) {
+    public void setBlockLight(int x, int y, int z, int blockLight) {
         if (blockLight < 0 || blockLight >= 16)
             throw new IllegalArgumentException();
 

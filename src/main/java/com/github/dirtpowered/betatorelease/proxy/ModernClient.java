@@ -5,17 +5,15 @@ import com.github.dirtpowered.betatorelease.utils.Tickable;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerAdvancementsPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerDifficultyPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPlayerListDataPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerPluginMessagePacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerResourcePackSendPacket;
-import com.github.steveice10.mc.protocol.packet.ingame.server.ServerUnlockRecipesPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.*;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPropertiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerAbilitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerSetExperiencePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.scoreboard.ServerScoreboardObjectivePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockBreakAnimPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerSpawnParticlePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerWorldBorderPacket;
+import com.github.steveice10.mc.protocol.packet.login.server.LoginSetCompressionPacket;
 import com.github.steveice10.mc.protocol.packet.login.server.LoginSuccessPacket;
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.event.session.ConnectedEvent;
@@ -51,7 +49,11 @@ public class ModernClient implements Tickable {
                 ServerPlayerSetExperiencePacket.class,
                 ServerWorldBorderPacket.class,
                 ServerAdvancementsPacket.class,
-                ServerScoreboardObjectivePacket.class
+                ServerScoreboardObjectivePacket.class,
+                ServerSpawnParticlePacket.class,
+                ServerCombatPacket.class,
+                ServerBlockBreakAnimPacket.class,
+                LoginSetCompressionPacket.class
         ));
     }
 

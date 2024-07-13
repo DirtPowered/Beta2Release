@@ -11,6 +11,7 @@ import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import org.pmw.tinylog.Logger;
+
 public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChunkDataPacket> {
 
     @Override
@@ -43,7 +44,7 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                             int blockId = blockState.getId();
                             betaChunk.setBlock(x, y + columnCurrentHeight, z, BlockMappings.getFixedBlockId(blockId));
                             betaChunk.setMetaData(x, y + columnCurrentHeight, z, BlockMappings.getFixedBlockData(blockId, blockState.getData()));
-                            betaChunk.setBlockLight(x, y + columnCurrentHeight, y, chunk.getBlockLight().get(x, y, z));
+                            betaChunk.setBlockLight(x, y + columnCurrentHeight, z, chunk.getBlockLight().get(x, y, z));
 
                             if (hasSkyLight) { // there's no skylight in end/nether
                                 betaChunk.setSkyLight(x, y + columnCurrentHeight, z, chunk.getSkyLight().get(x, y, z));

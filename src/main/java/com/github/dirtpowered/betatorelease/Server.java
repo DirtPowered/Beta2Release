@@ -183,6 +183,7 @@ public class Server implements Runnable {
         translatorRegistry.registerTranslator(ServerCloseWindowPacket.class, new ServerCloseWindowTranslator());
         translatorRegistry.registerTranslator(ServerWindowPropertyPacket.class, new ServerWindowPropertyTranslator());
         translatorRegistry.registerTranslator(ServerPlayEffectPacket.class, new ServerPlayEffectTranslator());
+        translatorRegistry.registerTranslator(ServerMapDataPacket.class, new ServerMapDataTranslator());
 
         //global tick loop
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Server Thread"));

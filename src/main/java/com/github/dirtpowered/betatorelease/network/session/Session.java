@@ -1,17 +1,16 @@
 package com.github.dirtpowered.betatorelease.network.session;
 
 import com.github.dirtpowered.betaprotocollib.model.Packet;
-import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.*;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.ChatPacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.KeepAlivePacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.KickDisconnectPacketData;
 import com.github.dirtpowered.betatorelease.Server;
-import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
-import com.github.dirtpowered.betatorelease.utils.Tickable;
-import com.github.dirtpowered.betatorelease.utils.Utils;
-import com.github.dirtpowered.betatorelease.data.chunk.Block;
 import com.github.dirtpowered.betatorelease.model.ProtocolState;
 import com.github.dirtpowered.betatorelease.network.handler.BetaToModernHandler;
 import com.github.dirtpowered.betatorelease.network.registry.MessageHandlerRegistry;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
 import com.github.dirtpowered.betatorelease.proxy.ModernClient;
+import com.github.dirtpowered.betatorelease.utils.Tickable;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -20,14 +19,11 @@ import lombok.Setter;
 import org.pmw.tinylog.Logger;
 
 import java.net.SocketAddress;
-import java.util.Deque;
-import java.util.LinkedList;
 
 public class Session extends SimpleChannelInboundHandler<Packet<?>> implements Tickable {
     private final Channel channel;
     private final SessionRegistry sessionRegistry;
     private final MessageHandlerRegistry messageHandlerRegistry;
-    private final Deque<Block> blockQueue = new LinkedList<>();
 
     @Getter
     private final Server server;
@@ -35,7 +31,6 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> implements T
     @Getter
     @Setter
     private ProtocolState protocolState;
-    private int tickLimiter = 0;
 
     @Getter
     private final ModernClient modernClient;
@@ -119,10 +114,6 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> implements T
     @Override
     public void tick() {
         modernClient.tick();
-        tickLimiter = (tickLimiter + 1) % 5; //24 chunks every 250ms
-        if (tickLimiter == 0) {
-            poolBlockQueue();
-        }
     }
 
     public void sendKeepAlive() {
@@ -131,24 +122,5 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> implements T
 
     public void joinPlayer() {
         // empty
-    }
-
-    private void poolBlockQueue() {
-        if (blockQueue.isEmpty())
-            return;
-
-        int allowance = Math.min(64, blockQueue.size());
-
-        for (int i = 0; i < allowance; i++) {
-            Block block = blockQueue.remove();
-            if (block == null)
-                return;
-
-            sendPacket(new BlockChangePacketData(block.getX(), block.getY(), block.getZ(), block.getBlockId(), block.getBlockData()));
-        }
-    }
-
-    public void queueBlock(Block block) {
-        this.blockQueue.add(new Block(block.getX(), block.getY(), block.getZ(), BlockMappings.getFixedBlockId(block.getBlockId()), block.getBlockData()));
     }
 }
