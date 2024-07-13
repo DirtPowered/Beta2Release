@@ -31,6 +31,9 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
             boolean hasSkyLight = betaSession.getBetaPlayer().getDimension() == 0;
 
             for (int index = 0; index < chunks.length; index++) {
+                if (index >= 8) // we don't need to send chunks above 128 since beta doesn't support them
+                    break;
+
                 Chunk chunk = chunks[index];
                 if (chunk == null)
                     continue;
