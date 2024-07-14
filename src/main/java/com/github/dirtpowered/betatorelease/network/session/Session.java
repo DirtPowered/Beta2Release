@@ -10,7 +10,6 @@ import com.github.dirtpowered.betatorelease.network.handler.BetaToModernHandler;
 import com.github.dirtpowered.betatorelease.network.registry.MessageHandlerRegistry;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
 import com.github.dirtpowered.betatorelease.proxy.ModernClient;
-import com.github.dirtpowered.betatorelease.utils.Tickable;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -20,7 +19,7 @@ import org.pmw.tinylog.Logger;
 
 import java.net.SocketAddress;
 
-public class Session extends SimpleChannelInboundHandler<Packet<?>> implements Tickable {
+public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     private final Channel channel;
     private final SessionRegistry sessionRegistry;
     private final MessageHandlerRegistry messageHandlerRegistry;
@@ -109,11 +108,6 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> implements T
 
     public void disconnect(String reason) {
         sendPacket(new KickDisconnectPacketData(reason));
-    }
-
-    @Override
-    public void tick() {
-        modernClient.tick();
     }
 
     public void sendKeepAlive() {

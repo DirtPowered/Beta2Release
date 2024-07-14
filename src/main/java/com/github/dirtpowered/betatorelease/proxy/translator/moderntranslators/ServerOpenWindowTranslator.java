@@ -4,13 +4,15 @@ import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.OpenWindo
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerOpenWindowPacket;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 
 public class ServerOpenWindowTranslator implements ModernToBetaHandler<ServerOpenWindowPacket> {
 
     @Override
     public void translate(ServerOpenWindowPacket packet, Session betaSession) {
         int slotsCount = packet.getSlots();
-        String windowTitle = packet.getName();
+        String windowTitle = TextComponent.toPlainText(ComponentSerializer.parse(packet.getName()));
 
         betaSession.getBetaPlayer().cacheWindowType(packet.getWindowId(), packet.getType());
 

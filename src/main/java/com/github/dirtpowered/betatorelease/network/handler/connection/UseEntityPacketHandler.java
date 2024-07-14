@@ -12,6 +12,7 @@ public class UseEntityPacketHandler implements BetaToModernHandler<UseEntityPack
     public void handlePacket(Session session, UseEntityPacketData packetClass) {
         int targetEntityId = packetClass.getTargetEntityId();
         boolean isLeftClick = packetClass.isLeftClick();
-        session.getModernClient().sendModernPacket(new ClientPlayerInteractEntityPacket(targetEntityId, isLeftClick ? InteractAction.ATTACK : InteractAction.INTERACT));
+
+        session.getModernClient().sendModernPacket(new ClientPlayerInteractEntityPacket(targetEntityId, isLeftClick ? InteractAction.ATTACK : InteractAction.INTERACT_AT));
     }
 }

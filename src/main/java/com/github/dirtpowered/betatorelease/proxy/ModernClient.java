@@ -1,7 +1,6 @@
 package com.github.dirtpowered.betatorelease.proxy;
 
 import com.github.dirtpowered.betatorelease.Server;
-import com.github.dirtpowered.betatorelease.utils.Tickable;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ModernClient implements Tickable {
+public class ModernClient {
     private final List<Class<? extends Packet>> skipTranslating = new ArrayList<>();
     private Client client;
     private final Session betaSession;
@@ -119,9 +118,5 @@ public class ModernClient implements Tickable {
 
     private Session getBetaSession() {
         return betaSession;
-    }
-
-    @Override
-    public void tick() {
     }
 }

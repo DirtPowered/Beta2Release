@@ -66,9 +66,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
-public class Server implements Runnable {
+public class Server {
     private final MessageHandlerRegistry messageHandlerRegistry;
     private final SessionRegistry sessionRegistry;
 
@@ -185,17 +184,7 @@ public class Server implements Runnable {
         translatorRegistry.registerTranslator(ServerPlayEffectPacket.class, new ServerPlayEffectTranslator());
         translatorRegistry.registerTranslator(ServerMapDataPacket.class, new ServerMapDataTranslator());
 
-        //global tick loop
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Server Thread"));
-        executor.scheduleAtFixedRate(this, 0L, 50L, TimeUnit.MILLISECONDS);
         bind(configuration.getBindAdress(), configuration.getBindPort());
-    }
-
-    @Override
-    public void run() {
-        for (final Session session : sessionRegistry.getSessions()) {
-            session.tick();
-        }
     }
 
     private void bind(String addr, int port) {
