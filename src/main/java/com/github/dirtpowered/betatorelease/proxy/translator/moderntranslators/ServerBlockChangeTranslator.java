@@ -24,6 +24,7 @@ public class ServerBlockChangeTranslator implements ModernToBetaHandler<ServerBl
         int blockId = block.getId();
         int blockData = block.getData();
 
-        betaSession.sendPacket(new BlockChangePacketData(x, y, z, BlockMappings.getFixedBlockId(blockId), blockData));
+        BlockMappings.RemappedBlock remap = BlockMappings.getRemappedBlock(blockId, blockData);
+        betaSession.sendPacket(new BlockChangePacketData(x, y, z, remap.blockId(), remap.blockData()));
     }
 }

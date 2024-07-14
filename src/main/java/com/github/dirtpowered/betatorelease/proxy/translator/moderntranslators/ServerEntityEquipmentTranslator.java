@@ -34,6 +34,7 @@ public class ServerEntityEquipmentTranslator implements ModernToBetaHandler<Serv
         if (betaSlot == -1)
             return;
 
-        betaSession.sendPacket(new EntityEquipmentPacketData(entityId, betaSlot, BlockMappings.getFixedItemId(itemId), itemData));
+        BlockMappings.RemappedItem remap = BlockMappings.getRemappedItem(itemId, itemData);
+        betaSession.sendPacket(new EntityEquipmentPacketData(entityId, betaSlot, remap.itemId(), remap.itemData()));
     }
 }

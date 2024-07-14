@@ -16,7 +16,7 @@ public class ServerPlayEffectTranslator implements ModernToBetaHandler<ServerPla
         Position position = packet.getPosition();
 
         if (packet.getEffect() == ParticleEffect.BREAK_BLOCK && packet.getData() instanceof BreakBlockEffectData data) {
-            byte packedData = (byte) (BlockMappings.getFixedBlockId(data.getBlockState().getId()) + (data.getBlockState().getData() << 12));
+            byte packedData = (byte) (BlockMappings.getRemappedBlock(data.getBlockState().getId()).blockId() + (data.getBlockState().getData() << 12));
 
             betaSession.sendPacket(new SoundEffectPacketData(2001, position.getX(), position.getY(), position.getZ(), packedData));
         } else if (packet.getEffect() == ParticleEffect.SMOKE) {

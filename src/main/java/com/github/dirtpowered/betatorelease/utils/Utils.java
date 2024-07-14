@@ -36,7 +36,8 @@ public class Utils {
         if (itemStack == null)
             return new BetaItemStack(0, 0, 0);
 
-        return new BetaItemStack(BlockMappings.getFixedItemId(itemStack.getId()), itemStack.getAmount(), itemStack.getData());
+        BlockMappings.RemappedItem remap = BlockMappings.getRemappedItem(itemStack.getId(), itemStack.getData());
+        return new BetaItemStack(remap.itemId(), itemStack.getAmount(), remap.itemData());
     }
 
     public static void updateInventory(Session session, BetaItemStack currentItem) {

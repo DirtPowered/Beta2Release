@@ -18,7 +18,8 @@ public class ServerMultiBlockChangeTranslator implements ModernToBetaHandler<Ser
             BlockState blockState = record.getBlock();
             Position pos = record.getPosition();
 
-            betaSession.sendPacket(new BlockChangePacketData(pos.getX(), pos.getY(), pos.getZ(), BlockMappings.getFixedBlockId(blockState.getId()), blockState.getData()));
+            BlockMappings.RemappedBlock remap = BlockMappings.getRemappedBlock(blockState.getId(), blockState.getData());
+            betaSession.sendPacket(new BlockChangePacketData(pos.getX(), pos.getY(), pos.getZ(), remap.blockId(), remap.blockData()));
         }
     }
 }
