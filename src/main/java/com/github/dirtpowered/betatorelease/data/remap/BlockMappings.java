@@ -65,14 +65,19 @@ public class BlockMappings {
     }
 
     public static RemappedItem getRemappedItem(int itemId, int itemData) {
-        Preconditions.checkArgument(itemData >= 0 && itemData <= 15, "item data must be between 0 and 15");
-
         String key = itemId + ":" + itemData;
         if (itemCache.containsKey(key))
             return itemCache.get(key);
 
         String remapped = itemMappings.get(key);
         if (remapped == null) {
+            // we need to support items with durability too
+            String itemDataRemapped = itemMappings.get(itemId + ":0"); // find base item
+
+            if (itemDataRemapped != null)
+                return new RemappedItem(Integer.parseInt(itemDataRemapped.split(":")[0]), itemData);
+
+            // if item data is not found, use default
             Logger.warn("Missing item mapping for item {}:{}", itemId, itemData);
             remapped = DEFAULT_ITEM_ID + ":" + 0;
         }
