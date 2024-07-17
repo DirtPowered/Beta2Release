@@ -7,15 +7,14 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionRegistry {
-
     private final Set<Session> sessions = ConcurrentHashMap.newKeySet();
 
     public void addSession(final Session session) {
-        sessions.add(session);
+        this.sessions.add(session);
     }
 
     public void removeSession(final Session session) {
-        sessions.remove(session);
+        this.sessions.remove(session);
     }
 
     public Set<Session> getSessions() {

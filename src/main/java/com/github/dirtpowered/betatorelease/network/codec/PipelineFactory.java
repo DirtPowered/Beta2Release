@@ -4,7 +4,7 @@ import com.github.dirtpowered.betatorelease.Server;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 
-public class PipelineFactory extends ChannelInitializer {
+public class PipelineFactory extends ChannelInitializer<Channel> {
 
     private final Server server;
 

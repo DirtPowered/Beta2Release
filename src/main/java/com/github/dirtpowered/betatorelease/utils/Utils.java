@@ -51,12 +51,12 @@ public class Utils {
         return var0 < (float) var1 ? var1 - 1 : var1;
     }
 
-    public static double toAbsoluteOffset(double pos) {
-        return pos / 32.0D;
-    }
-
     public static int toAbsoluteRotation(float rotation) {
         return floor_float(rotation * 256.0F / 360.0F);
+    }
+
+    public static double toAbsoluteOffset(double pos) {
+        return pos / 32.0D;
     }
 
     public static int toBetaVelocity(double vec) {

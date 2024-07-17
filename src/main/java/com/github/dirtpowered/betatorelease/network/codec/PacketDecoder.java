@@ -24,7 +24,9 @@ public class PacketDecoder extends ReplayingDecoder<Packet<?>> {
     }
 
     @Override
-    protected void decode(ChannelHandlerContext context, ByteBuf buffer, List<Object> list) throws IOException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    protected void decode(ChannelHandlerContext context, ByteBuf buffer, List<Object> list)
+            throws IOException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+
         final int packetId = buffer.readUnsignedByte();
 
         if (!BetaLib.getRegistry().hasId(packetId)) {

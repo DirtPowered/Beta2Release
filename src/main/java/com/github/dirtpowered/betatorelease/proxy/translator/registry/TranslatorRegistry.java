@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TranslatorRegistry {
-    private final Map<Class<? extends Packet>, ModernToBetaHandler> translators = new HashMap<>();
+    private final Map<Class<? extends Packet>, ModernToBetaHandler<?>> translators = new HashMap<>();
 
-    public void registerTranslator(final Class<? extends Packet> packet, ModernToBetaHandler translator) {
-        translators.put(packet, translator);
+    public void registerTranslator(final Class<? extends Packet> packet, ModernToBetaHandler<?> translator) {
+        this.translators.put(packet, translator);
     }
 
-    public ModernToBetaHandler getByPacket(final Packet packet) {
+    public ModernToBetaHandler<?> getByPacket(final Packet packet) {
         return translators.get(packet.getClass());
     }
 }

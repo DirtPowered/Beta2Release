@@ -7,13 +7,13 @@ import com.github.dirtpowered.betatorelease.configuration.Configuration;
 import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.data.entity.cache.PlayerCache;
 import com.github.dirtpowered.betatorelease.network.codec.PipelineFactory;
-import com.github.dirtpowered.betatorelease.network.handler.connection.*;
 import com.github.dirtpowered.betatorelease.network.registry.MessageHandlerRegistry;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
-import com.github.dirtpowered.betatorelease.proxy.translator.moderntranslators.*;
+import com.github.dirtpowered.betatorelease.proxy.translator.clientbound.*;
 import com.github.dirtpowered.betatorelease.proxy.translator.registry.TranslatorRegistry;
+import com.github.dirtpowered.betatorelease.proxy.translator.serverbound.*;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerDisconnectPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
@@ -64,8 +64,6 @@ import org.pmw.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class Server {
     private final MessageHandlerRegistry messageHandlerRegistry;
@@ -74,11 +72,6 @@ public class Server {
     @Getter
     private final TranslatorRegistry translatorRegistry;
 
-    @Getter
-    private final ScheduledExecutorService scheduledExecutorService;
-
-    private final EventLoopGroup bossGroup = new NioEventLoopGroup();
-    private final EventLoopGroup workerGroup = new NioEventLoopGroup();
     private final Server server;
 
     @Getter
@@ -96,19 +89,20 @@ public class Server {
     @Getter
     private boolean debugMode;
 
-    Server() {
+    private final EventLoopGroup bossGroup = new NioEventLoopGroup();
+    private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+
+    public Server() {
         this.server = this;
         this.messageHandlerRegistry = new MessageHandlerRegistry();
         this.sessionRegistry = new SessionRegistry();
         this.translatorRegistry = new TranslatorRegistry();
-        this.scheduledExecutorService = Executors.newScheduledThreadPool(32);
         this.entityCache = new EntityCache();
         this.playerCache = new PlayerCache();
         this.configuration = new Configuration();
 
-        setDebugMode(false); //TODO: Configuration?
+        setDebugMode(false);
 
-        //register packet handlers
         messageHandlerRegistry.registerHandler(HandshakePacketData.class, new HandshakePacketHandler());
         messageHandlerRegistry.registerHandler(LoginPacketData.class, new LoginPacketHandler());
         messageHandlerRegistry.registerHandler(PlayerLookMovePacketData.class, new PlayerLookMovePacketHandler());
@@ -131,10 +125,8 @@ public class Server {
         messageHandlerRegistry.registerHandler(UseEntityPacketData.class, new UseEntityPacketHandler());
         messageHandlerRegistry.registerHandler(UpdateSignPacketData.class, new UpdateSignPacketHandler());
 
-        //register packets
         BetaLib.inject(MinecraftVersion.B_1_7_3);
 
-        //register translators
         translatorRegistry.registerTranslator(ServerChatPacket.class, new ServerChatTranslator());
         translatorRegistry.registerTranslator(ServerUpdateTimePacket.class, new UpdateTimeTranslator());
         translatorRegistry.registerTranslator(ServerPlayerHealthPacket.class, new ServerPlayerHealthTranslator());

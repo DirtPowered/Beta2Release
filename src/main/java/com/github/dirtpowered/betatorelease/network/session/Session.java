@@ -6,7 +6,7 @@ import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.KeepAlive
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.KickDisconnectPacketData;
 import com.github.dirtpowered.betatorelease.Server;
 import com.github.dirtpowered.betatorelease.model.ProtocolState;
-import com.github.dirtpowered.betatorelease.network.handler.BetaToModernHandler;
+import com.github.dirtpowered.betatorelease.proxy.translator.BetaToModernHandler;
 import com.github.dirtpowered.betatorelease.network.registry.MessageHandlerRegistry;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
 import com.github.dirtpowered.betatorelease.proxy.ModernClient;
