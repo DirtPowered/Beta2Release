@@ -14,6 +14,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
     @Override
     public void translate(ServerSpawnObjectPacket packet, Session betaSession) {
         int entityId = packet.getEntityId();
+        int viewer = betaSession.getBetaPlayer().getEntityId();
 
         int x = Utils.toAbsolutePos(packet.getX());
         int y = Utils.toAbsolutePos(packet.getY());
@@ -39,7 +40,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 betaSession.getServer().getEntityCache().addEntity(entityItem);
                 break;
             case TIPPED_ARROW:
-                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 60, x, y, z, 0, velocityX, velocityY, velocityZ));
+                betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 60, x, y, z, viewer, velocityX, velocityY, velocityZ));
                 break;
             case PRIMED_TNT:
                 betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 50, x, y, z, 0, velocityX, velocityY, velocityZ));

@@ -17,19 +17,20 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
     @Override
     public void translate(ServerChunkDataPacket packet, Session betaSession) {
         Column chunkColumn = packet.getColumn();
+
         int xPosition = chunkColumn.getX();
         int zPosition = chunkColumn.getZ();
 
         BetaChunk betaChunk = new BetaChunk(xPosition, zPosition);
+        boolean fullChunk = chunkColumn.hasBiomeData();
 
-        betaSession.sendPacket(new PreChunkPacketData(xPosition, zPosition, true /* allocate space */));
         //https://wiki.vg/index.php?title=Protocol&oldid=689#Pre-Chunk_.280x32.29
+        if (fullChunk)
+            betaSession.sendPacket(new PreChunkPacketData(xPosition, zPosition, true /* allocate space */));
 
         Chunk[] chunks = chunkColumn.getChunks();
 
         try {
-            boolean hasSkyLight = betaSession.getBetaPlayer().getDimension() == 0;
-
             for (int index = 0; index < chunks.length; index++) {
                 if (index >= 8) // we don't need to send chunks above 128 since beta doesn't support them
                     break;
@@ -50,7 +51,7 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                             betaChunk.setMetaData(x, y + columnCurrentHeight, z, remap.blockData());
                             betaChunk.setBlockLight(x, y + columnCurrentHeight, z, chunk.getBlockLight().get(x, y, z));
 
-                            if (hasSkyLight) { // there's no skylight in end/nether
+                            if (chunkColumn.hasSkylight()) { // there's no skylight in end/nether
                                 betaChunk.setSkyLight(x, y + columnCurrentHeight, z, chunk.getSkyLight().get(x, y, z));
                             }
                         }

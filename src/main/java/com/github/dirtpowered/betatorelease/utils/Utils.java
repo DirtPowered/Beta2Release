@@ -5,13 +5,6 @@ import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.SetSlotPa
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
-import com.github.steveice10.opennbt.conversion.builtin.StringTagConverter;
-import com.github.steveice10.opennbt.tag.builtin.StringTag;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import io.netty.util.internal.StringUtil;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.pmw.tinylog.Logger;
@@ -68,21 +61,6 @@ public class Utils {
 
     public static int toBetaVelocity(double vec) {
         return (int) (vec * 8000.0D);
-    }
-
-    public static String getSignText(StringTag line) {
-        StringTagConverter converter = new StringTagConverter();
-        String jsonLine = converter.convert(line);
-
-        JsonElement jsonObject = new JsonParser().parse(jsonLine);
-        JsonObject jsObj = jsonObject.getAsJsonObject();
-
-        if (jsObj.has("extra")) {
-            JsonArray jsonArray = jsObj.getAsJsonArray("extra");
-            JsonObject object = jsonArray.get(0).getAsJsonObject();
-            return object.get("text").getAsString();
-        }
-        return StringUtil.EMPTY_STRING;
     }
 
     public static void debug(Object clazz) {
