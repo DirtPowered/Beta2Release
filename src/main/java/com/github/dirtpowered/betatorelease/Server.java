@@ -170,6 +170,7 @@ public class Server {
         translatorRegistry.registerTranslator(ServerWindowPropertyPacket.class, new ServerWindowPropertyTranslator());
         translatorRegistry.registerTranslator(ServerPlayEffectPacket.class, new ServerPlayEffectTranslator());
         translatorRegistry.registerTranslator(ServerMapDataPacket.class, new ServerMapDataTranslator());
+        translatorRegistry.registerTranslator(ServerBlockValuePacket.class, new ServerBlockValueTranslator());
 
         bind(configuration.getBindAdress(), configuration.getBindPort());
     }

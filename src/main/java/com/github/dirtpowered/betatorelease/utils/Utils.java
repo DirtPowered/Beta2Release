@@ -46,7 +46,7 @@ public class Utils {
 
         for (int line = 0; line < 4; ++line) {
             try {
-                String legacy = TextComponent.toPlainText(ComponentSerializer.parse(strings.get("Text" + (line + 1)).getValue() + ""));
+                String legacy = TextComponent.toLegacyText(ComponentSerializer.parse(strings.get("Text" + (line + 1)).getValue() + ""));
                 signLines[line] = StringUtils.substring(legacy, 0, 15);
             } catch (Exception e) {
                 signLines[line] = "error";

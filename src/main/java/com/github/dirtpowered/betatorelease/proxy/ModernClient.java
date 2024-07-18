@@ -56,7 +56,6 @@ public class ModernClient {
                 LoginSetCompressionPacket.class,
                 ServerPlaySoundPacket.class,
                 ServerUpdateScorePacket.class,
-                ServerBlockValuePacket.class,
                 ServerTeamPacket.class,
                 ServerDisplayScoreboardPacket.class
         ));

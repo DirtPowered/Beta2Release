@@ -10,13 +10,16 @@ import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler
 import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
+import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import org.pmw.tinylog.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChunkDataPacket> {
-    private final static String SIGN_TAG = "minecraft:sign";
 
     @Override
     public void translate(ServerChunkDataPacket packet, Session betaSession) {
@@ -33,6 +36,8 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
             betaSession.sendPacket(new PreChunkPacketData(xPosition, zPosition, true /* allocate space */));
 
         Chunk[] chunks = chunkColumn.getChunks();
+
+        List<Position> signPositions = new ArrayList<>();
 
         try {
             for (int index = 0; index < chunks.length; index++) {
@@ -58,6 +63,9 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                             if (chunkColumn.hasSkylight()) { // there's no skylight in end/nether
                                 betaChunk.setSkyLight(x, y + columnCurrentHeight, z, chunk.getSkyLight().get(x, y, z));
                             }
+                            if (remap.blockId() == 63 || remap.blockId() == 68) {
+                                signPositions.add(new Position(x + xPosition * 16, y + columnCurrentHeight, z + zPosition * 16));
+                            }
                         }
                     }
                 }
@@ -67,13 +75,12 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
             // update tile entities
             for (int i = 0; i < chunkColumn.getTileEntities().length; i++) {
                 CompoundTag tag = chunkColumn.getTileEntities()[i];
-                if (SIGN_TAG.equals(tag.get("id").getValue())) {
-                    int x = (int) tag.get("x").getValue();
-                    int y = (int) tag.get("y").getValue();
-                    int z = (int) tag.get("z").getValue();
+                int x = (int) tag.get("x").getValue();
+                int y = (int) tag.get("y").getValue();
+                int z = (int) tag.get("z").getValue();
 
+                if (signPositions.contains(new Position(x, y, z)))
                     betaSession.sendPacket(new UpdateSignPacketData(x, y, z, Utils.getLegacySignLines(tag)));
-                }
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             Logger.error("Chunk error: {}", e);
