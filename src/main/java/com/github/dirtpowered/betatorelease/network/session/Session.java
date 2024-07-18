@@ -2,13 +2,12 @@ package com.github.dirtpowered.betatorelease.network.session;
 
 import com.github.dirtpowered.betaprotocollib.model.Packet;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.ChatPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.KeepAlivePacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.KickDisconnectPacketData;
 import com.github.dirtpowered.betatorelease.Server;
 import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.model.ProtocolState;
 import com.github.dirtpowered.betatorelease.proxy.translator.BetaToModernHandler;
-import com.github.dirtpowered.betatorelease.network.registry.MessageHandlerRegistry;
+import com.github.dirtpowered.betatorelease.proxy.translator.registry.BetaToModernRegistry;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
 import com.github.dirtpowered.betatorelease.proxy.ModernClient;
 import io.netty.channel.Channel;
@@ -23,7 +22,7 @@ import java.net.SocketAddress;
 public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     private final Channel channel;
     private final SessionRegistry sessionRegistry;
-    private final MessageHandlerRegistry messageHandlerRegistry;
+    private final BetaToModernRegistry messageHandlerRegistry;
 
     @Getter
     private final Server server;
@@ -49,11 +48,11 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     @Getter
     private boolean loggedIn;
 
-    public Session(Server server, Channel channel, final SessionRegistry sessionRegistry, MessageHandlerRegistry messageHandlerRegistry) {
+    public Session(Server server, Channel channel, final SessionRegistry sessionRegistry, BetaToModernRegistry betaToModernRegistry) {
         this.server = server;
         this.channel = channel;
         this.sessionRegistry = sessionRegistry;
-        this.messageHandlerRegistry = messageHandlerRegistry;
+        this.messageHandlerRegistry = betaToModernRegistry;
         this.protocolState = ProtocolState.HANDSHAKE;
         this.modernClient = new ModernClient(this);
         this.betaPlayer = new BetaPlayer(this);
@@ -113,10 +112,6 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
 
     public void disconnect(String reason) {
         sendPacket(new KickDisconnectPacketData(reason));
-    }
-
-    public void sendKeepAlive() {
-        sendPacket(new KeepAlivePacketData());
     }
 
     public void joinPlayer() {

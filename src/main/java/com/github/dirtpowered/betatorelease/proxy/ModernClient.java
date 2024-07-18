@@ -92,15 +92,12 @@ public class ModernClient {
 
     @SuppressWarnings("unchecked")
     private void processPacket(Packet packet) {
-        ModernToBetaHandler handler = getBetaSession().getServer().getTranslatorRegistry().getByPacket(packet);
+        ModernToBetaHandler handler = getBetaSession().getServer().getModernToBetaRegistry().getByPacket(packet);
         if (skipTranslating.contains(packet.getClass()))
             return;
 
         if (handler != null) {
             handler.translate(packet, getBetaSession());
-            if (getBetaSession().getServer().isDebugMode()) {
-                Logger.info("[modern] translating {}", packet.getClass().getSimpleName());
-            }
         } else {
             Logger.error("[modern] missing 'ModernToBeta' translator for {}", packet.getClass().getSimpleName());
         }

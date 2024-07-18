@@ -27,6 +27,9 @@ public class BetaPlayer {
     @Setter
     private int dimension;
 
+    @Setter
+    private int gameMode;
+
     private final Map<Integer, WindowType> windowTypeMap;
 
     BetaPlayer(Session session) {

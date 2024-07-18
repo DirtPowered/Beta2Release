@@ -12,23 +12,12 @@ import org.pmw.tinylog.Logger;
 import java.util.List;
 
 public class PacketEncoder extends MessageToMessageEncoder {
-    private final Server server;
-
-    PacketEncoder(Server server) {
-        this.server = server;
-    }
 
     @SuppressWarnings("unchecked")
     @Override
     protected void encode(ChannelHandlerContext ctx, Object message, List out) throws Exception {
         if (message instanceof Packet packet) {
-            Class<? extends Packet> clazz = packet.getClass();
-
             AbstractPacket abstractPacket = (AbstractPacket) packet.getPacketClass().getDeclaredConstructor().newInstance();
-
-            if (server.isDebugMode()) {
-                Logger.info("sending {} packet", clazz.getSimpleName());
-            }
 
             ByteBuf packetId = Unpooled.buffer(1);
             packetId.writeByte(abstractPacket.getPacketId());
