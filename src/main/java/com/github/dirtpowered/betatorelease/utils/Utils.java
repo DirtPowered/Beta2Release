@@ -5,11 +5,17 @@ import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.SetSlotPa
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
+import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
+import com.github.steveice10.opennbt.tag.builtin.Tag;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.pmw.tinylog.Logger;
 
 import java.util.Arrays;
+import java.util.Map;
 
 public class Utils {
 
@@ -31,6 +37,22 @@ public class Utils {
 
         BlockMappings.RemappedItem remap = BlockMappings.getRemappedItem(itemStack.getId(), itemStack.getData());
         return new BetaItemStack(remap.itemId(), itemStack.getAmount(), remap.itemData());
+    }
+
+    public static String[] getLegacySignLines(CompoundTag tag) {
+        Map<String, Tag> strings = tag.getValue();
+
+        String[] signLines = new String[4];
+
+        for (int line = 0; line < 4; ++line) {
+            try {
+                String legacy = TextComponent.toPlainText(ComponentSerializer.parse(strings.get("Text" + (line + 1)).getValue() + ""));
+                signLines[line] = StringUtils.substring(legacy, 0, 15);
+            } catch (Exception e) {
+                signLines[line] = "error";
+            }
+        }
+        return signLines;
     }
 
     public static void updateInventory(Session session, BetaItemStack currentItem) {

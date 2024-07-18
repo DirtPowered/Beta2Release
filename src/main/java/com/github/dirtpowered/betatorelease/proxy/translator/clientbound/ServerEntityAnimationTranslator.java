@@ -11,7 +11,7 @@ public class ServerEntityAnimationTranslator implements ModernToBetaHandler<Serv
     @Override
     public void translate(ServerEntityAnimationPacket packet, Session betaSession) {
         int entityId = packet.getEntityId();
-        Entity entity = betaSession.getServer().getEntityCache().getEntityById(entityId);
+        Entity entity = betaSession.getEntityCache().getEntityById(entityId);
 
         if (entity != null)
             return; // this means that it's not human, so we don't need to send an animation packet

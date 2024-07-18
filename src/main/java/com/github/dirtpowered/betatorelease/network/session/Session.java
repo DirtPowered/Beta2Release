@@ -5,6 +5,7 @@ import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.ChatPacke
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.KeepAlivePacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.KickDisconnectPacketData;
 import com.github.dirtpowered.betatorelease.Server;
+import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.model.ProtocolState;
 import com.github.dirtpowered.betatorelease.proxy.translator.BetaToModernHandler;
 import com.github.dirtpowered.betatorelease.network.registry.MessageHandlerRegistry;
@@ -26,6 +27,9 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
 
     @Getter
     private final Server server;
+
+    @Getter
+    private final EntityCache entityCache;
 
     @Getter
     @Setter
@@ -53,6 +57,7 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
         this.protocolState = ProtocolState.HANDSHAKE;
         this.modernClient = new ModernClient(this);
         this.betaPlayer = new BetaPlayer(this);
+        this.entityCache = new EntityCache();
     }
 
     @SuppressWarnings("unchecked")

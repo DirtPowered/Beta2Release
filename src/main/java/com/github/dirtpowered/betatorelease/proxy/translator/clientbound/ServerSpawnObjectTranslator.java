@@ -3,6 +3,8 @@ package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.VehicleSpawnPacketData;
 import com.github.dirtpowered.betaprotocollib.utils.Location;
 import com.github.dirtpowered.betatorelease.data.entity.EntityItem;
+import com.github.dirtpowered.betatorelease.data.entity.EntityVehicle;
+import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.dirtpowered.betatorelease.utils.Utils;
@@ -16,6 +18,8 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
     public void translate(ServerSpawnObjectPacket packet, Session betaSession) {
         int entityId = packet.getEntityId();
         int viewer = betaSession.getBetaPlayer().getEntityId();
+
+        EntityCache entityCache = betaSession.getEntityCache();
 
         int x = Utils.toAbsolutePos(packet.getX());
         int y = Utils.toAbsolutePos(packet.getY());
@@ -38,7 +42,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 entityItem.setPitch(pitch);
                 entityItem.setRoll(roll);
 
-                betaSession.getServer().getEntityCache().addEntity(entityItem);
+                entityCache.addEntity(entityItem);
                 break;
             case TIPPED_ARROW:
                 betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 60, x, y, z, viewer, velocityX, velocityY, velocityZ));
@@ -57,6 +61,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 break;
             case BOAT:
                 betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 1, x, y, z, 0, velocityX, velocityY, velocityZ));
+                entityCache.addEntity(new EntityVehicle(entityId));
                 break;
             case GHAST_FIREBALL:
                 betaSession.sendPacket(new VehicleSpawnPacketData(entityId, 63, x, y, z, 0, velocityX, velocityY, velocityZ));
@@ -69,6 +74,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 } : 10;
 
                 betaSession.sendPacket(new VehicleSpawnPacketData(entityId, typeId, x, y, z, 0, velocityX, velocityY, velocityZ));
+                entityCache.addEntity(new EntityVehicle(entityId));
                 break;
             case FALLING_BLOCK:
                 if (!(packet.getData() instanceof FallingBlockData data))

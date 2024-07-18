@@ -24,7 +24,7 @@ public class ServerSpawnMobTranslator implements ModernToBetaHandler<ServerSpawn
         byte yaw = (byte) Utils.toAbsoluteRotation((int) packet.getYaw());
         byte pitch = (byte) Utils.toAbsoluteRotation((int) packet.getPitch());
 
-        betaSession.getServer().getEntityCache().addEntity(new Entity(entityId, packet.getType()) {
+        betaSession.getEntityCache().addEntity(new Entity(entityId, packet.getType()) {
             @Override
             public int getEntityId() {
                 return super.getEntityId();

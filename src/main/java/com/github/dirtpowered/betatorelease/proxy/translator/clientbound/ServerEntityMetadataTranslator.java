@@ -18,7 +18,7 @@ public class ServerEntityMetadataTranslator implements ModernToBetaHandler<Serve
     public void translate(ServerEntityMetadataPacket packet, Session betaSession) {
         int entityId = packet.getEntityId();
         EntityMetadata[] metadata = packet.getMetadata();
-        Entity entity = betaSession.getServer().getEntityCache().getEntityById(entityId);
+        Entity entity = betaSession.getEntityCache().getEntityById(entityId);
 
         for (EntityMetadata entityMetadata : metadata) {
             if (entityMetadata.getType() == MetadataType.ITEM && entity instanceof EntityItem item) {
@@ -44,6 +44,6 @@ public class ServerEntityMetadataTranslator implements ModernToBetaHandler<Serve
                 itemEntity.getItemStack()
         ));
 
-        session.getServer().getEntityCache().removeEntity(itemEntity.getEntityId());
+        session.getEntityCache().removeEntity(itemEntity.getEntityId());
     }
 }

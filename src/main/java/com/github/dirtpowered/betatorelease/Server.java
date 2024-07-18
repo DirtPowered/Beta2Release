@@ -4,7 +4,6 @@ import com.github.dirtpowered.betaprotocollib.BetaLib;
 import com.github.dirtpowered.betaprotocollib.data.version.MinecraftVersion;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.*;
 import com.github.dirtpowered.betatorelease.configuration.Configuration;
-import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.data.entity.cache.PlayerCache;
 import com.github.dirtpowered.betatorelease.network.codec.PipelineFactory;
 import com.github.dirtpowered.betatorelease.network.registry.MessageHandlerRegistry;
@@ -75,9 +74,6 @@ public class Server {
     private final Server server;
 
     @Getter
-    private final EntityCache entityCache;
-
-    @Getter
     private final PlayerCache playerCache;
 
     @Getter
@@ -97,7 +93,6 @@ public class Server {
         this.messageHandlerRegistry = new MessageHandlerRegistry();
         this.sessionRegistry = new SessionRegistry();
         this.translatorRegistry = new TranslatorRegistry();
-        this.entityCache = new EntityCache();
         this.playerCache = new PlayerCache();
         this.configuration = new Configuration();
 
@@ -206,7 +201,6 @@ public class Server {
     void stop() {
         bossGroup.shutdownGracefully();
         workerGroup.shutdownGracefully();
-        entityCache.getEntities().clear();
         playerCache.getPlayers().clear();
         sessionRegistry.getSessions().clear();
     }

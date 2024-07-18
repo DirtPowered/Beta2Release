@@ -2,17 +2,21 @@ package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.MapChunkPacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.PreChunkPacketData;
-import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.UpdateSignPacketData;
 import com.github.dirtpowered.betatorelease.data.chunk.BetaChunk;
+import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
+import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
+import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import org.pmw.tinylog.Logger;
 
 public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChunkDataPacket> {
+    private final static String SIGN_TAG = "minecraft:sign";
 
     @Override
     public void translate(ServerChunkDataPacket packet, Session betaSession) {
@@ -60,6 +64,17 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
             }
 
             betaSession.sendPacket(new MapChunkPacketData(betaChunk.getX() * 16, (short) 0, betaChunk.getZ() * 16, 16, 128, 16, betaChunk.serializeTileData()));
+            // update tile entities
+            for (int i = 0; i < chunkColumn.getTileEntities().length; i++) {
+                CompoundTag tag = chunkColumn.getTileEntities()[i];
+                if (SIGN_TAG.equals(tag.get("id").getValue())) {
+                    int x = (int) tag.get("x").getValue();
+                    int y = (int) tag.get("y").getValue();
+                    int z = (int) tag.get("z").getValue();
+
+                    betaSession.sendPacket(new UpdateSignPacketData(x, y, z, Utils.getLegacySignLines(tag)));
+                }
+            }
         } catch (ArrayIndexOutOfBoundsException e) {
             Logger.error("Chunk error: {}", e);
         }

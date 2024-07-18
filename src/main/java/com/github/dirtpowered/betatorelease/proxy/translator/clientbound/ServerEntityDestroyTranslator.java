@@ -11,7 +11,7 @@ public class ServerEntityDestroyTranslator implements ModernToBetaHandler<Server
     public void translate(ServerEntityDestroyPacket packet, Session betaSession) {
         for (int entityId : packet.getEntityIds()) {
             betaSession.sendPacket(new EntityDestroyPacketData(entityId));
-            betaSession.getServer().getEntityCache().removeEntity(entityId);
+            betaSession.getEntityCache().removeEntity(entityId);
         }
     }
 }

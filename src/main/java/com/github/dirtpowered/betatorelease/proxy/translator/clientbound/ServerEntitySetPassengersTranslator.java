@@ -18,11 +18,12 @@ public class ServerEntitySetPassengersTranslator implements ModernToBetaHandler<
 
         int vehicleEntityId = packet.getEntityId();
         int[] passengerEntityIds = packet.getPassengerIds();
-        EntityCache cache = betaSession.getServer().getEntityCache();
+        EntityCache cache = betaSession.getEntityCache();
 
         try {
-            EntityVehicle vehicle = new EntityVehicle(vehicleEntityId);
+            EntityVehicle vehicle = (EntityVehicle) cache.getEntityById(vehicleEntityId);
             vehicle.setPassenger(passengerEntityIds[0]);
+
             BetaPlayer player = betaSession.getServer().getPlayer(passengerEntityIds[0]);
             if (player != null)
                 player.setInVehicle(true, vehicleEntityId);
@@ -36,11 +37,10 @@ public class ServerEntitySetPassengersTranslator implements ModernToBetaHandler<
 
                 if (player != null)
                     player.setInVehicle(false, -1);
+
                 betaSession.sendPacket(new AttachEntityPacketData(vehicle.getPassenger(), -1));
-                cache.removeEntity(vehicle.getEntityId());
             }
         }
-
         Utils.debug(packet);
     }
 }
