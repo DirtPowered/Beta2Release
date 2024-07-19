@@ -114,15 +114,15 @@ public class BetaChunk {
             data[pos++] = (byte) ((meta2 << 4) | meta1);
         }
 
-        for (int i = 0; i < skyLight.length; i += 2) {
-            byte light1 = skyLight[i];
-            byte light2 = skyLight[i + 1];
-            data[pos++] = (byte) ((light2 << 4) | light1);
-        }
-
         for (int i = 0; i < blockLight.length; i += 2) {
             byte light1 = blockLight[i];
             byte light2 = blockLight[i + 1];
+            data[pos++] = (byte) ((light2 << 4) | light1);
+        }
+
+        for (int i = 0; i < skyLight.length; i += 2) {
+            byte light1 = skyLight[i];
+            byte light2 = skyLight[i + 1];
             data[pos++] = (byte) ((light2 << 4) | light1);
         }
 
