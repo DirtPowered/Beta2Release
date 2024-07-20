@@ -8,6 +8,8 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.window.WindowType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.window.ServerWindowItemsPacket;
 
+import java.util.Arrays;
+
 public class ServerWindowItemsTranslator implements ModernToBetaHandler<ServerWindowItemsPacket> {
 
     @Override
@@ -17,10 +19,7 @@ public class ServerWindowItemsTranslator implements ModernToBetaHandler<ServerWi
         WindowType windowType = betaSession.getBetaPlayer().getWindowType(windowId);
 
         if (items.length == 46 && windowType == WindowType.GENERIC_INVENTORY) { // skip offhand slot
-            ItemStack[] newStacks = new ItemStack[45];
-
-            System.arraycopy(items, 0, newStacks, 0, 44);
-            betaSession.sendPacket(new WindowItemsPacketData(windowId, Utils.convertItemStacks(newStacks)));
+            betaSession.sendPacket(new WindowItemsPacketData(windowId, Utils.convertItemStacks(Arrays.copyOf(items, 45))));
             return;
         }
         betaSession.sendPacket(new WindowItemsPacketData(windowId, Utils.convertItemStacks(items)));
