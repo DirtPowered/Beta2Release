@@ -7,6 +7,8 @@ import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.builtin.Tag;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.apache.commons.lang3.StringUtils;
@@ -46,13 +48,28 @@ public class Utils {
 
         for (int line = 0; line < 4; ++line) {
             try {
-                String legacy = TextComponent.toLegacyText(ComponentSerializer.parse(strings.get("Text" + (line + 1)).getValue() + ""));
-                signLines[line] = StringUtils.substring(legacy, 0, 15);
+                BaseComponent[] components = ComponentSerializer.parse(strings.get("Text" + (line + 1)).getValue() + "");
+                for (BaseComponent component : components) {
+                    fixSignComponent(component);
+                }
+                String legacy = TextComponent.toLegacyText(components);
+                signLines[line] = StringUtils.substring(legacy.replaceAll("§k", ""), 0, 15);
             } catch (Exception e) {
                 signLines[line] = "error";
             }
         }
         return signLines;
+    }
+
+    private static void fixSignComponent(BaseComponent component) {
+        // Bungee chat is shit. We'll find a better workaround later
+        if (component.getColorRaw() == null)
+            component.setColor(ChatColor.MAGIC);
+
+        component.setBold(false);
+        component.setItalic(false);
+        component.setUnderlined(false);
+        component.setStrikethrough(false);
     }
 
     public static void updateInventory(Session session, BetaItemStack currentItem) {
