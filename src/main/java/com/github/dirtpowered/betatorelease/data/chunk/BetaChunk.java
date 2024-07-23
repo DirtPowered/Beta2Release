@@ -42,7 +42,7 @@ public class BetaChunk {
 
     public void setBlock(final int x, final int y, final int z, final int type) {
         if (type < 0 || type >= 97)
-            throw new IllegalArgumentException();
+            return;
 
         this.types[getIndex(x, y, z)] = (byte) type;
     }
@@ -57,7 +57,7 @@ public class BetaChunk {
      */
     public void setMetaData(int x, int y, int z, int metaData) {
         if (metaData < 0 || metaData >= 16)
-            throw new IllegalArgumentException();
+            return;
 
         this.metaData[getIndex(x, y, z)] = (byte) metaData;
     }

@@ -10,7 +10,9 @@ public class UpdateTimeTranslator implements ModernToBetaHandler<ServerUpdateTim
     @Override
     public void translate(ServerUpdateTimePacket packet, Session betaSession) {
         long time = packet.getTime();
-        time = time * -1; // fix doDaylightCycle false
+        if (time < 0)
+            time = time * -1; // fix doDaylightCycle false
+
         betaSession.sendPacket(new UpdateTimePacketData(time));
     }
 }

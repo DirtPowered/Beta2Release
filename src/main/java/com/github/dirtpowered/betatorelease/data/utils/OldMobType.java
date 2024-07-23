@@ -20,7 +20,7 @@ public class OldMobType {
             id = 56;
         } else if (value == MobType.SHEEP) {
             id = 91;
-        } else if (value == MobType.SLIME) {
+        } else if (value == MobType.SLIME || value == MobType.MAGMA_CUBE) {
             id = 55;
         } else if (value == MobType.SPIDER) {
             id = 52;
@@ -30,7 +30,7 @@ public class OldMobType {
             id = 93;
         } else if (value == MobType.SQUID) {
             id = 94;
-        } else if (value == MobType.SKELETON) {
+        } else if (value == MobType.SKELETON || value == MobType.WITHER_SKELETON) {
             id = 51;
         } else if (value == MobType.ZOMBIE_PIGMAN) {
             id = 57;
