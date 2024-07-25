@@ -9,9 +9,7 @@ import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.registry.BetaToModernRegistry;
 import com.github.dirtpowered.betatorelease.proxy.translator.registry.ModernToBetaRegistry;
-import com.github.dirtpowered.betatorelease.proxy.translator.registry.b17.B17Registry;
-import com.github.dirtpowered.betatorelease.proxy.translator.registry.b18.B18Registry;
-import com.github.dirtpowered.betatorelease.proxy.translator.registry.b19.B19Registry;
+import com.github.dirtpowered.betatorelease.proxy.translator.registry.TranslatorRegistry;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -61,9 +59,8 @@ public class Server {
 
         // inject beta lib packets
         switch (version) {
-            case B_1_6_6, B_1_7_3 -> new B17Registry(betaToModernRegistry, modernToBetaRegistry).register();
-            case B_1_8_1 -> new B18Registry(betaToModernRegistry, modernToBetaRegistry).register();
-            case B_1_9 -> new B19Registry(betaToModernRegistry, modernToBetaRegistry).register();
+            case B_1_6_6, B_1_7_3 -> new TranslatorRegistry(betaToModernRegistry, modernToBetaRegistry).register();
+            default -> throw new UnsupportedOperationException("Unsupported version: " + version);
         }
 
         bind(configuration.getBindAddress(), configuration.getBindPort());

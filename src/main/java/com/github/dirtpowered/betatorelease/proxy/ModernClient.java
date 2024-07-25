@@ -83,6 +83,7 @@ public class ModernClient {
             public void disconnected(DisconnectedEvent event) {
                 Logger.info("[modern] disconnected from remote server because: {}", event.getReason());
                 disconnect(event.getReason());
+                event.getCause().printStackTrace();
                 server.getOnlinePlayers().remove(betaSession.getBetaPlayer());
                 Logger.info("[main] online: {}", betaSession.getServer().getOnlinePlayers().size());
             }

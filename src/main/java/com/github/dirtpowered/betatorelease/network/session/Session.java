@@ -1,8 +1,8 @@
 package com.github.dirtpowered.betatorelease.network.session;
 
 import com.github.dirtpowered.betaprotocollib.model.Packet;
-import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.ChatPacketData;
-import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.KickDisconnectPacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3ChatPacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3KickDisconnectPacketData;
 import com.github.dirtpowered.betatorelease.Server;
 import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.model.ProtocolState;
@@ -107,11 +107,11 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     }
 
     public void sendMessage(String message) {
-        sendPacket(new ChatPacketData(message));
+        sendPacket(new V1_7_3ChatPacketData(message));
     }
 
     public void disconnect(String reason) {
-        sendPacket(new KickDisconnectPacketData(reason));
+        sendPacket(new V1_7_3KickDisconnectPacketData(reason));
     }
 
     public void joinPlayer() {

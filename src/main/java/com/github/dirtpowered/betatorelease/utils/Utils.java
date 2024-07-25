@@ -1,7 +1,7 @@
 package com.github.dirtpowered.betatorelease.utils;
 
 import com.github.dirtpowered.betaprotocollib.data.BetaItemStack;
-import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.SetSlotPacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3SetSlotPacketData;
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
@@ -73,7 +73,7 @@ public class Utils {
     }
 
     public static void updateInventory(Session session, BetaItemStack currentItem) {
-        session.sendPacket(new SetSlotPacketData(-1, -1, currentItem));
+        session.sendPacket(new V1_7_3SetSlotPacketData(-1, -1, currentItem));
     }
 
     public static int toAbsolutePos(double pos) {
