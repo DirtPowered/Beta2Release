@@ -34,8 +34,6 @@ public class OldMobType {
             id = 51;
         } else if (value == MobType.ZOMBIE_PIGMAN) {
             id = 57;
-        } else if (value == MobType.VILLAGER) {
-            id = 49;
         } else if (value == MobType.ENDERMAN) {
             id = 54;
         } else {

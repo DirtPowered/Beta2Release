@@ -114,7 +114,7 @@
         <dependency>
             <groupId>com.electronwill.night-config</groupId>
             <artifactId>toml</artifactId>
-            <version>3.7.3</version>
+            <version>3.6.2</version>
         </dependency>
 
         <dependency>

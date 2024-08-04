@@ -1,9 +1,9 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3AttachEntityPacketData;
-import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.dirtpowered.betatorelease.data.entity.EntityVehicle;
 import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
+import com.github.dirtpowered.betatorelease.data.entity.model.Entity;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
@@ -20,9 +20,9 @@ public class ServerEntitySetPassengersTranslator implements ModernToBetaHandler<
         int[] passengerEntityIds = packet.getPassengerIds();
         EntityCache cache = betaSession.getEntityCache();
 
+        Entity entity = cache.getEntityById(vehicleEntityId);
         try {
-            EntityVehicle vehicle = (EntityVehicle) cache.getEntityById(vehicleEntityId);
-            if (vehicle == null)
+            if (!(entity instanceof EntityVehicle vehicle))
                 return;
 
             vehicle.setPassenger(passengerEntityIds[0]);
@@ -34,16 +34,14 @@ public class ServerEntitySetPassengersTranslator implements ModernToBetaHandler<
             cache.addEntity(vehicle);
             betaSession.sendPacket(new V1_7_3AttachEntityPacketData(passengerEntityIds[0], vehicleEntityId));
         } catch (ArrayIndexOutOfBoundsException e) {
-            EntityVehicle vehicle = ((EntityVehicle) cache.getEntityById(vehicleEntityId));
-            if (vehicle != null) {
-                BetaPlayer player = betaSession.getServer().getPlayer(vehicle.getPassenger());
+            EntityVehicle vehicle = (EntityVehicle) entity;
 
-                if (player != null)
-                    player.setInVehicle(false, -1);
+            BetaPlayer player = betaSession.getServer().getPlayer(vehicle.getPassenger());
 
-                betaSession.sendPacket(new V1_7_3AttachEntityPacketData(vehicle.getPassenger(), -1));
-            }
+            if (player != null)
+                player.setInVehicle(false, -1);
+
+            betaSession.sendPacket(new V1_7_3AttachEntityPacketData(vehicle.getPassenger(), -1));
         }
-        Utils.debug(packet);
     }
 }

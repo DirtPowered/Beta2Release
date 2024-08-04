@@ -1,6 +1,5 @@
 package com.github.dirtpowered.betatorelease;
 
-import com.github.dirtpowered.betaprotocollib.data.version.MinecraftVersion;
 import com.github.dirtpowered.betatorelease.configuration.Configuration;
 import com.github.dirtpowered.betatorelease.data.entity.cache.PlayerCache;
 import com.github.dirtpowered.betatorelease.network.codec.PipelineFactory;
@@ -45,9 +44,6 @@ public class Server {
     private final EventLoopGroup bossGroup = new NioEventLoopGroup();
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
-    @Getter
-    private final MinecraftVersion version;
-
     public Server() {
         this.server = this;
         this.betaToModernRegistry = new BetaToModernRegistry();
@@ -55,13 +51,9 @@ public class Server {
         this.modernToBetaRegistry = new ModernToBetaRegistry();
         this.playerCache = new PlayerCache();
         this.configuration = new Configuration();
-        this.version = configuration.getVersion();
 
         // inject beta lib packets
-        switch (version) {
-            case B_1_6_6, B_1_7_3 -> new TranslatorRegistry(betaToModernRegistry, modernToBetaRegistry).register();
-            default -> throw new UnsupportedOperationException("Unsupported version: " + version);
-        }
+        new TranslatorRegistry(betaToModernRegistry, modernToBetaRegistry).register();
 
         bind(configuration.getBindAddress(), configuration.getBindPort());
     }

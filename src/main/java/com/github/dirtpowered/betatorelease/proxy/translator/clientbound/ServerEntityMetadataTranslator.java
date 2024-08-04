@@ -32,12 +32,13 @@ public class ServerEntityMetadataTranslator implements ModernToBetaHandler<Serve
                     spawnItemEntity(betaSession, item);
                 }
             } else {
-                translateEntityFlags(betaSession, entityId, entityMetadata);
+                translateBaseEntityFlags(betaSession, entityId, entityMetadata);
+                translateMobEntityFlags(betaSession, entity, entityMetadata);
             }
         }
     }
 
-    private void translateEntityFlags(Session session, int entityId, EntityMetadata metadata) {
+    private void translateBaseEntityFlags(Session session, int entityId, EntityMetadata metadata) {
         if (metadata.getType() != MetadataType.BYTE || metadata.getId() != 0)
             return;
 
@@ -54,6 +55,23 @@ public class ServerEntityMetadataTranslator implements ModernToBetaHandler<Serve
         } else {
             session.sendPacket(new V1_7_3EntityMetadataPacketData(entityId, watchables));
         }
+    }
+
+    private void translateMobEntityFlags(Session session, Entity entity, EntityMetadata metadata) {
+        if (entity == null || entity.getMobType() == null)
+            return;
+
+        int id = metadata.getId();
+        MetadataType type = metadata.getType();
+        Object value = metadata.getValue();
+
+        if ((type != MetadataType.BYTE || id != 13) && (type != MetadataType.INT || id != 12) && (type != MetadataType.BOOLEAN || (id != 12 && id != 13)))
+            return;
+
+        if (type == MetadataType.BOOLEAN && id == 13)
+            value = (boolean) value ? (byte) 0x01 : (byte) 0x00; // saddled pig
+
+        session.sendPacket(new V1_7_3EntityMetadataPacketData(entity.getEntityId(), List.of(new WatchableObject(0, 16, value))));
     }
 
     private void spawnItemEntity(Session session, EntityItem itemEntity) {
