@@ -98,7 +98,12 @@ public class ModernClient {
             return;
 
         if (handler != null) {
-            handler.translate(packet, getBetaSession());
+            try {
+                handler.translate(packet, getBetaSession());
+            } catch (Exception e) {
+                Logger.error("[modern] error while translating packet: {}", packet.getClass().getSimpleName());
+                e.printStackTrace();
+            }
         } else {
             Logger.error("[modern] missing 'ModernToBeta' translator for {}", packet.getClass().getSimpleName());
         }

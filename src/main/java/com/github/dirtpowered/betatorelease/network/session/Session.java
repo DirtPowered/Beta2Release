@@ -64,7 +64,12 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
         final BetaToModernHandler handler = messageHandlerRegistry.getMessageHandler(packet);
 
         if (handler != null) {
-            handler.handlePacket(this, packet);
+            try {
+                handler.handlePacket(this, packet);
+            } catch (Exception e) {
+                Logger.error("error while handling packet: {}", e.getMessage());
+                e.printStackTrace();
+            }
         } else {
             Logger.error("missing 'BetaToModern' translator for {}", packet.getClass().getSimpleName());
         }
