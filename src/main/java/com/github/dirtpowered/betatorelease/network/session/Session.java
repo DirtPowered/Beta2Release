@@ -91,6 +91,8 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     public void channelInactive(final ChannelHandlerContext context) {
         Logger.info("disconnected {}", getAddress());
         sessionRegistry.removeSession(this);
+        // disconnect from remote server too
+        modernClient.disconnect("disconnected from remote server");
         context.close();
     }
 
