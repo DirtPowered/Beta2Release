@@ -7,6 +7,7 @@ import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.mc.protocol.packet.ingame.server.*;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityPropertiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerAbilitiesPacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerChangeHeldItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerSetExperiencePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.scoreboard.ServerDisplayScoreboardPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.scoreboard.ServerScoreboardObjectivePacket;
@@ -57,7 +58,10 @@ public class ModernClient {
                 ServerPlaySoundPacket.class,
                 ServerUpdateScorePacket.class,
                 ServerTeamPacket.class,
-                ServerDisplayScoreboardPacket.class
+                ServerDisplayScoreboardPacket.class,
+                ServerPlayBuiltinSoundPacket.class,
+                ServerSetCooldownPacket.class,
+                ServerPlayerChangeHeldItemPacket.class
         ));
     }
 

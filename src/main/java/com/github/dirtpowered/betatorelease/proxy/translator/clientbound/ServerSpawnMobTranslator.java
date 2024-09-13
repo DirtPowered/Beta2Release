@@ -19,7 +19,7 @@ public class ServerSpawnMobTranslator implements ModernToBetaHandler<ServerSpawn
         int entityId = packet.getEntityId();
         MobType mobType = packet.getType();
 
-        byte type = (byte) OldMobType.fromMobType(mobType);
+        byte type = OldMobType.fromMobType(mobType);
         if (type == -1 && mobType != MobType.VILLAGER)
             return;
 

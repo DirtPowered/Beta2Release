@@ -14,10 +14,10 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
+import com.google.common.collect.Sets;
 import org.pmw.tinylog.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChunkDataPacket> {
 
@@ -36,19 +36,16 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
             betaSession.sendPacket(new V1_7_3PreChunkPacketData(xPosition, zPosition, true /* allocate space */));
 
         Chunk[] chunks = chunkColumn.getChunks();
-
-        List<Position> signPositions = new ArrayList<>();
+        Set<Position> signPositions = Sets.newHashSet();
 
         try {
-            for (int index = 0; index < chunks.length; index++) {
-                if (index >= 8) // we don't need to send chunks above 128 since beta doesn't support them
-                    break;
-
+            // we don't need to send chunks above 128 since beta doesn't support them
+            for (int index = Math.min(chunks.length, 8) - 1; index >= 0; index--) {
                 Chunk chunk = chunks[index];
                 if (chunk == null)
                     continue;
 
-                final int columnCurrentHeight = index * 16; //(0-127)
+                final int columnCurrentHeight = index * 16; // (0-127)
 
                 for (int x = 0; x < 16; x++) {
                     for (int y = 0; y < 16; y++) {

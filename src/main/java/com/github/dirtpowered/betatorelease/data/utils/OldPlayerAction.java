@@ -6,10 +6,10 @@ public class OldPlayerAction {
 
     public static PlayerAction getPlayerAction(int actionId) {
         /*
-         * Started digging 	 0
-         * Finished digging  2
-         * Drop item 	     4
-         * Shoot arrow 	     5
+         * Started digging	0
+         * Finished digging 2
+         * Drop item	4
+         * Shoot arrow	5
          */
         return switch (actionId) {
             case 0 -> PlayerAction.START_DIGGING;

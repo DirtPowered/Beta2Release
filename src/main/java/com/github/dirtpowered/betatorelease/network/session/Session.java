@@ -1,15 +1,14 @@
 package com.github.dirtpowered.betatorelease.network.session;
 
 import com.github.dirtpowered.betaprotocollib.model.Packet;
-import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3ChatPacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3KickDisconnectPacketData;
 import com.github.dirtpowered.betatorelease.Server;
 import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.model.ProtocolState;
-import com.github.dirtpowered.betatorelease.proxy.translator.BetaToModernHandler;
-import com.github.dirtpowered.betatorelease.proxy.translator.registry.BetaToModernRegistry;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
 import com.github.dirtpowered.betatorelease.proxy.ModernClient;
+import com.github.dirtpowered.betatorelease.proxy.translator.BetaToModernHandler;
+import com.github.dirtpowered.betatorelease.proxy.translator.registry.BetaToModernRegistry;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -60,7 +59,7 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     }
 
     @SuppressWarnings("unchecked")
-    private void processPacket(Packet packet) {
+    private void processPacket(Packet<?> packet) {
         final BetaToModernHandler handler = messageHandlerRegistry.getMessageHandler(packet);
 
         if (handler != null) {
@@ -75,13 +74,13 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
         }
     }
 
-    public void sendPacket(Packet packet) {
-        channel.writeAndFlush(packet);
+    public void sendPacket(Packet<?> packet) {
+        this.channel.writeAndFlush(packet);
     }
 
     @Override
     public void channelActive(final ChannelHandlerContext context) {
-        sessionRegistry.addSession(this);
+        this.sessionRegistry.addSession(this);
 
         Logger.info("new connection from ip {}", getAddress());
         Logger.info("session count: {}", sessionRegistry.getSessions().size());
@@ -90,9 +89,9 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     @Override
     public void channelInactive(final ChannelHandlerContext context) {
         Logger.info("disconnected {}", getAddress());
-        sessionRegistry.removeSession(this);
+        this.sessionRegistry.removeSession(this);
         // disconnect from remote server too
-        modernClient.disconnect("disconnected from remote server");
+        this.modernClient.disconnect("disconnected from remote server");
         context.close();
     }
 
@@ -111,10 +110,6 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, Packet packet) {
         /* Server -> Client */
         processPacket(packet);
-    }
-
-    public void sendMessage(String message) {
-        sendPacket(new V1_7_3ChatPacketData(message));
     }
 
     public void disconnect(String reason) {

@@ -1,5 +1,6 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3ChatPacketData;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.data.game.MessageType;
@@ -46,7 +47,7 @@ public class ServerChatTranslator implements ModernToBetaHandler<ServerChatPacke
                     linePart = lastColorCode + linePart;
 
                 parts.append(linePart);
-                betaSession.sendMessage(parts.toString());
+                betaSession.sendPacket(new V1_7_3ChatPacketData(parts.toString()));
                 parts.setLength(0); // reset
 
                 lastColorCode = getLastColorCode(linePart);
@@ -70,7 +71,7 @@ public class ServerChatTranslator implements ModernToBetaHandler<ServerChatPacke
             if (!lastColorCode.isEmpty())
                 part = lastColorCode + part;
 
-            betaSession.sendMessage(part);
+            betaSession.sendPacket(new V1_7_3ChatPacketData(part));
 
             lastColorCode = getLastColorCode(part);
             index = endIndex;

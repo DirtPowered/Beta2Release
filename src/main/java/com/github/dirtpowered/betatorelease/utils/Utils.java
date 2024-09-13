@@ -1,9 +1,7 @@
 package com.github.dirtpowered.betatorelease.utils;
 
 import com.github.dirtpowered.betaprotocollib.data.BetaItemStack;
-import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3SetSlotPacketData;
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
-import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.builtin.Tag;
@@ -12,9 +10,6 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.pmw.tinylog.Logger;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -72,10 +67,6 @@ public class Utils {
         component.setStrikethrough(false);
     }
 
-    public static void updateInventory(Session session, BetaItemStack currentItem) {
-        session.sendPacket(new V1_7_3SetSlotPacketData(-1, -1, currentItem));
-    }
-
     public static int toAbsolutePos(double pos) {
         return floor_double(pos * 32.0D);
     }
@@ -94,15 +85,7 @@ public class Utils {
         return floor_float(rotation * 256.0F / 360.0F);
     }
 
-    public static double toAbsoluteOffset(double pos) {
-        return pos / 32.0D;
-    }
-
     public static int toBetaVelocity(double vec) {
         return (int) (vec * 8000.0D);
-    }
-
-    public static void debug(Object clazz) {
-        Logger.info("[DEBUG] {}", ReflectionToStringBuilder.toString(clazz, ToStringStyle.JSON_STYLE));
     }
 }

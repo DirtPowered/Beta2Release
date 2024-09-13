@@ -10,10 +10,10 @@ import com.github.dirtpowered.betatorelease.proxy.translator.registry.BetaToMode
 import com.github.dirtpowered.betatorelease.proxy.translator.registry.ModernToBetaRegistry;
 import com.github.dirtpowered.betatorelease.proxy.translator.registry.TranslatorRegistry;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
+import io.netty.channel.epoll.Epoll;
+import io.netty.channel.epoll.EpollEventLoopGroup;
+import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -30,6 +30,7 @@ public class Server {
     @Getter
     private final ModernToBetaRegistry modernToBetaRegistry;
 
+    @Getter
     private final Server server;
 
     @Getter
@@ -41,8 +42,7 @@ public class Server {
     @Getter
     private final List<BetaPlayer> onlinePlayers = new ArrayList<>();
 
-    private final EventLoopGroup bossGroup = new NioEventLoopGroup();
-    private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+    private EventLoopGroup bossGroup;
 
     public Server() {
         this.server = this;
@@ -59,38 +59,46 @@ public class Server {
     }
 
     private void bind(String address, int port) {
-        ServerBootstrap b = new ServerBootstrap();
-        b.group(bossGroup, workerGroup)
-                .channel(NioServerSocketChannel.class)
+        Class<? extends ServerChannel> socketChannel;
+
+        if (Epoll.isAvailable()) {
+            Logger.info("Epoll is available. Using it");
+            this.bossGroup = new EpollEventLoopGroup();
+            socketChannel = EpollServerSocketChannel.class;
+        } else {
+            Logger.warn("Epoll not available, using NIO. Reason: " + Epoll.unavailabilityCause().getMessage());
+            this.bossGroup = new NioEventLoopGroup();
+            socketChannel = NioServerSocketChannel.class;
+        }
+
+        ServerBootstrap bootstrap = new ServerBootstrap();
+
+        bootstrap.group(bossGroup)
+                .channel(socketChannel)
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
-                    public void initChannel(SocketChannel channel) {
+                    protected void initChannel(SocketChannel channel) {
                         channel.pipeline().addLast("mc_pipeline", new PipelineFactory());
                         channel.pipeline().addLast("user_session", new Session(getServer(), channel, sessionRegistry, betaToModernRegistry));
                     }
                 })
                 .childOption(ChannelOption.SO_KEEPALIVE, true);
 
-        ChannelFuture f;
-        try {
-            Logger.info("Ready for connections!");
-
-            f = b.bind(address, port).sync();
-            f.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
-            Logger.error("Address in use: {}", e.getLocalizedMessage());
-        }
+        ChannelFuture future = bootstrap.bind(address, port);
+        future.addListener(f -> {
+            if (!f.isSuccess()) {
+                Logger.error("Failed to bind address: {}", f.cause().getLocalizedMessage());
+            } else {
+                Logger.info("Proxy is running on {}:{}", address, port);
+            }
+        });
     }
 
-    void stop() {
-        bossGroup.shutdownGracefully();
-        workerGroup.shutdownGracefully();
-        playerCache.getPlayers().clear();
-        sessionRegistry.getSessions().clear();
-    }
-
-    private Server getServer() {
-        return server;
+    protected void stop() {
+        this.bossGroup.shutdownGracefully();
+        // cleanup
+        this.playerCache.getPlayers().clear();
+        this.sessionRegistry.getSessions().clear();
     }
 
     public BetaPlayer getPlayer(int entityId) {

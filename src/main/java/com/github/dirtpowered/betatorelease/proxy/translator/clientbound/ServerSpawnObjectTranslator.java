@@ -50,7 +50,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
             case PRIMED_TNT:
                 betaSession.sendPacket(new V1_7_3VehicleSpawnPacketData(entityId, 50, x, y, z, velocityX, velocityY, velocityZ, 0));
                 break;
-            case SNOWBALL:
+            case SNOWBALL, ENDER_PEARL, WITHER_HEAD_PROJECTILE:
                 betaSession.sendPacket(new V1_7_3VehicleSpawnPacketData(entityId, 61, x, y, z, velocityX, velocityY, velocityZ, 0));
                 break;
             case EGG:
@@ -63,7 +63,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 betaSession.sendPacket(new V1_7_3VehicleSpawnPacketData(entityId, 1, x, y, z, velocityX, velocityY, velocityZ, 0));
                 entityCache.addEntity(new EntityVehicle(entityId));
                 break;
-            case GHAST_FIREBALL:
+            case GHAST_FIREBALL, BLAZE_FIREBALL, DRAGON_FIREBALL:
                 betaSession.sendPacket(new V1_7_3VehicleSpawnPacketData(entityId, 63, x, y, z, velocityX, velocityY, velocityZ, 0));
                 break;
             case MINECART:

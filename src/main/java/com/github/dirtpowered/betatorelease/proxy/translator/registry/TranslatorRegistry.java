@@ -7,7 +7,6 @@ import com.github.dirtpowered.betatorelease.proxy.translator.clientbound.*;
 import com.github.dirtpowered.betatorelease.proxy.translator.serverbound.*;
 import com.github.steveice10.mc.protocol.packet.ingame.server.*;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.*;
-import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerChangeHeldItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerHealthPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerPositionRotationPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerUseBedPacket;
@@ -68,7 +67,6 @@ public class TranslatorRegistry {
         modernToBetaRegistry.registerTranslator(ServerEntityPositionPacket.class, new ServerEntityPositionTranslator());
         modernToBetaRegistry.registerTranslator(ServerEntityDestroyPacket.class, new ServerEntityDestroyTranslator());
         modernToBetaRegistry.registerTranslator(ServerEntityAnimationPacket.class, new ServerEntityAnimationTranslator());
-        modernToBetaRegistry.registerTranslator(ServerPlayerChangeHeldItemPacket.class, new ServerPlayerChangeHeldItemTranslator());
         modernToBetaRegistry.registerTranslator(ServerEntityPositionRotationPacket.class, new ServerEntityPositionRotationTranslator());
         modernToBetaRegistry.registerTranslator(ServerEntityRotationPacket.class, new ServerEntityRotationTranslator());
         modernToBetaRegistry.registerTranslator(ServerKeepAlivePacket.class, new ServerKeepAliveTranslator());
@@ -87,7 +85,6 @@ public class TranslatorRegistry {
         modernToBetaRegistry.registerTranslator(ServerEntityEquipmentPacket.class, new ServerEntityEquipmentTranslator());
         modernToBetaRegistry.registerTranslator(ServerPlayerListEntryPacket.class, new ServerPlayerListEntryTranslator());
         modernToBetaRegistry.registerTranslator(ServerEntitySetPassengersPacket.class, new ServerEntitySetPassengersTranslator());
-        modernToBetaRegistry.registerTranslator(ServerPlayBuiltinSoundPacket.class, new ServerPlayBuiltinSoundTranslator());
         modernToBetaRegistry.registerTranslator(ServerVehicleMovePacket.class, new ServerVehicleMoveTranslator());
         modernToBetaRegistry.registerTranslator(ServerPlayerUseBedPacket.class, new ServerPlayerUseBedTranslator());
         modernToBetaRegistry.registerTranslator(ServerSpawnPaintingPacket.class, new ServerSpawnPaintingTranslator());

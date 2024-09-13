@@ -6,8 +6,8 @@ import java.util.Objects;
 
 public class OldMobType {
 
-    public static int fromMobType(MobType value) {
-        int id;
+    public static byte fromMobType(MobType value) {
+        byte id;
         if (Objects.requireNonNull(value) == MobType.CREEPER) {
             id = 50;
         } else if (value == MobType.PIG) {
@@ -37,7 +37,7 @@ public class OldMobType {
         } else if (value == MobType.ENDERMAN) {
             id = 54;
         } else {
-            id = 90; //all unknown entities should be visible anyway. Enderdragon too. Flying pig *_*
+            id = 90; // All unknown entities should be visible anyway. Enderdragon too. Flying pig *_*
         }
         return id;
     }

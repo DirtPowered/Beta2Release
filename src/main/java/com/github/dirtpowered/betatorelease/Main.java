@@ -5,7 +5,7 @@ import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Logger;
 
 public class Main {
-
+    private static Server server;
 
     public static void main(String... arguments) {
         Configurator.currentConfig().formatPattern("[{level} {date:HH:mm:ss}] {message}").activate();
@@ -16,8 +16,15 @@ public class Main {
         Logger.info("It may contain peanuts or gluten.");
 
         BlockMappings.init();
-        new Server();
+        server = new Server();
+        addShutdownHook();
+    }
 
-        //TODO: add ShutdownHook
+    private static void addShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Logger.info("Shutting down proxy...");
+            Main.server.stop();
+            Logger.info("Goodbye!");
+        }));
     }
 }

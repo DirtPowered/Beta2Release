@@ -87,9 +87,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.Steveice10</groupId>
-            <artifactId>MCProtocolLib</artifactId>
-            <version>1.12.2-2</version>
+            <groupId>com.github.steveice10</groupId>
+            <artifactId>mcprotocollib-fixed</artifactId>
+            <version>1.12.2</version>
         </dependency>
 
         <dependency>
