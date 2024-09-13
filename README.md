@@ -1,4 +1,6 @@
 # Beta2Release
+[![Discord](https://img.shields.io/discord/684429844947271767.svg?label=Discord)](https://discord.gg/v6xsRdc)
+[![License: MIT](https://img.shields.io/badge/license-MIT-red.svg)](LICENSE)
 
 Beta2Release is an application that allows connecting to modern servers (version 1.12.2) from a Beta 1.7.3 client. 
 This is particularly useful for players who want to experience modern server features while using the nostalgic Beta 1.7.3 client.
@@ -26,3 +28,11 @@ We welcome contributions! If you encounter any issues or have suggestions for im
 Enjoy playing on modern servers with your favorite Beta 1.7.3 client!
 
 For any further assistance or questions, please join our [Discord server](https://discord.gg/v6xsRdc).
+
+### WARNING !!!
+Don't use this on servers that don't allow it!
+Well, you can, but don't be surprised if you get banned
+
+We're not responsible for any bans or other consequences that may occur from using it
+
+![ss](images/screenshot.png)
