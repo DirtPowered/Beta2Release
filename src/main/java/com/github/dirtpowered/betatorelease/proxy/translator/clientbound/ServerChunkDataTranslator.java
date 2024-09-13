@@ -3,6 +3,7 @@ package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3MapChunkPacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3PreChunkPacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3UpdateSignPacketData;
+import com.github.dirtpowered.betatorelease.Main;
 import com.github.dirtpowered.betatorelease.data.chunk.BetaChunk;
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
@@ -15,11 +16,9 @@ import com.github.steveice10.mc.protocol.data.game.world.block.BlockState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.google.common.collect.Sets;
-import lombok.extern.log4j.Log4j2;
 
 import java.util.Set;
 
-@Log4j2
 public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChunkDataPacket> {
 
     @Override
@@ -81,7 +80,7 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                     betaSession.sendPacket(new V1_7_3UpdateSignPacketData(x, y, z, Utils.getLegacySignLines(tag)));
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            log.error("Chunk error:", e);
+            Main.LOGGER.error("Chunk error:", e);
         }
     }
 }

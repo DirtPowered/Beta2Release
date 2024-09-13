@@ -18,12 +18,10 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Log4j2
 public class Server {
     private final BetaToModernRegistry betaToModernRegistry;
     private final SessionRegistry sessionRegistry;
@@ -63,11 +61,11 @@ public class Server {
         Class<? extends ServerChannel> socketChannel;
 
         if (Epoll.isAvailable()) {
-            log.info("Epoll is available. Using it");
+            Main.LOGGER.info("Epoll is available. Using it");
             this.bossGroup = new EpollEventLoopGroup();
             socketChannel = EpollServerSocketChannel.class;
         } else {
-            log.warn("Epoll not available, using NIO. Reason: " + Epoll.unavailabilityCause().getMessage());
+            Main.LOGGER.warn("Epoll not available, using NIO. Reason: " + Epoll.unavailabilityCause().getMessage());
             this.bossGroup = new NioEventLoopGroup();
             socketChannel = NioServerSocketChannel.class;
         }
@@ -88,9 +86,9 @@ public class Server {
         ChannelFuture future = bootstrap.bind(address, port);
         future.addListener(f -> {
             if (!f.isSuccess()) {
-                log.error("Failed to bind address: {}", f.cause().getLocalizedMessage());
+                Main.LOGGER.error("Failed to bind address: {}", f.cause().getLocalizedMessage());
             } else {
-                log.info("Proxy is running on {}:{}", address, port);
+                Main.LOGGER.info("Proxy is running on {}:{}", address, port);
             }
         });
     }

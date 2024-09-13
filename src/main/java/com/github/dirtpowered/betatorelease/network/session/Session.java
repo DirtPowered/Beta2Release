@@ -2,6 +2,7 @@ package com.github.dirtpowered.betatorelease.network.session;
 
 import com.github.dirtpowered.betaprotocollib.model.Packet;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3KickDisconnectPacketData;
+import com.github.dirtpowered.betatorelease.Main;
 import com.github.dirtpowered.betatorelease.Server;
 import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.model.ProtocolState;
@@ -14,11 +15,9 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
 
 import java.net.SocketAddress;
 
-@Log4j2
 public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     private final Channel channel;
     private final SessionRegistry sessionRegistry;
@@ -67,11 +66,11 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
             try {
                 handler.handlePacket(this, packet);
             } catch (Exception e) {
-                log.error("error while handling packet: {}", e.getMessage());
+                Main.LOGGER.error("error while handling packet: {}", e.getMessage());
                 e.printStackTrace();
             }
         } else {
-            log.error("missing 'BetaToModern' translator for {}", packet.getClass().getSimpleName());
+            Main.LOGGER.error("missing 'BetaToModern' translator for {}", packet.getClass().getSimpleName());
         }
     }
 
@@ -83,13 +82,13 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     public void channelActive(final ChannelHandlerContext context) {
         this.sessionRegistry.addSession(this);
 
-        log.info("new connection from ip {}", getAddress());
-        log.info("session count: {}", sessionRegistry.getSessions().size());
+        Main.LOGGER.info("new connection from ip {}", getAddress());
+        Main.LOGGER.info("session count: {}", sessionRegistry.getSessions().size());
     }
 
     @Override
     public void channelInactive(final ChannelHandlerContext context) {
-        log.info("disconnected {}", getAddress());
+        Main.LOGGER.info("disconnected {}", getAddress());
         this.sessionRegistry.removeSession(this);
         // disconnect from remote server too
         this.modernClient.disconnect("disconnected from remote server");
@@ -102,7 +101,7 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext context, Throwable cause) {
-        log.warn("closed connection: {} [{}]", cause.getLocalizedMessage(), getAddress());
+        Main.LOGGER.warn("closed connection: {} [{}]", cause.getLocalizedMessage(), getAddress());
         cause.printStackTrace();
         context.close();
     }

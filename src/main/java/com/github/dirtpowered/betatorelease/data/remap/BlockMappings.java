@@ -1,11 +1,11 @@
 package com.github.dirtpowered.betatorelease.data.remap;
 
+import com.github.dirtpowered.betatorelease.Main;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
 import java.io.FileReader;
@@ -17,7 +17,6 @@ import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
 
-@Log4j2
 public class BlockMappings {
     private final static int MAX_SUPPORTED_BLOCK_ID = 97;
     private final static int DEFAULT_BLOCK_ID = 1;
@@ -34,7 +33,7 @@ public class BlockMappings {
 
             Files.copy(defaultConfigStream, configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            log.error("Failed to copy default mappings.json", e);
+            Main.LOGGER.error("Failed to copy default mappings.json", e);
         }
     }
 
@@ -48,7 +47,7 @@ public class BlockMappings {
         String remapped = blockMappings.get(key);
         if (remapped == null) {
             if (blockId >= MAX_SUPPORTED_BLOCK_ID)
-                log.warn("Missing block mapping for block {}:{}", blockId, blockData);
+                Main.LOGGER.warn("Missing block mapping for block {}:{}", blockId, blockData);
 
             remapped = blockId + ":" + blockData;
         }
@@ -79,7 +78,7 @@ public class BlockMappings {
                 return new RemappedItem(Integer.parseInt(itemDataRemapped.split(":")[0]), itemData);
 
             // if item data is not found, use default
-            log.warn("Missing item mapping for item {}:{}", itemId, itemData);
+            Main.LOGGER.warn("Missing item mapping for item {}:{}", itemId, itemData);
             remapped = DEFAULT_ITEM_ID + ":" + 0;
         }
         String[] parts = remapped.split(":");
@@ -109,7 +108,7 @@ public class BlockMappings {
             blockMappings = mappings.getMappings().getBlocks();
             itemMappings = mappings.getMappings().getItems();
         } catch (IOException e) {
-            log.error("Failed to load mappings.json", e);
+            Main.LOGGER.error("Failed to load mappings.json", e);
         }
     }
 

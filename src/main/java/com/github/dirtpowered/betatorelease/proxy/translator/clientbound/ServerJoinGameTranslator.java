@@ -1,13 +1,12 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3LoginPacketData;
+import com.github.dirtpowered.betatorelease.Main;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerJoinGamePacket;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
 public class ServerJoinGameTranslator implements ModernToBetaHandler<ServerJoinGamePacket> {
 
     @Override
@@ -16,7 +15,7 @@ public class ServerJoinGameTranslator implements ModernToBetaHandler<ServerJoinG
         int entityId = packet.getEntityId();
         int dimension = packet.getDimension();
 
-        log.info("Entity player joined (modern server) with id {}", entityId);
+        Main.LOGGER.info("Entity player joined (modern server) with id {}", entityId);
         betaPlayer.setEntityId(entityId);
         betaPlayer.setDimension(dimension);
 

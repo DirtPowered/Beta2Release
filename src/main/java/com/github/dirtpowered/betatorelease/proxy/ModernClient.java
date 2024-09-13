@@ -1,5 +1,6 @@
 package com.github.dirtpowered.betatorelease.proxy;
 
+import com.github.dirtpowered.betatorelease.Main;
 import com.github.dirtpowered.betatorelease.Server;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
@@ -23,13 +24,11 @@ import com.github.steveice10.packetlib.event.session.PacketReceivedEvent;
 import com.github.steveice10.packetlib.event.session.SessionAdapter;
 import com.github.steveice10.packetlib.packet.Packet;
 import com.github.steveice10.packetlib.tcp.TcpSessionFactory;
-import lombok.extern.log4j.Log4j2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Log4j2
 public class ModernClient {
     private final List<Class<? extends Packet>> skipTranslating = new ArrayList<>();
     private Client client;
@@ -79,14 +78,14 @@ public class ModernClient {
 
             @Override
             public void connected(ConnectedEvent event) {
-                log.info("Connected to remote server");
+                Main.LOGGER.info("Connected to remote server");
                 server.getOnlinePlayers().add(betaSession.getBetaPlayer());
-                log.info("Online: {}", betaSession.getServer().getOnlinePlayers().size());
+                Main.LOGGER.info("Online: {}", betaSession.getServer().getOnlinePlayers().size());
             }
 
             @Override
             public void disconnected(DisconnectedEvent event) {
-                log.info("Disconnected from remote server because: {}", event.getReason());
+                Main.LOGGER.info("Disconnected from remote server because: {}", event.getReason());
                 server.getOnlinePlayers().remove(betaSession.getBetaPlayer());
                 disconnect(event.getReason());
             }
@@ -104,11 +103,11 @@ public class ModernClient {
             try {
                 handler.translate(packet, getBetaSession());
             } catch (Exception e) {
-                log.error("Error while translating packet: {}", packet.getClass().getSimpleName());
+                Main.LOGGER.error("Error while translating packet: {}", packet.getClass().getSimpleName());
                 e.printStackTrace();
             }
         } else {
-            log.error("Missing 'ModernToBeta' translator for {}", packet.getClass().getSimpleName());
+            Main.LOGGER.error("Missing 'ModernToBeta' translator for {}", packet.getClass().getSimpleName());
         }
     }
 
