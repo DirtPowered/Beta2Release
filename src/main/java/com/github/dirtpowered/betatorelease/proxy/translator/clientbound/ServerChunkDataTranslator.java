@@ -15,10 +15,11 @@ import com.github.steveice10.mc.protocol.data.game.world.block.BlockState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.google.common.collect.Sets;
-import org.pmw.tinylog.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.Set;
 
+@Log4j2
 public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChunkDataPacket> {
 
     @Override
@@ -80,7 +81,7 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                     betaSession.sendPacket(new V1_7_3UpdateSignPacketData(x, y, z, Utils.getLegacySignLines(tag)));
             }
         } catch (ArrayIndexOutOfBoundsException e) {
-            Logger.error("Chunk error: {}", e);
+            log.error("Chunk error:", e);
         }
     }
 }

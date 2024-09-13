@@ -8,12 +8,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
-import org.pmw.tinylog.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+@Log4j2
 public class PacketDecoder extends ReplayingDecoder<Packet<?>> {
 
     @Override
@@ -23,7 +24,7 @@ public class PacketDecoder extends ReplayingDecoder<Packet<?>> {
         final int packetId = buffer.readUnsignedByte();
 
         if (!BetaLib.getRegistry().hasId(packetId)) {
-            Logger.warn("Packet {}[{}] is not registered", Utils.toHex(packetId), packetId);
+            log.warn("Packet {}[{}] is not registered", Utils.toHex(packetId), packetId);
             list.add(Unpooled.EMPTY_BUFFER);
             return;
         }

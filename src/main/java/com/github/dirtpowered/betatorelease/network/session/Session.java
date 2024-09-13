@@ -14,10 +14,11 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.Getter;
 import lombok.Setter;
-import org.pmw.tinylog.Logger;
+import lombok.extern.log4j.Log4j2;
 
 import java.net.SocketAddress;
 
+@Log4j2
 public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     private final Channel channel;
     private final SessionRegistry sessionRegistry;
@@ -66,11 +67,11 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
             try {
                 handler.handlePacket(this, packet);
             } catch (Exception e) {
-                Logger.error("error while handling packet: {}", e.getMessage());
+                log.error("error while handling packet: {}", e.getMessage());
                 e.printStackTrace();
             }
         } else {
-            Logger.error("missing 'BetaToModern' translator for {}", packet.getClass().getSimpleName());
+            log.error("missing 'BetaToModern' translator for {}", packet.getClass().getSimpleName());
         }
     }
 
@@ -82,13 +83,13 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     public void channelActive(final ChannelHandlerContext context) {
         this.sessionRegistry.addSession(this);
 
-        Logger.info("new connection from ip {}", getAddress());
-        Logger.info("session count: {}", sessionRegistry.getSessions().size());
+        log.info("new connection from ip {}", getAddress());
+        log.info("session count: {}", sessionRegistry.getSessions().size());
     }
 
     @Override
     public void channelInactive(final ChannelHandlerContext context) {
-        Logger.info("disconnected {}", getAddress());
+        log.info("disconnected {}", getAddress());
         this.sessionRegistry.removeSession(this);
         // disconnect from remote server too
         this.modernClient.disconnect("disconnected from remote server");
@@ -101,7 +102,7 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext context, Throwable cause) {
-        Logger.warn("closed connection: {} [{}]", cause.getLocalizedMessage(), getAddress());
+        log.warn("closed connection: {} [{}]", cause.getLocalizedMessage(), getAddress());
         cause.printStackTrace();
         context.close();
     }
