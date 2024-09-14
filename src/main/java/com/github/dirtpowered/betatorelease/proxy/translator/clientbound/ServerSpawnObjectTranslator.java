@@ -30,7 +30,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
         int velocityZ = Utils.toBetaVelocity(packet.getMotionZ());
 
         switch (packet.getType()) {
-            case ITEM:
+            case ITEM, ITEM_FRAME: // TODO: itemframe ticking so the item will always stay in the same position
                 float yaw = ((int) (packet.getMotionX() * 128.0D));
                 float pitch = ((int) (packet.getMotionY() * 128.0D));
                 float roll = ((int) (packet.getMotionZ() * 128.0D));
@@ -53,7 +53,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
             case SNOWBALL, ENDER_PEARL, WITHER_HEAD_PROJECTILE:
                 betaSession.sendPacket(new V1_7_3VehicleSpawnPacketData(entityId, 61, x, y, z, velocityX, velocityY, velocityZ, 0));
                 break;
-            case EGG:
+            case EGG, POTION, EXP_BOTTLE:
                 betaSession.sendPacket(new V1_7_3VehicleSpawnPacketData(entityId, 62, x, y, z, velocityX, velocityY, velocityZ, 0));
                 break;
             case FISH_HOOK:

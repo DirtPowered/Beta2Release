@@ -5,22 +5,31 @@ import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.data.game.world.block.value.NoteBlockValue;
 import com.github.steveice10.mc.protocol.data.game.world.block.value.NoteBlockValueType;
+import com.github.steveice10.mc.protocol.data.game.world.block.value.PistonValue;
+import com.github.steveice10.mc.protocol.data.game.world.block.value.PistonValueType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerBlockValuePacket;
 
 public class ServerBlockValueTranslator implements ModernToBetaHandler<ServerBlockValuePacket> {
 
     @Override
     public void translate(ServerBlockValuePacket packet, Session betaSession) {
-        if (!(packet.getValue() instanceof NoteBlockValue value))
+        int x = packet.getPosition().getX();
+        int y = packet.getPosition().getY();
+        int z = packet.getPosition().getZ();
+
+        if (packet.getValue() instanceof NoteBlockValue noteBlockValue) {
+            int instrument = (packet.getType() instanceof NoteBlockValueType noteBlockType) ?
+                    getInstrumentType(noteBlockType) : 0;
+
+            betaSession.sendPacket(new V1_7_3PlayNoteblockPacketData(x, y, z, instrument, noteBlockValue.getPitch()));
             return;
+        }
 
-        int instrument = 0;
-        int pitch = value.getPitch();
+        if (packet.getValue() instanceof PistonValue pistonValue) {
+            int instrument = (packet.getType() == PistonValueType.PUSHING) ? 0 : 1;
 
-        if (packet.getType() instanceof NoteBlockValueType noteBlockValueType)
-            instrument = getInstrumentType(noteBlockValueType);
-
-        betaSession.sendPacket(new V1_7_3PlayNoteblockPacketData(packet.getPosition().getX(), packet.getPosition().getY(), packet.getPosition().getZ(), instrument, pitch));
+            betaSession.sendPacket(new V1_7_3PlayNoteblockPacketData(x, y, z, instrument, pistonValue.ordinal()));
+        }
     }
 
     private int getInstrumentType(NoteBlockValueType sound) {
