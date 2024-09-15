@@ -10,8 +10,8 @@ public class ServerNotifyClientTranslator implements ModernToBetaHandler<ServerN
     @Override
     public void translate(ServerNotifyClientPacket packet, Session betaSession) {
         int state = switch (packet.getNotification()) {
-            case START_RAIN -> 2;
-            case STOP_RAIN -> 1;
+            case START_RAIN -> 1;
+            case STOP_RAIN -> 2;
             case INVALID_BED -> 0;
             default -> -1;
         };
