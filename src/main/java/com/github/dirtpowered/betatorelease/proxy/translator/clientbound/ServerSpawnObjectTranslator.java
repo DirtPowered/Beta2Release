@@ -1,5 +1,6 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3EntityTeleportPacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3VehicleSpawnPacketData;
 import com.github.dirtpowered.betaprotocollib.utils.Location;
 import com.github.dirtpowered.betatorelease.data.entity.EntityItem;
@@ -10,6 +11,7 @@ import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler
 import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.steveice10.mc.protocol.data.game.entity.type.object.FallingBlockData;
 import com.github.steveice10.mc.protocol.data.game.entity.type.object.MinecartType;
+import com.github.steveice10.mc.protocol.data.game.entity.type.object.ObjectType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnObjectPacket;
 
 public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSpawnObjectPacket> {
@@ -30,7 +32,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
         int velocityZ = Utils.toBetaVelocity(packet.getMotionZ());
 
         switch (packet.getType()) {
-            case ITEM, ITEM_FRAME: // TODO: itemframe ticking so the item will always stay in the same position
+            case ITEM, ITEM_FRAME:
                 float yaw = ((int) (packet.getMotionX() * 128.0D));
                 float pitch = ((int) (packet.getMotionY() * 128.0D));
                 float roll = ((int) (packet.getMotionZ() * 128.0D));
@@ -38,6 +40,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 EntityItem entityItem = new EntityItem(entityId);
                 entityItem.setLocation(new Location(x, y, z, 0, 0));
 
+                handleItemFrames(packet, betaSession, entityItem, entityId);
                 entityItem.setRotation(yaw);
                 entityItem.setPitch(pitch);
                 entityItem.setRoll(roll);
@@ -84,5 +87,22 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 betaSession.sendPacket(new V1_7_3VehicleSpawnPacketData(entityId, entityType, x, y, z, velocityX, velocityY, velocityZ, 0));
                 break;
         }
+    }
+
+    private static void handleItemFrames(ServerSpawnObjectPacket packet, Session betaSession, EntityItem entityItem, int entityId) {
+        if (packet.getType() != ObjectType.ITEM_FRAME)
+            return;
+
+        final int cx = Utils.toAbsolutePos(packet.getX() + 0.5D);
+        final int cy = Utils.toAbsolutePos(packet.getY() + 0.5D);
+        final int cz = Utils.toAbsolutePos(packet.getZ() + 0.5D);
+
+        entityItem.setTickable(true);
+        entityItem.setLocation(new Location(cx, cy, cz, 0, 0));
+
+        entityItem.setTickConsumer(e -> {
+            // teleport to original location
+            betaSession.sendPacket(new V1_7_3EntityTeleportPacketData(entityId, cx, cy, cz, 0, 0));
+        });
     }
 }

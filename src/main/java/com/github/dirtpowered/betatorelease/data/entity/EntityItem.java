@@ -5,6 +5,8 @@ import com.github.dirtpowered.betatorelease.data.entity.model.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.function.Consumer;
+
 @Setter
 @Getter
 public class EntityItem extends Entity {
@@ -12,6 +14,8 @@ public class EntityItem extends Entity {
     private float pitch;
     private float roll;
     private BetaItemStack itemStack;
+    private boolean tickable = false;
+    private Consumer<EntityItem> tickConsumer;
 
     public EntityItem(int entityId) {
         super(entityId);

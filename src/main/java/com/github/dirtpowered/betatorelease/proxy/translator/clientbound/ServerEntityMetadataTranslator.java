@@ -87,7 +87,5 @@ public class ServerEntityMetadataTranslator implements ModernToBetaHandler<Serve
                 (byte) itemEntity.getRoll(),
                 itemEntity.getItemStack()
         ));
-
-        session.getEntityCache().removeEntity(itemEntity.getEntityId());
     }
 }

@@ -1,7 +1,9 @@
 package com.github.dirtpowered.betatorelease;
 
 import com.github.dirtpowered.betatorelease.configuration.Configuration;
+import com.github.dirtpowered.betatorelease.data.entity.EntityItem;
 import com.github.dirtpowered.betatorelease.data.entity.cache.PlayerCache;
+import com.github.dirtpowered.betatorelease.data.entity.model.Entity;
 import com.github.dirtpowered.betatorelease.network.codec.PipelineFactory;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
@@ -21,6 +23,9 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Server {
     private final BetaToModernRegistry betaToModernRegistry;
@@ -53,6 +58,9 @@ public class Server {
 
         // inject beta lib packets
         new TranslatorRegistry(betaToModernRegistry, modernToBetaRegistry).register();
+        // start tick thread
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Tick Thread"));
+        executor.scheduleAtFixedRate(this::tickCache, 0L, 50L, TimeUnit.MILLISECONDS);
 
         bind(configuration.getBindAddress(), configuration.getBindPort());
     }
@@ -91,6 +99,19 @@ public class Server {
                 Main.LOGGER.info("Proxy is running on {}:{}", address, port);
             }
         });
+    }
+
+    public void tickCache() {
+        for (Session session : sessionRegistry.getSessions()) {
+            for (Entity entity : session.getEntityCache().getEntities().values()) {
+                if (entity instanceof EntityItem item) {
+                    if (!item.isTickable())
+                        continue;
+
+                    item.getTickConsumer().accept(item);
+                }
+            }
+        }
     }
 
     protected void stop() {
