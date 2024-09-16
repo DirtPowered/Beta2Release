@@ -18,7 +18,7 @@ public class UseEntityPacketHandler implements BetaToModernHandler<V1_7_3UseEnti
         InteractAction action = leftClick ? InteractAction.ATTACK : InteractAction.INTERACT_AT;
         Entity entity = session.getEntityCache().getEntityById(packetClass.getTargetEntityId());
 
-        if (entity instanceof EntityVehicle || (entity != null && entity.getMobType() != null))
+        if ((entity instanceof EntityVehicle || (entity != null && entity.getMobType() != null)) && !leftClick)
             action = InteractAction.INTERACT;
 
         session.getModernClient().sendModernPacket(new ClientPlayerInteractEntityPacket(target, action));
