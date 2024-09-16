@@ -9,7 +9,8 @@ import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler
 import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnMobPacket;
-import com.google.common.collect.Lists;
+
+import java.util.ArrayList;
 
 public class ServerSpawnMobTranslator implements ModernToBetaHandler<ServerSpawnMobPacket> {
     private final static String NAME = "Villager";
@@ -39,6 +40,6 @@ public class ServerSpawnMobTranslator implements ModernToBetaHandler<ServerSpawn
                 return super.getEntityId();
             }
         });
-        betaSession.sendPacket(new V1_7_3MobSpawnPacketData(entityId, type, x, y, z, yaw, pitch, Lists.newArrayList()));
+        betaSession.sendPacket(new V1_7_3MobSpawnPacketData(entityId, type, x, y, z, yaw, pitch, new ArrayList<>()));
     }
 }

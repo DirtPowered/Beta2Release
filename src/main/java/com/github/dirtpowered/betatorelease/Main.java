@@ -1,5 +1,6 @@
 package com.github.dirtpowered.betatorelease;
 
+import com.github.dirtpowered.betatorelease.data.lang.LangStorage;
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,8 @@ public class Main {
         LOGGER.info("It may contain peanuts or gluten.");
 
         BlockMappings.init();
+        LangStorage.init();
+
         server = new Server();
         addShutdownHook();
     }

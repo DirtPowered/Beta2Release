@@ -13,8 +13,8 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadat
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
-import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServerEntityMetadataTranslator implements ModernToBetaHandler<ServerEntityMetadataPacket> {
@@ -43,7 +43,7 @@ public class ServerEntityMetadataTranslator implements ModernToBetaHandler<Serve
             return;
 
         byte flags = (byte) metadata.getValue();
-        List<WatchableObject> watchables = Lists.newArrayList();
+        List<WatchableObject> watchables = new ArrayList<>();
 
         if ((flags & 0x02) == 0x02) // sneaking
             watchables.add(new WatchableObject(0, 0, (byte) 0x02));

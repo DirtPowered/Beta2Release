@@ -1,7 +1,6 @@
 package com.github.dirtpowered.betatorelease.data.remap;
 
 import com.github.dirtpowered.betatorelease.Main;
-import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
@@ -29,7 +28,8 @@ public class BlockMappings {
     private static void copyDefaultConfigFile(File configFile) {
         try {
             InputStream defaultConfigStream = BlockMappings.class.getResourceAsStream("/mappings.json");
-            Preconditions.checkNotNull(defaultConfigStream, "Default mappings.json not found");
+            if (defaultConfigStream == null)
+                throw new IllegalStateException("Default mappings.json not found");
 
             Files.copy(defaultConfigStream, configFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
@@ -38,7 +38,8 @@ public class BlockMappings {
     }
 
     public static RemappedBlock getRemappedBlock(int blockId, int blockData) {
-        Preconditions.checkArgument(blockData >= 0 && blockData <= 15, "block data must be between 0 and 15");
+        if (blockData < 0 || blockData > 15)
+            throw new IllegalArgumentException("block data must be between 0 and 15");
 
         String key = blockId + ":" + blockData;
         if (blockCache.containsKey(key))

@@ -134,10 +134,9 @@
         </dependency>
 
         <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-chat</artifactId>
-            <version>1.20-R0.1</version>
-            <scope>compile</scope>
+            <groupId>net.lenni0451.mcstructs</groupId>
+            <artifactId>text</artifactId>
+            <version>2.5.1</version>
         </dependency>
 
         <dependency>

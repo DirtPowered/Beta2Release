@@ -15,8 +15,8 @@ import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
-import com.google.common.collect.Sets;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChunkDataPacket> {
@@ -36,7 +36,7 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
             betaSession.sendPacket(new V1_7_3PreChunkPacketData(xPosition, zPosition, true /* allocate space */));
 
         Chunk[] chunks = chunkColumn.getChunks();
-        Set<Position> signPositions = Sets.newHashSet();
+        Set<Position> signPositions = new HashSet<>();
 
         try {
             // we don't need to send chunks above 128 since beta doesn't support them
