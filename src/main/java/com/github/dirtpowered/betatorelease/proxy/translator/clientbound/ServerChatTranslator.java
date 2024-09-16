@@ -7,6 +7,9 @@ import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler
 import com.github.steveice10.mc.protocol.data.game.MessageType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerChatPacket;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ServerChatTranslator implements ModernToBetaHandler<ServerChatPacket> {
     private static final int MAX_PACKET_LENGTH = 100;
     private static final int LINE_LENGTH = 64;
@@ -18,24 +21,22 @@ public class ServerChatTranslator implements ModernToBetaHandler<ServerChatPacke
             return;
 
         String legacy = LangStorage.translate(packet.getMessage().toJsonString(), false);
+        sendFormattedMessage(legacy, betaSession);
+    }
 
-        if (legacy.length() <= MAX_PACKET_LENGTH) {
-            sendFormattedMessage(legacy, betaSession);
-            return;
-        }
-
+    public static List<String> formatMessage(String message) {
+        List<String> formattedParts = new ArrayList<>();
         int index = 0;
         String lastColorCode = "";
 
-        while (index < legacy.length()) {
-            int endIndex = Math.min(index + MAX_PACKET_LENGTH, legacy.length());
-            String part = legacy.substring(index, endIndex);
+        while (index < message.length()) {
+            int endIndex = Math.min(index + MAX_PACKET_LENGTH, message.length());
+            String part = message.substring(index, endIndex);
             StringBuilder parts = new StringBuilder();
 
             int i = 0;
             while (i < part.length()) {
                 int lineEndIndex = Math.min(i + LINE_LENGTH, part.length());
-
                 if (lineEndIndex < part.length() && part.charAt(lineEndIndex - 1) == COLOR_CHAR)
                     lineEndIndex--;
 
@@ -45,38 +46,26 @@ public class ServerChatTranslator implements ModernToBetaHandler<ServerChatPacke
                     linePart = lastColorCode + linePart;
 
                 parts.append(linePart);
-                betaSession.sendPacket(new V1_7_3ChatPacketData(parts.toString()));
-                parts.setLength(0); // reset
+                formattedParts.add(parts.toString());
+                parts.setLength(0);
 
                 lastColorCode = getLastColorCode(linePart);
                 i = lineEndIndex;
             }
             index = endIndex;
         }
+        return formattedParts;
     }
 
-    private void sendFormattedMessage(String message, Session betaSession) {
-        String lastColorCode = "";
-        int index = 0;
+    public void sendFormattedMessage(String message, Session betaSession) {
+        List<String> messageParts = formatMessage(message);
 
-        while (index < message.length()) {
-            int endIndex = Math.min(index + ServerChatTranslator.LINE_LENGTH, message.length());
-
-            if (endIndex < message.length() && message.charAt(endIndex - 1) == COLOR_CHAR)
-                endIndex--;
-
-            String part = message.substring(index, endIndex);
-            if (!lastColorCode.isEmpty())
-                part = lastColorCode + part;
-
+        for (String part : messageParts) {
             betaSession.sendPacket(new V1_7_3ChatPacketData(part));
-
-            lastColorCode = getLastColorCode(part);
-            index = endIndex;
         }
     }
 
-    private String getLastColorCode(String text) {
+    private static String getLastColorCode(String text) {
         String lastColorCode = "";
         int length = text.length();
 

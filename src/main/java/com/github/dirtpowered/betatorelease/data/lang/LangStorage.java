@@ -2,7 +2,6 @@ package com.github.dirtpowered.betatorelease.data.lang;
 
 import com.github.dirtpowered.betatorelease.Main;
 import net.lenni0451.mcstructs.text.ATextComponent;
-import net.lenni0451.mcstructs.text.components.TranslationComponent;
 import net.lenni0451.mcstructs.text.serializer.TextComponentSerializer;
 import net.lenni0451.mcstructs.text.utils.TextUtils;
 
@@ -43,22 +42,12 @@ public class LangStorage {
     }
 
     public static String translate(String text, boolean forceTranslatable) {
-        ATextComponent deserialized = TextComponentSerializer.V1_12.deserialize(text);
-
+        ATextComponent deserialized = TextComponentSerializer.V1_12.deserializeReader(text);
         if (forceTranslatable) {
             String legacy = deserialized.asLegacyFormatString();
             return TRANSLATIONS.getOrDefault(legacy, legacy);
         }
-
-        TextUtils.iterateAll(deserialized, textComponent -> {
-            if (textComponent instanceof TranslationComponent translationComponent) {
-                String key = translationComponent.getKey();
-
-                if (TRANSLATIONS.containsKey(key)) {
-                    translationComponent.setKey(TRANSLATIONS.get(key));
-                }
-            }
-        });
+        TextUtils.setTranslator(deserialized, TRANSLATIONS::get);
         return deserialized.asLegacyFormatString();
     }
 }
