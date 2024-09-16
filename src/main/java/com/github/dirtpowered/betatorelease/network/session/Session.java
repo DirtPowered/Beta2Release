@@ -19,7 +19,10 @@ import lombok.Setter;
 import java.net.SocketAddress;
 
 public class Session extends SimpleChannelInboundHandler<Packet<?>> {
+
+    @Getter
     private final Channel channel;
+
     private final SessionRegistry sessionRegistry;
     private final BetaToModernRegistry messageHandlerRegistry;
 
