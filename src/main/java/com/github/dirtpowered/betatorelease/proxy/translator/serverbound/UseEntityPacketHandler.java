@@ -1,6 +1,7 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.serverbound;
 
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3UseEntityPacketData;
+import com.github.dirtpowered.betatorelease.data.entity.EntityVehicle;
 import com.github.dirtpowered.betatorelease.data.entity.model.Entity;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.BetaToModernHandler;
@@ -17,7 +18,7 @@ public class UseEntityPacketHandler implements BetaToModernHandler<V1_7_3UseEnti
         InteractAction action = leftClick ? InteractAction.ATTACK : InteractAction.INTERACT_AT;
         Entity entity = session.getEntityCache().getEntityById(packetClass.getTargetEntityId());
 
-        if (entity != null && entity.getMobType() != null && !leftClick)
+        if (entity instanceof EntityVehicle || (entity != null && entity.getMobType() != null))
             action = InteractAction.INTERACT;
 
         session.getModernClient().sendModernPacket(new ClientPlayerInteractEntityPacket(target, action));
