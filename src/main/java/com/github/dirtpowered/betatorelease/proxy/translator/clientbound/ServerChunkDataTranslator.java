@@ -1,17 +1,19 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3BlockChangePacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3MapChunkPacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3PreChunkPacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3UpdateSignPacketData;
+import com.github.dirtpowered.betaprotocollib.utils.BlockLocation;
 import com.github.dirtpowered.betatorelease.Main;
 import com.github.dirtpowered.betatorelease.data.chunk.BetaChunk;
+import com.github.dirtpowered.betatorelease.data.chunk.Block;
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
-import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerChunkDataPacket;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
@@ -36,7 +38,8 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
             betaSession.sendPacket(new V1_7_3PreChunkPacketData(xPosition, zPosition, true /* allocate space */));
 
         Chunk[] chunks = chunkColumn.getChunks();
-        Set<Position> signPositions = new HashSet<>();
+        Set<BlockLocation> signLocations = new HashSet<>();
+        Set<Block> doors = new HashSet<>();
 
         try {
             // we don't need to send chunks above 128 since beta doesn't support them
@@ -52,9 +55,14 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                         for (int z = 0; z < 16; z++) {
                             BlockState blockState = chunk.getBlocks().get(x, y, z);
                             BlockMappings.RemappedBlock remap = BlockMappings.getRemappedBlock(blockState.getId(), blockState.getData());
-                            /* see {@link ServerBlockChangeTranslator} for more info */
-                            if (Utils.isDoor(remap.blockId()) && remap.blockData() > 7)
-                                continue;
+
+                            int xBlock = x + xPosition * 16;
+                            int yBlock = y + columnCurrentHeight;
+                            int zBlock = z + zPosition * 16;
+
+                            betaSession.getBlockStorage().setBlockAt(xBlock, yBlock, zBlock, remap.blockId(), remap.blockData());
+                            if (Utils.isDoor(remap.blockId()))
+                                doors.add(new Block(xBlock, yBlock, zBlock, remap.blockId(), remap.blockData()));
 
                             betaChunk.setBlock(x, y + columnCurrentHeight, z, remap.blockId());
                             betaChunk.setMetaData(x, y + columnCurrentHeight, z, remap.blockData());
@@ -64,7 +72,7 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                                 betaChunk.setSkyLight(x, y + columnCurrentHeight, z, chunk.getSkyLight().get(x, y, z));
                             }
                             if (remap.blockId() == 63 || remap.blockId() == 68) {
-                                signPositions.add(new Position(x + xPosition * 16, y + columnCurrentHeight, z + zPosition * 16));
+                                signLocations.add(new BlockLocation(xBlock, yBlock, zBlock));
                             }
                         }
                     }
@@ -79,8 +87,18 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                 int y = (int) tag.get("y").getValue();
                 int z = (int) tag.get("z").getValue();
 
-                if (signPositions.contains(new Position(x, y, z)))
+                if (signLocations.contains(new BlockLocation(x, y, z))) {
                     betaSession.sendPacket(new V1_7_3UpdateSignPacketData(x, y, z, Utils.getLegacySignLines(tag)));
+                }
+            }
+            // update doors
+            for (Block block : doors) {
+                int x = block.getX();
+                int y = block.getY();
+                int z = block.getZ();
+
+                int fixedData = Utils.getLegacyDoorData(betaSession, x, y, z, block.getBlockData());
+                betaSession.sendPacket(new V1_7_3BlockChangePacketData(x, y, z, block.getBlockId(), fixedData));
             }
         } catch (ArrayIndexOutOfBoundsException e) {
             Main.LOGGER.error("Chunk error:", e);

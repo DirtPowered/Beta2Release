@@ -12,6 +12,7 @@ public class ServerUnloadChunkTranslator implements ModernToBetaHandler<ServerUn
         int xPosition = packet.getX();
         int zPosition = packet.getZ();
 
+        betaSession.getBlockStorage().removeChunk(xPosition, zPosition);
         betaSession.sendPacket(new V1_7_3PreChunkPacketData(xPosition, zPosition, false /* unload chunk */));
     }
 }

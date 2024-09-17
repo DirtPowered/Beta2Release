@@ -32,12 +32,14 @@ public class ServerMultiBlockChangeTranslator implements ModernToBetaHandler<Ser
             Position pos = record.getPosition();
 
             BlockMappings.RemappedBlock remap = BlockMappings.getRemappedBlock(blockState.getId(), blockState.getData());
-            /* see {@link ServerBlockChangeTranslator} for more info */
-            if (Utils.isDoor(remap.blockId()) && remap.blockData() > 7)
-                continue;
+            betaSession.getBlockStorage().setBlockAt(pos.getX(), pos.getY(), pos.getZ(), remap.blockId(), remap.blockData());
+
+            int blockData = remap.blockData();
+            if (Utils.isDoor(remap.blockId()))
+                blockData = Utils.getLegacyDoorData(betaSession, pos.getX(), pos.getY(), pos.getZ(), blockData);
 
             blocks[i] = (byte) remap.blockId();
-            data[i] = (byte) remap.blockData();
+            data[i] = (byte) blockData;
             coordinates[i] = (short) ((pos.getX() & 0xF) << 12 | (pos.getZ() & 0xF) << 8 | pos.getY() & 0xFF);
         }
 

@@ -1,8 +1,11 @@
 package com.github.dirtpowered.betatorelease.utils;
 
 import com.github.dirtpowered.betaprotocollib.data.BetaItemStack;
+import com.github.dirtpowered.betatorelease.data.chunk.Block;
+import com.github.dirtpowered.betatorelease.data.chunk.BlockStorage;
 import com.github.dirtpowered.betatorelease.data.lang.LangStorage;
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
+import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 import com.github.steveice10.opennbt.tag.builtin.Tag;
@@ -46,6 +49,20 @@ public class Utils {
             }
         }
         return signLines;
+    }
+
+    public static int getLegacyDoorData(Session session, int x, int y, int z, int data) {
+        BlockStorage storage = session.getBlockStorage();
+        boolean topHalf = (data & 0x8) == 8;
+
+        if (topHalf) {
+            Block bottomHalf = storage.getBlockAt(x, y - 1, z);
+            if (bottomHalf != null && isDoor(bottomHalf.getBlockId())) {
+                data = bottomHalf.getBlockData();
+                data |= 0x8;
+            }
+        }
+        return data;
     }
 
     public static int toAbsolutePos(double pos) {

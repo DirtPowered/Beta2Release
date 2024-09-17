@@ -4,6 +4,7 @@ import com.github.dirtpowered.betaprotocollib.model.Packet;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3KickDisconnectPacketData;
 import com.github.dirtpowered.betatorelease.Main;
 import com.github.dirtpowered.betatorelease.Server;
+import com.github.dirtpowered.betatorelease.data.chunk.BlockStorage;
 import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.model.ProtocolState;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
@@ -33,6 +34,9 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     private final EntityCache entityCache;
 
     @Getter
+    private final BlockStorage blockStorage;
+
+    @Getter
     @Setter
     private ProtocolState protocolState;
 
@@ -59,6 +63,7 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
         this.modernClient = new ModernClient(this);
         this.betaPlayer = new BetaPlayer(this);
         this.entityCache = new EntityCache();
+        this.blockStorage = new BlockStorage();
     }
 
     @SuppressWarnings("unchecked")

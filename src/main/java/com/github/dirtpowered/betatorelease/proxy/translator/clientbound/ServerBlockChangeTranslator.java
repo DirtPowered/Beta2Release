@@ -26,14 +26,12 @@ public class ServerBlockChangeTranslator implements ModernToBetaHandler<ServerBl
         int blockData = block.getData();
 
         BlockMappings.RemappedBlock remap = BlockMappings.getRemappedBlock(blockId, blockData);
-        // TODO: Bottom half cache
-        // We need to cache the bottom half to properly reconstruct the top half,
-        // without that cache it's impossible to fully decuct all the necessary information
+        betaSession.getBlockStorage().setBlockAt(x, y, z, remap.blockId(), remap.blockData());
 
-        // for now, we just skip the top half, so it's not buggy that much
-        if (Utils.isDoor(remap.blockId()) && remap.blockData() > 7)
-            return;
+        int remapped = remap.blockData();
+        if (Utils.isDoor(remap.blockId()))
+            remapped = Utils.getLegacyDoorData(betaSession, x, y, z, blockData);
 
-        betaSession.sendPacket(new V1_7_3BlockChangePacketData(x, y, z, remap.blockId(), remap.blockData()));
+        betaSession.sendPacket(new V1_7_3BlockChangePacketData(x, y, z, remap.blockId(), remapped));
     }
 }
