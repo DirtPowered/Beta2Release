@@ -4,6 +4,7 @@ import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3Mul
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
+import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockState;
@@ -31,6 +32,9 @@ public class ServerMultiBlockChangeTranslator implements ModernToBetaHandler<Ser
             Position pos = record.getPosition();
 
             BlockMappings.RemappedBlock remap = BlockMappings.getRemappedBlock(blockState.getId(), blockState.getData());
+            /* see {@link ServerBlockChangeTranslator} for more info */
+            if (Utils.isDoor(remap.blockId()) && remap.blockData() > 7)
+                continue;
 
             blocks[i] = (byte) remap.blockId();
             data[i] = (byte) remap.blockData();

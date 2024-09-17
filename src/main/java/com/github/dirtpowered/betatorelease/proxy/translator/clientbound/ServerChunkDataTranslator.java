@@ -52,6 +52,9 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                         for (int z = 0; z < 16; z++) {
                             BlockState blockState = chunk.getBlocks().get(x, y, z);
                             BlockMappings.RemappedBlock remap = BlockMappings.getRemappedBlock(blockState.getId(), blockState.getData());
+                            /* see {@link ServerBlockChangeTranslator} for more info */
+                            if (Utils.isDoor(remap.blockId()) && remap.blockData() > 7)
+                                continue;
 
                             betaChunk.setBlock(x, y + columnCurrentHeight, z, remap.blockId());
                             betaChunk.setMetaData(x, y + columnCurrentHeight, z, remap.blockData());

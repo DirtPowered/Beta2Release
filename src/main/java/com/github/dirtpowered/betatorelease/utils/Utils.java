@@ -62,6 +62,10 @@ public class Utils {
         return var0 < (float) var1 ? var1 - 1 : var1;
     }
 
+    public static boolean isDoor(int blockId) {
+        return blockId == 64 || blockId == 71;
+    }
+
     public static int toAbsoluteRotation(float rotation) {
         return floor_float(rotation * 256.0F / 360.0F);
     }
