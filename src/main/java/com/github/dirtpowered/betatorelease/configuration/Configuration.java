@@ -13,6 +13,7 @@ public class Configuration {
     private final String remoteAddress;
     private final int remotePort;
     private final String worldSeed;
+    private final boolean strictVersionCheck;
 
     private static final String CONFIG_FILE_PATH = "config.toml";
 
@@ -22,12 +23,14 @@ public class Configuration {
             try {
                 config.load();
                 config.setComment("world-seed", "Seed from beta 1.7.3 world generator, if applicable");
+                config.setComment("strict-version-check", "If true, the proxy will only accept connections from beta 1.7.3 clients");
 
                 config.set("bind-address", "127.0.0.1");
                 config.set("bind-port", 25565);
                 config.set("remote-address", "127.0.0.1");
                 config.set("remote-port", 25566);
                 config.set("world-seed", "-1849830396072973239");
+                config.set("strict-version-check", false);
                 config.save();
             } catch (Exception e) {
                 throw new RuntimeException("Failed to create or initialize the config file", e);
@@ -41,6 +44,7 @@ public class Configuration {
         this.remoteAddress = config.get("remote-address");
         this.remotePort = config.get("remote-port");
         this.worldSeed = config.get("world-seed");
+        this.strictVersionCheck = config.getOrElse("strict-version-check", false);
         config.close();
     }
 

@@ -20,8 +20,8 @@ public class BlockMappings {
     private final static int MAX_SUPPORTED_BLOCK_ID = 97;
     private final static int DEFAULT_BLOCK_ID = 1;
     private final static int DEFAULT_ITEM_ID = 1;
-    private final static Map<String, RemappedBlock> blockCache = new HashMap<>();
-    private final static Map<String, RemappedItem> itemCache = new HashMap<>();
+    private final static Map<Integer, RemappedBlock> blockCache = new HashMap<>();
+    private final static Map<Integer, RemappedItem> itemCache = new HashMap<>();
     private static Map<String, String> blockMappings = new HashMap<>();
     private static Map<String, String> itemMappings = new HashMap<>();
 
@@ -37,15 +37,20 @@ public class BlockMappings {
         }
     }
 
+    private static int packBlockKey(int blockId, int blockData) {
+        return (blockId << 4) | (blockData & 0xF);
+    }
+
     public static RemappedBlock getRemappedBlock(int blockId, int blockData) {
         if (blockData < 0 || blockData > 15)
             throw new IllegalArgumentException("block data must be between 0 and 15");
 
-        String key = blockId + ":" + blockData;
+        int key = packBlockKey(blockId, blockData);
         if (blockCache.containsKey(key))
             return blockCache.get(key);
 
-        String remapped = blockMappings.get(key);
+        String keyStr = blockId + ":" + blockData;
+        String remapped = blockMappings.get(keyStr);
         if (remapped == null) {
             if (blockId >= MAX_SUPPORTED_BLOCK_ID)
                 Main.LOGGER.warn("Missing block mapping for block {}:{}", blockId, blockData);
@@ -57,7 +62,7 @@ public class BlockMappings {
         int id = Integer.parseInt(parts[0]);
         int data = Integer.parseInt(parts[1]);
 
-        RemappedBlock remappedBlock = (id >= MAX_SUPPORTED_BLOCK_ID) // check if block is supported
+        RemappedBlock remappedBlock = (id >= MAX_SUPPORTED_BLOCK_ID)
                 ? new RemappedBlock(DEFAULT_BLOCK_ID)
                 : new RemappedBlock(id, data);
 
@@ -66,13 +71,14 @@ public class BlockMappings {
     }
 
     public static RemappedItem getRemappedItem(int itemId, int itemData) {
-        String key = itemId + ":" + itemData;
+        int key = packBlockKey(itemId, itemData);
         if (itemCache.containsKey(key))
             return itemCache.get(key);
 
-        String remapped = itemMappings.get(key);
+        String keyStr = itemId + ":" + itemData;
+        String remapped = itemMappings.get(keyStr);
         if (remapped == null) {
-            // we need to support items with durability too
+            // handle items with durability by trying to find the base item
             String itemDataRemapped = itemMappings.get(itemId + ":0"); // find base item
 
             if (itemDataRemapped != null)

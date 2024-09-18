@@ -22,11 +22,11 @@ public class OldMobType {
             id = 91;
         } else if (value == MobType.SLIME || value == MobType.MAGMA_CUBE) {
             id = 55;
-        } else if (value == MobType.SPIDER) {
+        } else if (value == MobType.SPIDER || value == MobType.CAVE_SPIDER) {
             id = 52;
         } else if (value == MobType.ZOMBIE) {
             id = 54;
-        } else if (value == MobType.CHICKEN) {
+        } else if (value == MobType.CHICKEN || value == MobType.RABBIT) {
             id = 93;
         } else if (value == MobType.SQUID) {
             id = 94;
@@ -36,6 +36,8 @@ public class OldMobType {
             id = 57;
         } else if (value == MobType.ENDERMAN) {
             id = 54;
+        } else if (value == MobType.GIANT_ZOMBIE) {
+            id = 53;
         } else {
             id = 90; // All unknown entities should be visible anyway. Enderdragon too. Flying pig *_*
         }

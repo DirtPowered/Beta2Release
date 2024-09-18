@@ -1,9 +1,10 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.serverbound;
 
+import com.github.dirtpowered.betaprotocollib.data.version.MinecraftVersion;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3LoginPacketData;
 import com.github.dirtpowered.betatorelease.model.ProtocolState;
-import com.github.dirtpowered.betatorelease.proxy.translator.BetaToModernHandler;
 import com.github.dirtpowered.betatorelease.network.session.Session;
+import com.github.dirtpowered.betatorelease.proxy.translator.BetaToModernHandler;
 
 public class LoginPacketHandler implements BetaToModernHandler<V1_7_3LoginPacketData> {
 
@@ -14,6 +15,13 @@ public class LoginPacketHandler implements BetaToModernHandler<V1_7_3LoginPacket
         if (protocolState != ProtocolState.LOGIN)
             return;
 
+        // limit client version to 1.7.3, if enabled
+        if (session.getServer().getConfiguration().isStrictVersionCheck()) {
+            if (packetClass.getEntityId() != MinecraftVersion.B_1_7_3.getProtocolVersion()) {
+                session.disconnect("Invalid client version, please use 1.7.3");
+                return;
+            }
+        }
         session.setProtocolState(ProtocolState.PLAY);
         session.setPlayerName(packetClass.getPlayerName());
 

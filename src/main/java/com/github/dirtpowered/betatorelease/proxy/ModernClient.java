@@ -10,6 +10,7 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntit
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerAbilitiesPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerChangeHeldItemPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.player.ServerPlayerSetExperiencePacket;
+import com.github.steveice10.mc.protocol.packet.ingame.server.entity.spawn.ServerSpawnExpOrbPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.scoreboard.ServerDisplayScoreboardPacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.scoreboard.ServerScoreboardObjectivePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.scoreboard.ServerTeamPacket;
@@ -61,7 +62,8 @@ public class ModernClient {
                 ServerDisplayScoreboardPacket.class,
                 ServerPlayBuiltinSoundPacket.class,
                 ServerSetCooldownPacket.class,
-                ServerPlayerChangeHeldItemPacket.class
+                ServerPlayerChangeHeldItemPacket.class,
+                ServerSpawnExpOrbPacket.class
         ));
     }
 
@@ -112,6 +114,9 @@ public class ModernClient {
     }
 
     public void disconnect(String reason) {
+        if (client == null || !client.getSession().isConnected())
+            return;
+
         client.getSession().disconnect(reason);
         betaSession.disconnect(reason);
     }
