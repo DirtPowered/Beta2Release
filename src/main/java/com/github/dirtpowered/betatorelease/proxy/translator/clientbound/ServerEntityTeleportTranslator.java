@@ -14,8 +14,9 @@ public class ServerEntityTeleportTranslator implements ModernToBetaHandler<Serve
         int x = Utils.toAbsolutePos(packet.getX());
         int y = Utils.toAbsolutePos(packet.getY());
         int z = Utils.toAbsolutePos(packet.getZ());
-        byte yaw = (byte) Utils.toAbsoluteRotation(packet.getYaw());
-        byte pitch = (byte) Utils.toAbsoluteRotation(packet.getPitch());
+
+        int yaw = Utils.toAbsoluteRotation(packet.getYaw());
+        int pitch = Utils.toAbsoluteRotation(packet.getPitch());
 
         betaSession.sendPacket(new V1_7_3EntityTeleportPacketData(entityId, x, y, z, yaw, pitch));
     }

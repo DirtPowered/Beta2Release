@@ -89,7 +89,8 @@ public class Server {
                         channel.pipeline().addLast("user_session", new Session(getServer(), channel, sessionRegistry, betaToModernRegistry));
                     }
                 })
-                .childOption(ChannelOption.SO_KEEPALIVE, true);
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
+                .childOption(ChannelOption.TCP_NODELAY, true);
 
         ChannelFuture future = bootstrap.bind(address, port);
         future.addListener(f -> {

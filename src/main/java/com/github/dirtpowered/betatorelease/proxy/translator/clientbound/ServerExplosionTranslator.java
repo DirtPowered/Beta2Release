@@ -13,9 +13,9 @@ public class ServerExplosionTranslator implements ModernToBetaHandler<ServerExpl
 
     @Override
     public void translate(ServerExplosionPacket packet, Session betaSession) {
-        int x = (int) packet.getX();
-        int y = (int) packet.getY();
-        int z = (int) packet.getZ();
+        double x = packet.getX();
+        double y = packet.getY();
+        double z = packet.getZ();
 
         List<BlockLocation> locations = packet.getExploded().stream().map(block -> new BlockLocation(block.getX(), block.getY(), block.getZ())).collect(Collectors.toList());
         betaSession.sendPacket(new V1_7_3ExplosionPacketData(x, y, z, packet.getRadius(), locations));

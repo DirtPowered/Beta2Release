@@ -28,9 +28,6 @@ public class ServerPlayerPositionRotationTranslator implements ModernToBetaHandl
         betaSession.getModernClient().sendModernPacket(new ClientTeleportConfirmPacket(packet.getTeleportId()));
 
         betaSession.sendPacket(new V1_7_3PlayerLookMovePacketData(x, y, y, z, yaw, pitch, false));
-        if (!betaPlayer.getSession().isLoggedIn())
-            betaSession.joinPlayer();
-
         betaSession.setLoggedIn(true);
     }
 }

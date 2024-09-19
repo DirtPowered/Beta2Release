@@ -22,8 +22,9 @@ public class ServerSpawnPlayerTranslator implements ModernToBetaHandler<ServerSp
         int x = Utils.toAbsolutePos(packet.getX());
         int y = Utils.toAbsolutePos(packet.getY());
         int z = Utils.toAbsolutePos(packet.getZ());
-        byte yaw = (byte) Utils.toAbsoluteRotation((int) packet.getYaw());
-        byte pitch = (byte) Utils.toAbsoluteRotation((int) packet.getPitch());
+
+        byte yaw = (byte) Utils.toAbsoluteRotation(packet.getYaw());
+        byte pitch = (byte) Utils.toAbsoluteRotation(packet.getPitch());
 
         betaSession.sendPacket(new V1_7_3NamedEntitySpawnPacketData(entityId, username, x, y, z, yaw, pitch, 0));
     }

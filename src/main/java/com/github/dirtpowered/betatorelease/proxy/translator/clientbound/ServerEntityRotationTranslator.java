@@ -10,8 +10,8 @@ public class ServerEntityRotationTranslator implements ModernToBetaHandler<Serve
 
     @Override
     public void translate(ServerEntityRotationPacket packet, Session betaSession) {
-        byte yaw = (byte) Utils.toAbsoluteRotation(packet.getYaw());
-        byte pitch = (byte) Utils.toAbsoluteRotation(packet.getPitch());
+        int yaw = Utils.toAbsoluteRotation(packet.getYaw());
+        int pitch = Utils.toAbsoluteRotation(packet.getPitch());
 
         betaSession.sendPacket(new V1_7_3EntityLookPacketData(packet.getEntityId(), yaw, pitch));
     }

@@ -123,8 +123,4 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
     public void disconnect(String reason) {
         sendPacket(new V1_7_3KickDisconnectPacketData(reason));
     }
-
-    public void joinPlayer() {
-        // empty
-    }
 }

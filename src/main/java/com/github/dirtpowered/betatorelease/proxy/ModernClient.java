@@ -63,7 +63,8 @@ public class ModernClient {
                 ServerPlayBuiltinSoundPacket.class,
                 ServerSetCooldownPacket.class,
                 ServerPlayerChangeHeldItemPacket.class,
-                ServerSpawnExpOrbPacket.class
+                ServerSpawnExpOrbPacket.class,
+                ServerBossBarPacket.class
         ));
     }
 
@@ -74,8 +75,7 @@ public class ModernClient {
             @Override
             public void packetReceived(PacketReceivedEvent event) {
                 /* Modern -> Beta */
-                Packet packet = event.getPacket();
-                processPacket(packet);
+                processPacket(event.getPacket());
             }
 
             @Override
@@ -97,13 +97,14 @@ public class ModernClient {
 
     @SuppressWarnings("unchecked")
     private void processPacket(Packet packet) {
-        ModernToBetaHandler handler = getBetaSession().getServer().getModernToBetaRegistry().getByPacket(packet);
         if (skipTranslating.contains(packet.getClass()))
             return;
 
+        ModernToBetaHandler handler = betaSession.getServer().getModernToBetaRegistry().getByPacket(packet);
+
         if (handler != null) {
             try {
-                handler.translate(packet, getBetaSession());
+                handler.translate(packet, betaSession);
             } catch (Exception e) {
                 Main.LOGGER.error("Error while translating packet: {}", packet.getClass().getSimpleName());
                 e.printStackTrace();
@@ -123,9 +124,5 @@ public class ModernClient {
 
     public void sendModernPacket(Packet modernPacket) {
         client.getSession().send(modernPacket);
-    }
-
-    private Session getBetaSession() {
-        return betaSession;
     }
 }
