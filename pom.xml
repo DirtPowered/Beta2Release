@@ -136,7 +136,7 @@
         <dependency>
             <groupId>net.lenni0451.mcstructs</groupId>
             <artifactId>text</artifactId>
-            <version>2.5.1</version>
+            <version>2.5.2</version>
         </dependency>
 
         <dependency>
