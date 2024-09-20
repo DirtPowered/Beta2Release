@@ -10,6 +10,10 @@ public class BlockStorage {
         return ((long) chunkX & 0xffffffffL) | (((long) chunkZ & 0xffffffffL) << 32);
     }
 
+    public boolean isChunkLoaded(int chunkX, int chunkZ) {
+        return blockStorage.containsKey(getKey(chunkX, chunkZ));
+    }
+
     public void removeChunk(int chunkX, int chunkZ) {
         this.blockStorage.remove(getKey(chunkX, chunkZ));
     }

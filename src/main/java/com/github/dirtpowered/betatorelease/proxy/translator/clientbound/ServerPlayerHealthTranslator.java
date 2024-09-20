@@ -9,6 +9,6 @@ public class ServerPlayerHealthTranslator implements ModernToBetaHandler<ServerP
 
     @Override
     public void translate(ServerPlayerHealthPacket packet, Session betaSession) {
-        betaSession.sendPacket(new V1_7_3UpdateHealthPacketData((int) packet.getHealth()));
+        betaSession.sendPacket(new V1_7_3UpdateHealthPacketData((int) Math.ceil(packet.getHealth())));
     }
 }

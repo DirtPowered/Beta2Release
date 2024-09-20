@@ -1,6 +1,8 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3BlockChangePacketData;
+import com.github.dirtpowered.betatorelease.Main;
+import com.github.dirtpowered.betatorelease.data.chunk.BlockStorage;
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
@@ -25,8 +27,15 @@ public class ServerBlockChangeTranslator implements ModernToBetaHandler<ServerBl
         int blockId = block.getId();
         int blockData = block.getData();
 
+        // Check if chunk is loaded. Beta 1.7.3 client will crash if block is changed in unloaded chunk
+        BlockStorage storage = betaSession.getBlockStorage();
+        if (!storage.isChunkLoaded(x >> 4, z >> 4)) {
+            Main.LOGGER.warn("Attempted to change block at unloaded chunk: " + x + " " + y + " " + z);
+            return;
+        }
+
         BlockMappings.RemappedBlock remap = BlockMappings.getRemappedBlock(blockId, blockData);
-        betaSession.getBlockStorage().setBlockAt(x, y, z, remap.blockId(), remap.blockData());
+        storage.setBlockAt(x, y, z, remap.blockId(), remap.blockData());
 
         int remapped = remap.blockData();
         if (Utils.isDoor(remap.blockId()))
