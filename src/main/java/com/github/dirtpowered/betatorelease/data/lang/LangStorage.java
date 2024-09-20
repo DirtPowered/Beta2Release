@@ -45,8 +45,8 @@ public class LangStorage {
     public static String translate(String text, boolean forceTranslatable) {
         ATextComponent deserialized = TextComponentSerializer.V1_12.deserializeReader(text);
         if (forceTranslatable) {
-            String legacy = deserialized.asLegacyFormatString();
-            return Utils.stripUnsupportedColors(TRANSLATIONS.getOrDefault(legacy, legacy));
+            String legacy = Utils.stripUnsupportedColors(deserialized.asLegacyFormatString());
+            return TRANSLATIONS.getOrDefault(legacy, legacy);
         }
         TextUtils.setTranslator(deserialized, TRANSLATIONS::get);
         return Utils.stripUnsupportedColors(deserialized.asLegacyFormatString());
