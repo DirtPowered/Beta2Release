@@ -6,7 +6,7 @@
 
     <groupId>dev.mzga</groupId>
     <artifactId>Beta2Release</artifactId>
-    <version>1.0.3-SNAPSHOT</version>
+    <version>1.0.4-SNAPSHOT</version>
 
     <repositories>
         <repository>
