@@ -1,6 +1,7 @@
 package com.github.dirtpowered.betatorelease.data.lang;
 
 import com.github.dirtpowered.betatorelease.Main;
+import com.github.dirtpowered.betatorelease.utils.Utils;
 import net.lenni0451.mcstructs.text.ATextComponent;
 import net.lenni0451.mcstructs.text.serializer.TextComponentSerializer;
 import net.lenni0451.mcstructs.text.utils.TextUtils;
@@ -45,9 +46,9 @@ public class LangStorage {
         ATextComponent deserialized = TextComponentSerializer.V1_12.deserializeReader(text);
         if (forceTranslatable) {
             String legacy = deserialized.asLegacyFormatString();
-            return TRANSLATIONS.getOrDefault(legacy, legacy);
+            return Utils.stripUnsupportedColors(TRANSLATIONS.getOrDefault(legacy, legacy));
         }
         TextUtils.setTranslator(deserialized, TRANSLATIONS::get);
-        return deserialized.asLegacyFormatString();
+        return Utils.stripUnsupportedColors(deserialized.asLegacyFormatString());
     }
 }

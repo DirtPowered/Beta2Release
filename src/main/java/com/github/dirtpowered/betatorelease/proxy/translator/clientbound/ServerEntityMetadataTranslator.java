@@ -2,6 +2,7 @@ package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
 import com.github.dirtpowered.betaprotocollib.data.WatchableObject;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3EntityMetadataPacketData;
+import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3EntityVelocityPacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3PickupSpawnPacketData;
 import com.github.dirtpowered.betaprotocollib.utils.Location;
 import com.github.dirtpowered.betatorelease.data.entity.EntityItem;
@@ -29,7 +30,7 @@ public class ServerEntityMetadataTranslator implements ModernToBetaHandler<Serve
             if (entityMetadata.getType() == MetadataType.ITEM && entity instanceof EntityItem item) {
                 if (entityMetadata.getValue() instanceof ItemStack) {
                     item.setItemStack(Utils.itemStackToBetaItemStack((ItemStack) entityMetadata.getValue()));
-                    spawnItemEntity(betaSession, item);
+                    spawnItemEntity(betaSession, item, !item.isTickable());
                 }
             } else {
                 translateBaseEntityFlags(betaSession, entityId, entityMetadata);
@@ -74,18 +75,26 @@ public class ServerEntityMetadataTranslator implements ModernToBetaHandler<Serve
         session.sendPacket(new V1_7_3EntityMetadataPacketData(entity.getEntityId(), List.of(new WatchableObject(0, 16, value))));
     }
 
-    private void spawnItemEntity(Session session, EntityItem itemEntity) {
-        Location location = itemEntity.getLocation();
+    private void spawnItemEntity(Session session, EntityItem item, boolean removeImmediately) {
+        Location location = item.getLocation();
 
         session.sendPacket(new V1_7_3PickupSpawnPacketData(
-                itemEntity.getEntityId(),
+                item.getEntityId(),
                 (int) location.getX(),
                 (int) location.getY(),
                 (int) location.getZ(),
-                (byte) itemEntity.getRotation(),
-                (byte) itemEntity.getPitch(),
-                (byte) itemEntity.getRoll(),
-                itemEntity.getItemStack()
+                (byte) item.getRotation(),
+                (byte) item.getPitch(),
+                (byte) item.getRoll(),
+                item.getItemStack()
         ));
+
+        // apply additional velocity from a spawn object packet
+        session.sendPacket(new V1_7_3EntityVelocityPacketData(item.getEntityId(), item.getVelocityX(), item.getVelocityY(), item.getVelocityZ()));
+
+        if (removeImmediately) {
+            // fix item merging visual bug
+            session.getEntityCache().removeEntity(item.getEntityId());
+        }
     }
 }

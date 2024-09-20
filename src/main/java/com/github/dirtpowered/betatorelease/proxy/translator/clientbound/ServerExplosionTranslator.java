@@ -39,7 +39,6 @@ public class ServerExplosionTranslator implements ModernToBetaHandler<ServerExpl
         if (!(player.getLocation().distanceTo(new Location(x, y, z, 0, 0)) <= radius))
             return;
 
-
         betaSession.sendPacket(new V1_7_3EntityVelocityPacketData(entityId, motionX, motionY, motionZ));
     }
 }

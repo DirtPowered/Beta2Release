@@ -51,6 +51,24 @@ public class Utils {
         return signLines;
     }
 
+    public static String stripUnsupportedColors(String message) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < message.length(); i++) {
+            char c = message.charAt(i);
+            if (c == '§') {
+                if (i + 1 < message.length()) {
+                    char next = message.charAt(i + 1);
+                    if (next == 'k' || next == 'l' || next == 'm' || next == 'n' || next == 'o' || next == 'r') {
+                        i++;
+                        continue;
+                    }
+                }
+            }
+            builder.append(c);
+        }
+        return builder.toString();
+    }
+
     public static int getLegacyDoorData(Session session, int x, int y, int z, int data) {
         BlockStorage storage = session.getBlockStorage();
         boolean topHalf = (data & 0x8) == 8;

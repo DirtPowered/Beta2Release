@@ -17,6 +17,10 @@ public class EntityItem extends Entity {
     private boolean tickable = false;
     private Consumer<EntityItem> tickConsumer;
 
+    private int velocityX;
+    private int velocityY;
+    private int velocityZ;
+
     public EntityItem(int entityId) {
         super(entityId);
     }

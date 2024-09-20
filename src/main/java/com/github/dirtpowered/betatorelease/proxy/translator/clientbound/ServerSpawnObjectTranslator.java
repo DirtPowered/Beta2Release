@@ -45,6 +45,11 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 entityItem.setPitch(pitch);
                 entityItem.setRoll(roll);
 
+                // set initial velocity
+                entityItem.setVelocityX(velocityX);
+                entityItem.setVelocityY(velocityY);
+                entityItem.setVelocityZ(velocityZ);
+
                 entityCache.addEntity(entityItem);
                 break;
             case TIPPED_ARROW:
