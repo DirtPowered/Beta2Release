@@ -17,6 +17,7 @@ public class Configuration {
     private final boolean strictVersionCheck;
     private final Locale locale;
     private final int renderDistance;
+    private final boolean haproxySupport;
 
     private static final String CONFIG_FILE_PATH = "config.toml";
 
@@ -38,6 +39,7 @@ public class Configuration {
                 config.set("strict-version-check", false);
                 config.set("locale", "en_US");
                 config.set("render-distance", 4);
+                config.set("haproxy-support", false);
                 config.save();
             } catch (Exception e) {
                 throw new RuntimeException("Failed to create or initialize the config file", e);
@@ -54,6 +56,7 @@ public class Configuration {
         this.strictVersionCheck = config.getOrElse("strict-version-check", false);
         this.locale = Locale.fromCode(config.getOrElse("locale", "en_US"));
         this.renderDistance = Math.max(4, Math.min(config.getOrElse("render-distance", 4), 15)) - 1;
+        this.haproxySupport = config.getOrElse("haproxy-support", false);
 
         config.close();
     }

@@ -103,7 +103,7 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
         context.close();
     }
 
-    private SocketAddress getAddress() {
+    public SocketAddress getAddress() {
         return channel.remoteAddress();
     }
 

@@ -25,6 +25,6 @@ public class LoginPacketHandler implements BetaToModernHandler<V1_7_3LoginPacket
         session.setProtocolState(ProtocolState.PLAY);
         session.setPlayerName(packetClass.getPlayerName());
 
-        session.getModernClient().connect(); // connect to remote modern server
+        session.getModernClient().connect(session); // connect to remote modern server
     }
 }
