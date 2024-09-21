@@ -16,9 +16,7 @@ public class Main {
         LOGGER.info("It may contain peanuts or gluten.");
 
         BlockMappings.init();
-        LangStorage.init();
-
-        server = new Server();
+        LangStorage.init(server = new Server());
         addShutdownHook();
     }
 

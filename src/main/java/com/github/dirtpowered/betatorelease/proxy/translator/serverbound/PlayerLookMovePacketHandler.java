@@ -25,6 +25,7 @@ public class PlayerLookMovePacketHandler implements BetaToModernHandler<V1_7_3Pl
         float pitch = packetClass.getPitch();
 
         player.setLocation(new Location(x, y, z, pitch, yaw));
+        player.setOnGround(packetClass.isOnGround());
 
         if (!player.isInVehicle()) {
             session.getModernClient().sendModernPacket(new ClientPlayerPositionRotationPacket(packetClass.isOnGround(), x, y, z, yaw, pitch));
