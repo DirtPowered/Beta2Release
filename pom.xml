@@ -10,24 +10,32 @@
 
     <repositories>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        <repository>
-            <id>bungeecord-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-        <repository>
             <id>maven_central</id>
             <name>Maven Central</name>
             <url>https://repo.maven.apache.org/maven2/</url>
         </repository>
         <repository>
-            <id>dirtpowered-repository</id>
-            <name>DirtPowered Maven repository</name>
-            <url>https://repo.mzga.dev/</url>
+            <id>dirtpowered-releases</id>
+            <name>DirtPowered Releases Maven repository</name>
+            <url>https://repo.mzga.dev/releases</url>
+        </repository>
+        <repository>
+            <id>dirtpowered-snapshots</id>
+            <name>DirtPowered Snapshots Maven repository</name>
+            <url>https://repo.mzga.dev/snapshots</url>
         </repository>
     </repositories>
+
+    <dependencyManagement>
+        <!-- force a netty version across all dependencies -->
+        <dependencies>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>4.1.113.Final</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
@@ -146,7 +154,7 @@
         </dependency>
 
         <dependency>
-            <groupId>BetaProtocollib</groupId>
+            <groupId>com.github.dirtpowered</groupId>
             <artifactId>BetaProtocollib</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>compile</scope>
