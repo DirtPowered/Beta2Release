@@ -19,8 +19,12 @@ public class PacketDecoder extends ReplayingDecoder<Packet<?>> {
     @Override
     protected void decode(ChannelHandlerContext context, ByteBuf buffer, List<Object> list)
             throws IOException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-
-        final int packetId = buffer.readUnsignedByte();
+        // skip decoding if the protocol is modern
+        if (context.channel().attr(VersionDetectionHandler.PROTOCOL_ATTRIBUTE).get().equals("modern")) {
+            list.add(buffer.readBytes(buffer.readableBytes()));
+            return;
+        }
+         int packetId = buffer.readUnsignedByte();
 
         if (!BetaLib.getRegistry().hasId(packetId)) {
             Main.LOGGER.warn("Packet {}[{}] is not registered", Utils.toHex(packetId), packetId);

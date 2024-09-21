@@ -66,16 +66,14 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
         this.blockStorage = new BlockStorage();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void processPacket(Packet<?> packet) {
         final BetaToModernHandler handler = messageHandlerRegistry.getMessageHandler(packet);
-
         if (handler != null) {
             try {
                 handler.handlePacket(this, packet);
             } catch (Exception e) {
-                Main.LOGGER.error("error while handling packet: {}", e.getMessage());
-                e.printStackTrace();
+                Main.LOGGER.error("error while handling packet: {}", e.getMessage(), e);
             }
         } else {
             Main.LOGGER.error("missing 'BetaToModern' translator for {}", packet.getClass().getSimpleName());
@@ -109,8 +107,8 @@ public class Session extends SimpleChannelInboundHandler<Packet<?>> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext context, Throwable cause) {
-        Main.LOGGER.warn("closed connection: {} [{}]", cause.getLocalizedMessage(), getAddress());
-        cause.printStackTrace();
+        Main.LOGGER.warn("closed connection: {} [{}]", cause.getLocalizedMessage(), getAddress(), cause);
+        this.sessionRegistry.removeSession(this);
         context.close();
     }
 

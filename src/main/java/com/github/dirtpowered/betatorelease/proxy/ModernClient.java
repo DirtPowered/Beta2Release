@@ -68,14 +68,14 @@ public class ModernClient {
     }
 
     public void disconnect(String reason) {
-        if (client == null || !client.getSession().isConnected())
-            return;
+        if (checkConnection()) return;
 
         this.client.getSession().disconnect(reason);
         this.betaSession.disconnect(reason);
     }
 
     public void sendModernPacket(Packet modernPacket) {
+        if (checkConnection()) return;
         this.client.getSession().send(modernPacket);
     }
 
@@ -87,5 +87,9 @@ public class ModernClient {
             sessionFactory = new TcpSessionFactory();
         }
         return sessionFactory;
+    }
+
+    private boolean checkConnection() {
+        return client == null || !client.getSession().isConnected();
     }
 }

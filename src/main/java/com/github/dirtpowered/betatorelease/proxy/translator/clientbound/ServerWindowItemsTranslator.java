@@ -18,7 +18,11 @@ public class ServerWindowItemsTranslator implements ModernToBetaHandler<ServerWi
         int windowId = packet.getWindowId();
         WindowType windowType = betaSession.getBetaPlayer().getWindowType(windowId);
 
-        if (items.length == 46 && windowType == WindowType.GENERIC_INVENTORY) { // skip offhand slot
+        if (items.length == 46 /* skip offhand slot */ && (windowType == WindowType.GENERIC_INVENTORY
+                || windowType == WindowType.DROPPER
+                || windowType == WindowType.DISPENSER
+                || windowType == WindowType.CRAFTING_TABLE)) {
+
             betaSession.sendPacket(new V1_7_3WindowItemsPacketData(windowId, Utils.convertItemStacks(Arrays.copyOf(items, 45))));
             return;
         }
