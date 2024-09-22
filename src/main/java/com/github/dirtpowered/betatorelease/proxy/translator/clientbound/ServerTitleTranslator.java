@@ -4,6 +4,7 @@ import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3Cha
 import com.github.dirtpowered.betatorelease.data.lang.LangStorage;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
+import com.github.dirtpowered.betatorelease.utils.LegacyTextWrapper;
 import com.github.steveice10.mc.protocol.data.game.TitleAction;
 import com.github.steveice10.mc.protocol.packet.ingame.server.ServerTitlePacket;
 
@@ -24,7 +25,7 @@ public class ServerTitleTranslator implements ModernToBetaHandler<ServerTitlePac
         }
         text = LangStorage.translate(text, true); // apply args
         // send messages in parts, so the client can display them correctly
-        for (String s : ServerChatTranslator.formatMessage(text)) {
+        for (String s : LegacyTextWrapper.wrapText(text)) {
             betaSession.sendPacket(new V1_7_3ChatPacketData(s));
         }
     }
