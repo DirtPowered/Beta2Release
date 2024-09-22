@@ -13,12 +13,12 @@ public class AnimationPacketHandler implements BetaToModernHandler<V1_7_3Animati
     @Override
     public void handlePacket(Session session, V1_7_3AnimationPacketData packetClass) {
         int type = packetClass.getAnimate();
-
         if (type == 1) {
             session.getChannel().eventLoop().execute(() -> {
                 // delay a swing-arm packet to prevent from activating attack cooldown before an entity-use packet
                 session.getModernClient().sendModernPacket(new ClientPlayerSwingArmPacket(Hand.MAIN_HAND));
             });
+            session.getBetaPlayer().setLastAnimationPacket(System.currentTimeMillis());
         } else if (type == 3) {
             session.getModernClient().sendModernPacket(new ClientPlayerStatePacket(packetClass.getEntityId(), PlayerState.LEAVE_BED));
         }

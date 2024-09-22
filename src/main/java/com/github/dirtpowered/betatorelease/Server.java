@@ -114,6 +114,7 @@ public class Server {
                     item.getTickConsumer().accept(item);
                 }
             }
+            session.getBetaPlayer().tick();
         }
     }
 

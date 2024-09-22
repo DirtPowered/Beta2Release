@@ -1,8 +1,10 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.serverbound;
 
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3BlockDigPacketData;
+import com.github.dirtpowered.betatorelease.data.chunk.BlockDigEntry;
 import com.github.dirtpowered.betatorelease.data.utils.OldBlockFace;
 import com.github.dirtpowered.betatorelease.data.utils.OldPlayerAction;
+import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.proxy.translator.BetaToModernHandler;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
@@ -23,10 +25,20 @@ public class BlockDigPacketHandler implements BetaToModernHandler<V1_7_3BlockDig
         if (playerAction == null || blockFace == null)
             return;
 
+        BetaPlayer player = session.getBetaPlayer();
+
         int x = packetClass.getX();
         int y = packetClass.getY();
         int z = packetClass.getZ();
 
-        session.getModernClient().sendModernPacket(new ClientPlayerActionPacket(playerAction, new Position(x, y, z), blockFace));
+        BlockDigEntry entry = new BlockDigEntry();
+
+        entry.setBlockFace(blockFace);
+        entry.setPlayerAction(playerAction);
+        entry.setPosition(new Position(x, y, z));
+
+        player.setDiggingEntry(entry);
+
+        session.getModernClient().sendModernPacket(new ClientPlayerActionPacket(playerAction, entry.getPosition(), blockFace));
     }
 }
