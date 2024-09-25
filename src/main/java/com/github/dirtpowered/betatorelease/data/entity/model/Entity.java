@@ -14,6 +14,9 @@ public abstract class Entity {
     private UUID uniqueId;
 
     @Setter
+    private int passenger;
+
+    @Setter
     private Location location;
 
     public Entity(int entityId) {

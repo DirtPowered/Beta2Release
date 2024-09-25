@@ -1,7 +1,6 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3AttachEntityPacketData;
-import com.github.dirtpowered.betatorelease.data.entity.EntityVehicle;
 import com.github.dirtpowered.betatorelease.data.entity.cache.EntityCache;
 import com.github.dirtpowered.betatorelease.data.entity.model.Entity;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
@@ -13,35 +12,41 @@ public class ServerEntitySetPassengersTranslator implements ModernToBetaHandler<
 
     @Override
     public void translate(ServerEntitySetPassengersPacket packet, Session betaSession) {
-        //https://wiki.vg/index.php?title=Protocol&oldid=689#Attach_Entity_.280x27.29
-        //NOTE: It supports only one passenger.
+        int entityId = packet.getEntityId();
+        int[] passengers = packet.getPassengerIds();
 
-        int vehicleEntityId = packet.getEntityId();
-        int[] passengerEntityIds = packet.getPassengerIds();
         EntityCache cache = betaSession.getEntityCache();
+        Entity vehicle = cache.getEntityById(entityId);
 
-        Entity entity = cache.getEntityById(vehicleEntityId);
-        try {
-            if (!(entity instanceof EntityVehicle vehicle))
-                return;
+        if (vehicle == null) return;
 
-            vehicle.setPassenger(passengerEntityIds[0]);
-
-            BetaPlayer player = betaSession.getServer().getPlayer(passengerEntityIds[0]);
-            if (player != null)
-                player.setInVehicle(true, vehicleEntityId);
-
-            cache.addEntity(vehicle);
-            betaSession.sendPacket(new V1_7_3AttachEntityPacketData(passengerEntityIds[0], vehicleEntityId));
-        } catch (ArrayIndexOutOfBoundsException e) {
-            EntityVehicle vehicle = (EntityVehicle) entity;
-
-            BetaPlayer player = betaSession.getServer().getPlayer(vehicle.getPassenger());
-
-            if (player != null)
-                player.setInVehicle(false, -1);
-
-            betaSession.sendPacket(new V1_7_3AttachEntityPacketData(vehicle.getPassenger(), -1));
+        if (passengers.length != 0) {
+            int inside = vehicle.getPassenger();
+            if (passengers[0] != inside) {
+                if (inside != -1) {
+                    betaSession.sendPacket(new V1_7_3AttachEntityPacketData(inside, -1));
+                    updateState(inside, false, -1, betaSession);
+                }
+                vehicle.setPassenger(passengers[0]);
+                betaSession.sendPacket(new V1_7_3AttachEntityPacketData(passengers[0], vehicle.getEntityId()));
+                updateState(passengers[0], true, vehicle.getEntityId(), betaSession);
+            }
+        } else {
+            int old = vehicle.getPassenger();
+            if (old != -1) {
+                betaSession.sendPacket(new V1_7_3AttachEntityPacketData(old, -1));
+                vehicle.setPassenger(-1);
+                updateState(old, false, -1, betaSession);
+            }
         }
+        cache.addEntity(vehicle);
+    }
+
+    private void updateState(int playerId, boolean state, int vehicleId, Session session) {
+        BetaPlayer player = session.getServer().getPlayer(playerId);
+        if (player == null)
+            return;
+
+        player.setInVehicle(state, vehicleId);
     }
 }
