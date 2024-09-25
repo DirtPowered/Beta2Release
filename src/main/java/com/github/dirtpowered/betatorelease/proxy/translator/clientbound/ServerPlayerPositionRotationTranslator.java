@@ -30,12 +30,16 @@ public class ServerPlayerPositionRotationTranslator implements ModernToBetaHandl
         betaPlayer.setOnGround(false);
         betaPlayer.setLocation(new Location(x, y, z, pitch, yaw));
 
-        Configuration config = betaSession.getServer().getConfiguration();
-        betaSession.getModernClient().sendModernPacket(new ClientSettingsPacket(config.getLocale().getCode(), config.getRenderDistance(), ChatVisibility.FULL, true, SkinPart.values(), Hand.MAIN_HAND));
+        // send client settings only in the initial login phase
+        if (!betaSession.isLoggedIn()) {
+            Configuration config = betaSession.getServer().getConfiguration();
+            betaSession.getModernClient().sendModernPacket(new ClientSettingsPacket(config.getLocale().getCode(), config.getRenderDistance(), ChatVisibility.FULL, true, SkinPart.values(), Hand.MAIN_HAND));
+        }
 
         betaSession.getModernClient().sendModernPacket(new ClientPlayerPositionRotationPacket(false, x, y, z, yaw, pitch));
         betaSession.getModernClient().sendModernPacket(new ClientTeleportConfirmPacket(packet.getTeleportId()));
         betaSession.sendPacket(new V1_7_3PlayerLookMovePacketData(x, y, y, z, yaw, pitch, false));
+
         betaSession.setLoggedIn(true);
     }
 }
