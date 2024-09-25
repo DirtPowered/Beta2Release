@@ -69,7 +69,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 break;
             case BOAT:
                 betaSession.sendPacket(new V1_7_3VehicleSpawnPacketData(entityId, 1, x, y, z, velocityX, velocityY, velocityZ, 0));
-                entityCache.addEntity(new EntityVehicle(entityId));
+                entityCache.addEntity(new EntityVehicle(entityId, true));
                 break;
             case GHAST_FIREBALL, BLAZE_FIREBALL, DRAGON_FIREBALL:
                 betaSession.sendPacket(new V1_7_3VehicleSpawnPacketData(entityId, 63, x, y, z, velocityX, velocityY, velocityZ, 0));
@@ -82,7 +82,7 @@ public class ServerSpawnObjectTranslator implements ModernToBetaHandler<ServerSp
                 } : 10;
 
                 betaSession.sendPacket(new V1_7_3VehicleSpawnPacketData(entityId, typeId, x, y, z, velocityX, velocityY, velocityZ, 0));
-                entityCache.addEntity(new EntityVehicle(entityId));
+                entityCache.addEntity(new EntityVehicle(entityId, false));
                 break;
             case FALLING_BLOCK:
                 if (!(packet.getData() instanceof FallingBlockData data))

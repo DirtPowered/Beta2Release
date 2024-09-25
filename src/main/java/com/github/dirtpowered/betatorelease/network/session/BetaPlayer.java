@@ -32,7 +32,7 @@ public class BetaPlayer {
     private int dimension;
 
     @Setter
-    private volatile long lastAnimationPacket;
+    private long lastAnimationPacket;
 
     private final Map<Integer, WindowType> windowTypeMap;
 
@@ -66,7 +66,7 @@ public class BetaPlayer {
             return false;
 
         if (diggingEntry.getPlayerAction() == PlayerAction.START_DIGGING)
-            return System.currentTimeMillis() - lastAnimationPacket < 500L;
+            return System.currentTimeMillis() - lastAnimationPacket < 250L;
 
         return false;
     }

@@ -8,8 +8,10 @@ import lombok.Setter;
 @Getter
 public class EntityVehicle extends Entity {
     private int passenger;
+    private boolean boat;
 
-    public EntityVehicle(int entityId) {
+    public EntityVehicle(int entityId, boolean boat) {
         super(entityId);
+        this.boat = boat;
     }
 }
