@@ -6,6 +6,7 @@ import com.github.dirtpowered.betatorelease.data.chunk.BlockStorage;
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
+import com.github.dirtpowered.betatorelease.utils.LegacyDoorDataFixer;
 import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord;
@@ -39,7 +40,7 @@ public class ServerBlockChangeTranslator implements ModernToBetaHandler<ServerBl
 
         int remapped = remap.blockData();
         if (Utils.isDoor(remap.blockId()))
-            remapped = Utils.getLegacyDoorData(betaSession, x, y, z, blockData);
+            remapped = LegacyDoorDataFixer.getLegacyDoorData(betaSession, x, y, z, blockData);
 
         betaSession.sendPacket(new V1_7_3BlockChangePacketData(x, y, z, remap.blockId(), remapped));
     }

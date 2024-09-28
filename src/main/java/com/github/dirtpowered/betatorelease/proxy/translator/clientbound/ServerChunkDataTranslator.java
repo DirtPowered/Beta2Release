@@ -11,6 +11,7 @@ import com.github.dirtpowered.betatorelease.data.chunk.Block;
 import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
+import com.github.dirtpowered.betatorelease.utils.LegacyDoorDataFixer;
 import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.steveice10.mc.protocol.data.game.chunk.Chunk;
 import com.github.steveice10.mc.protocol.data.game.chunk.Column;
@@ -97,7 +98,7 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                 int y = block.getY();
                 int z = block.getZ();
 
-                int fixedData = Utils.getLegacyDoorData(betaSession, x, y, z, block.getBlockData());
+                int fixedData = LegacyDoorDataFixer.getLegacyDoorData(betaSession, x, y, z, block.getBlockData());
                 betaSession.sendPacket(new V1_7_3BlockChangePacketData(x, y, z, block.getBlockId(), fixedData));
             }
         } catch (ArrayIndexOutOfBoundsException e) {
