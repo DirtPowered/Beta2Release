@@ -60,9 +60,8 @@ public class Server {
         // inject beta lib packets
         new TranslatorRegistry(betaToModernRegistry, modernToBetaRegistry).register();
         // start tick thread
-        try (ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Tick Thread"))) {
-            executor.scheduleAtFixedRate(this::tickCache, 0L, 50L, TimeUnit.MILLISECONDS);
-        }
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(r -> new Thread(r, "Tick Thread"));
+        executor.scheduleAtFixedRate(this::tickCache, 0L, 50L, TimeUnit.MILLISECONDS);
 
         bind(configuration.getBindAddress(), configuration.getBindPort());
     }
