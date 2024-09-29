@@ -42,17 +42,19 @@ public class LegacyTextWrapper {
                 lineLength += 2;
                 continue;
             }
-
-            int width = CHARACTER_WIDTHS[charAt];
-            if (lineLength + 1 > CHAT_STRING_LENGTH || lineWidth + width >= CHAT_WINDOW_WIDTH) {
-                out.append('\n').append(defaultColor != 'f' ? COLOR_CHAR + "" + defaultColor : "");
-                lineLength = defaultColor != 'f' ? 2 : 0;
-                lineWidth = 0;
-            } else {
-                lineWidth += width;
+            // check if the character doesn't exceed the array length, otherwise skip it
+            if (charAt < CHARACTER_WIDTHS.length) {
+                int width = CHARACTER_WIDTHS[charAt];
+                if (lineLength + 1 > CHAT_STRING_LENGTH || lineWidth + width >= CHAT_WINDOW_WIDTH) {
+                    out.append('\n').append(defaultColor != 'f' ? COLOR_CHAR + "" + defaultColor : "");
+                    lineLength = defaultColor != 'f' ? 2 : 0;
+                    lineWidth = 0;
+                } else {
+                    lineWidth += width;
+                }
+                out.append(charAt);
+                lineLength++;
             }
-            out.append(charAt);
-            lineLength++;
         }
         return out.toString().split("\n");
     }
