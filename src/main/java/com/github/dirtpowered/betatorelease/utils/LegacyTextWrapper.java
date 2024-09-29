@@ -4,6 +4,7 @@ public class LegacyTextWrapper {
     private static final int CHAT_WINDOW_WIDTH = 320;
     private static final int CHAT_STRING_LENGTH = 119;
     private static final char COLOR_CHAR = '§';
+    private static final char UNKNOWN_CHAR_PLACEHOLDER = '?';
 
     private static final int[] CHARACTER_WIDTHS = new int[]{
             1, 9, 9, 8, 8, 8, 8, 7, 9, 8, 9, 9, 8, 9, 9, 9,
@@ -54,6 +55,8 @@ public class LegacyTextWrapper {
                 }
                 out.append(charAt);
                 lineLength++;
+            } else {
+                out.append(UNKNOWN_CHAR_PLACEHOLDER);
             }
         }
         return out.toString().split("\n");
