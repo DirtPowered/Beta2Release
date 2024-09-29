@@ -7,11 +7,8 @@ This is particularly useful for players who want to experience modern server fea
 
 ## Getting the Latest Build
 
-You can find the latest development build on our Discord server:
+You can download latest build from our [Jenkins Server](https://ci.mzga.dev/job/Beta2Release/)
 
-[Join our Discord](https://discord.gg/v6xsRdc)
-
-Jenkins build server will be available soon!
 
 ## Configuration Files
 
