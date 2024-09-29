@@ -63,7 +63,7 @@ public class BetaChunk {
     }
 
     private int getIndex(final int x, final int y, final int z) {
-        return (Math.min(16, x) * 16 + Math.min(16, z)) * 128 + Math.min(128, y);
+        return (x << 11) | (z << 7) | y;
     }
 
     /**

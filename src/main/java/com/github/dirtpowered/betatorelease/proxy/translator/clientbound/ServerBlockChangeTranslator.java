@@ -31,7 +31,7 @@ public class ServerBlockChangeTranslator implements ModernToBetaHandler<ServerBl
         // Check if chunk is loaded. Beta 1.7.3 client will crash if block is changed in unloaded chunk
         BlockStorage storage = betaSession.getBlockStorage();
         if (!storage.isChunkLoaded(x >> 4, z >> 4)) {
-            Main.LOGGER.warn("Attempted to change block at unloaded chunk: " + x + " " + y + " " + z);
+            Main.LOGGER.warn("Attempted to change block at unloaded chunk: {} {} {}", x, y, z);
             return;
         }
 

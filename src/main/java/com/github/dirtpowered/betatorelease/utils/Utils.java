@@ -79,6 +79,10 @@ public class Utils {
         return blockId == 64 || blockId == 71;
     }
 
+    public static boolean isSign(int blockId) {
+        return blockId == 63 || blockId == 68;
+    }
+
     public static int toAbsoluteRotation(float rotation) {
         return floor_float(rotation * 256.0F / 360.0F);
     }

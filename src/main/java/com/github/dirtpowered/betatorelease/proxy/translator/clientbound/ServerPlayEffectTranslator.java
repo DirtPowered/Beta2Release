@@ -31,7 +31,7 @@ public class ServerPlayEffectTranslator implements ModernToBetaHandler<ServerPla
             int recordId = data.getRecordId();
 
             if (recordId != 2256 && recordId != 2257) {
-                Main.LOGGER.warn("Unknown record id: " + recordId);
+                Main.LOGGER.warn("Unknown record id: {}", recordId);
                 return;
             }
             betaSession.sendPacket(new V1_7_3SoundEffectPacketData(1005, position.getX(), position.getY(), position.getZ(), recordId));

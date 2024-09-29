@@ -62,8 +62,12 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
                             int zBlock = z + zPosition * 16;
 
                             betaSession.getBlockStorage().setBlockAt(xBlock, yBlock, zBlock, remap.blockId(), remap.blockData());
+
                             if (Utils.isDoor(remap.blockId()))
                                 doors.add(new Block(xBlock, yBlock, zBlock, remap.blockId(), remap.blockData()));
+
+                            if (Utils.isSign(remap.blockId()))
+                                signLocations.add(new BlockLocation(xBlock, yBlock, zBlock));
 
                             betaChunk.setBlock(x, y + columnCurrentHeight, z, remap.blockId());
                             betaChunk.setMetaData(x, y + columnCurrentHeight, z, remap.blockData());
@@ -71,9 +75,6 @@ public class ServerChunkDataTranslator implements ModernToBetaHandler<ServerChun
 
                             if (chunkColumn.hasSkylight()) { // there's no skylight in end/nether
                                 betaChunk.setSkyLight(x, y + columnCurrentHeight, z, chunk.getSkyLight().get(x, y, z));
-                            }
-                            if (remap.blockId() == 63 || remap.blockId() == 68) {
-                                signLocations.add(new BlockLocation(xBlock, yBlock, zBlock));
                             }
                         }
                     }

@@ -14,6 +14,7 @@ public class ServerEntityPositionTranslator implements ModernToBetaHandler<Serve
     @Override
     public void translate(ServerEntityPositionPacket packet, Session betaSession) {
         int entityId = packet.getEntityId();
+
         int x = Utils.toAbsolutePos(packet.getMovementX());
         int y = Utils.toAbsolutePos(packet.getMovementY());
         int z = Utils.toAbsolutePos(packet.getMovementZ());

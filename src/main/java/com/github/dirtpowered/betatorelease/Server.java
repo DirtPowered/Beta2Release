@@ -75,7 +75,7 @@ public class Server {
             this.bossGroup = new EpollEventLoopGroup();
             socketChannel = EpollServerSocketChannel.class;
         } else {
-            Main.LOGGER.warn("Epoll not available, using NIO. Reason: " + Epoll.unavailabilityCause().getMessage());
+            Main.LOGGER.warn("Epoll not available, using NIO. Reason: {}", Epoll.unavailabilityCause().getMessage());
             this.bossGroup = new NioEventLoopGroup();
             socketChannel = NioServerSocketChannel.class;
         }

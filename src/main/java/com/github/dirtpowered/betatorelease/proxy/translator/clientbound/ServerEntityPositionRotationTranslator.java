@@ -14,6 +14,7 @@ public class ServerEntityPositionRotationTranslator implements ModernToBetaHandl
     @Override
     public void translate(ServerEntityPositionRotationPacket packet, Session betaSession) {
         int entityId = packet.getEntityId();
+
         int x = Utils.toAbsolutePos(packet.getMovementX());
         int y = Utils.toAbsolutePos(packet.getMovementY());
         int z = Utils.toAbsolutePos(packet.getMovementZ());

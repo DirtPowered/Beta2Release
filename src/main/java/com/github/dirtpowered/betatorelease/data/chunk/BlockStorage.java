@@ -11,7 +11,7 @@ public class BlockStorage {
     }
 
     public boolean isChunkLoaded(int chunkX, int chunkZ) {
-        return blockStorage.containsKey(getKey(chunkX, chunkZ));
+        return blockStorage.get(getKey(chunkX, chunkZ)) != null;
     }
 
     public void removeChunk(int chunkX, int chunkZ) {
