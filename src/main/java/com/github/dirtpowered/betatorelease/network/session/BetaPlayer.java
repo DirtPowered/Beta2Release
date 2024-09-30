@@ -2,6 +2,7 @@ package com.github.dirtpowered.betatorelease.network.session;
 
 import com.github.dirtpowered.betaprotocollib.utils.Location;
 import com.github.dirtpowered.betatorelease.data.chunk.BlockDigEntry;
+import com.github.dirtpowered.betatorelease.data.tile.FurnaceFuelCache;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerAction;
 import com.github.steveice10.mc.protocol.data.game.window.WindowType;
 import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerActionPacket;
@@ -39,8 +40,12 @@ public class BetaPlayer {
     @Setter
     private BlockDigEntry diggingEntry;
 
+    @Setter
+    private FurnaceFuelCache furnaceFuelCache;
+
     protected BetaPlayer(Session session) {
         this.session = session;
+        this.furnaceFuelCache = new FurnaceFuelCache(1600, 200);
         this.windowTypeMap = new HashMap<>();
     }
 
