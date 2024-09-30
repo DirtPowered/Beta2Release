@@ -1,5 +1,6 @@
 package com.github.dirtpowered.betatorelease;
 
+import com.github.dirtpowered.betatorelease.command.CommandManager;
 import com.github.dirtpowered.betatorelease.configuration.Configuration;
 import com.github.dirtpowered.betatorelease.data.entity.EntityItem;
 import com.github.dirtpowered.betatorelease.data.entity.cache.PlayerCache;
@@ -45,6 +46,9 @@ public class Server {
     private final Configuration configuration;
 
     @Getter
+    private final CommandManager commandManager;
+
+    @Getter
     private final List<BetaPlayer> onlinePlayers = new ArrayList<>();
 
     private EventLoopGroup bossGroup;
@@ -56,6 +60,7 @@ public class Server {
         this.modernToBetaRegistry = new ModernToBetaRegistry();
         this.playerCache = new PlayerCache();
         this.configuration = new Configuration();
+        this.commandManager = new CommandManager();
 
         // inject beta lib packets
         new TranslatorRegistry(betaToModernRegistry, modernToBetaRegistry).register();

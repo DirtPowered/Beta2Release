@@ -6,13 +6,18 @@
 
     <groupId>dev.mzga</groupId>
     <artifactId>Beta2Release</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.5-SNAPSHOT</version>
 
     <repositories>
         <repository>
             <id>maven_central</id>
             <name>Maven Central</name>
             <url>https://repo.maven.apache.org/maven2/</url>
+        </repository>
+        <repository>
+            <id>lenni0451-maven-snapshots</id>
+            <name>lenni0451.net Maven Repository</name>
+            <url>https://maven.lenni0451.net/snapshots</url>
         </repository>
         <repository>
             <id>dirtpowered-releases</id>
@@ -64,6 +69,8 @@
                     <archive>
                         <manifestEntries>
                             <Main-Class>com.github.dirtpowered.betatorelease.Main</Main-Class>
+                            <Implementation-Vendor>${maven.build.timestamp}</Implementation-Vendor>
+                            <Implementation-Version>${project.version}</Implementation-Version>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -144,7 +151,7 @@
         <dependency>
             <groupId>net.lenni0451.mcstructs</groupId>
             <artifactId>text</artifactId>
-            <version>2.5.2</version>
+            <version>2.5.4-SNAPSHOT</version>
         </dependency>
 
         <dependency>

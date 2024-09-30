@@ -9,6 +9,11 @@ public class ChatPacketHandler implements BetaToModernHandler<V1_7_3ChatPacketDa
 
     @Override
     public void handlePacket(Session session, V1_7_3ChatPacketData packetClass) {
-        session.getModernClient().sendModernPacket(new ClientChatPacket(packetClass.getMessage()));
+        String message = packetClass.getMessage();
+        // handle chat commands
+        if (session.getServer().getCommandManager().handleChatCommand(session.getBetaPlayer(), message))
+            return;
+
+        session.getModernClient().sendModernPacket(new ClientChatPacket(message));
     }
 }

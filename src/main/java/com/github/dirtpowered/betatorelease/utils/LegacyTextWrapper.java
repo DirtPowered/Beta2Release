@@ -61,4 +61,8 @@ public class LegacyTextWrapper {
         }
         return out.toString().split("\n");
     }
+
+    public static String translateAlternateColorCodes(char c, String message) {
+        return message.replace(c, COLOR_CHAR);
+    }
 }
