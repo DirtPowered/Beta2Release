@@ -27,7 +27,7 @@ public class ServerWindowPropertyTranslator implements ModernToBetaHandler<Serve
         int progressValue = -1;
 
         switch (updateType) {
-            case 0 -> progressValue = (value * cache.getMaxProgress()) / cache.getFuel(); // fuel
+            case 0 -> progressValue = getFuelValue(value, cache.getFuel(), cache.getMaxProgress()); // fuel
             case 1 -> cache.setFuel(value); // max fuel (1600)
             case 2 -> progressValue = value; // progress
             case 3 -> cache.setMaxProgress(value); // max progress (200)
@@ -37,5 +37,12 @@ public class ServerWindowPropertyTranslator implements ModernToBetaHandler<Serve
             return;
 
         betaSession.sendPacket(new V1_7_3UpdateProgressPacketData(packet.getWindowId(), updateFuel ? 1 : 0, progressValue));
+    }
+
+    private int getFuelValue(int value, int maxFuel, int maxProgress) {
+        if (maxFuel == 0 || maxProgress == 0)
+            return -1; // prevent division by zero
+
+        return (value * maxProgress) / maxFuel;
     }
 }
