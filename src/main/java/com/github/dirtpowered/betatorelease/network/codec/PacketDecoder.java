@@ -19,11 +19,14 @@ public class PacketDecoder extends ReplayingDecoder<Packet<?>> {
     @Override
     protected void decode(ChannelHandlerContext context, ByteBuf buffer, List<Object> list)
             throws IOException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+
         // skip decoding if the protocol is modern
-        if (context.channel().attr(VersionDetectionHandler.PROTOCOL_ATTRIBUTE).get().equals("modern")) {
+        String protocolAttr = context.channel().attr(VersionDetectionHandler.PROTOCOL_ATTRIBUTE).get();
+        if (protocolAttr != null && protocolAttr.equals("modern")) {
             list.add(buffer.readBytes(buffer.readableBytes()));
             return;
         }
+
          int packetId = buffer.readUnsignedByte();
 
         if (!BetaLib.getRegistry().hasId(packetId)) {

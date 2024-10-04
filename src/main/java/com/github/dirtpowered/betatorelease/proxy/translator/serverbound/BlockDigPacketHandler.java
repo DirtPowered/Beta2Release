@@ -46,6 +46,7 @@ public class BlockDigPacketHandler implements BetaToModernHandler<V1_7_3BlockDig
             // send an item use packet to open the door
             if (!player.isDigging()) { // prevent from sending multiple packets
                 session.getModernClient().sendModernPacket(new ClientPlayerPlaceBlockPacket(pos, blockFace, Hand.MAIN_HAND, 0, 0, 0));
+                return;
             }
         }
 
