@@ -17,7 +17,7 @@ public class ServerOpenWindowTranslator implements ModernToBetaHandler<ServerOpe
 
         int inventoryType = switch (packet.getType()) {
             case CRAFTING_TABLE -> 1;
-            case CHEST, GENERIC_INVENTORY -> 0;
+            case CHEST, GENERIC_INVENTORY, SHULKER_BOX -> 0;
             case FURNACE -> 2;
             case DISPENSER, DROPPER -> 3;
             default -> -1;
