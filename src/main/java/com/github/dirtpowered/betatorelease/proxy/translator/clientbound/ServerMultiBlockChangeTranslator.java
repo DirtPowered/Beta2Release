@@ -1,6 +1,5 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
-import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3BlockChangePacketData;
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3MultiBlockChangePacketData;
 import com.github.dirtpowered.betatorelease.Main;
 import com.github.dirtpowered.betatorelease.data.chunk.Block;
@@ -15,6 +14,7 @@ import com.github.steveice10.mc.protocol.data.game.world.block.BlockChangeRecord
 import com.github.steveice10.mc.protocol.data.game.world.block.BlockState;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerMultiBlockChangePacket;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,13 +67,20 @@ public class ServerMultiBlockChangeTranslator implements ModernToBetaHandler<Ser
          * Same as in ServerChunkDataTranslator,
          * We need 2 halves of the door to calculate the correct data
          */
-        for (Block block : doors) {
-            int x = block.getX();
-            int y = block.getY();
-            int z = block.getZ();
+        if (!doors.isEmpty()) {
+            int newSize = size + doors.size();
+            blocks = Arrays.copyOf(blocks, newSize);
+            data = Arrays.copyOf(data, newSize);
+            coordinates = Arrays.copyOf(coordinates, newSize);
 
-            int fixedData = LegacyDoorDataFixer.getLegacyDoorData(betaSession, x, y, z, block.getBlockData());
-            betaSession.sendPacket(new V1_7_3BlockChangePacketData(x, y, z, block.getBlockId(), fixedData));
+            int index = size;
+            for (Block door : doors) {
+                blocks[index] = (byte) door.getBlockId();
+                data[index] = (byte) LegacyDoorDataFixer.getLegacyDoorData(betaSession, door.getX(), door.getY(), door.getZ(), door.getBlockData());
+                coordinates[index] = (short) ((door.getX() & 0xF) << 12 | (door.getZ() & 0xF) << 8 | door.getY() & 0xFF);
+                index++;
+            }
+            size = newSize;
         }
         betaSession.sendPacket(new V1_7_3MultiBlockChangePacketData(chunkX, chunkZ, coordinates, blocks, data, size));
     }
