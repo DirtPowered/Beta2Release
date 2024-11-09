@@ -94,5 +94,6 @@ public class TranslatorRegistry {
         modernToBetaRegistry.registerTranslator(ServerMapDataPacket.class, new ServerMapDataTranslator());
         modernToBetaRegistry.registerTranslator(ServerBlockValuePacket.class, new ServerBlockValueTranslator());
         modernToBetaRegistry.registerTranslator(ServerTitlePacket.class, new ServerTitleTranslator());
+        modernToBetaRegistry.registerTranslator(ServerResourcePackSendPacket.class, new ServerResourcePackSendTranslator());
     }
 }
