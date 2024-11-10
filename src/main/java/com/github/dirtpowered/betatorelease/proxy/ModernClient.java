@@ -5,6 +5,7 @@ import com.github.dirtpowered.betatorelease.Server;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.session.HAProxySessionFactory;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
+import com.github.steveice10.mc.protocol.MinecraftConstants;
 import com.github.steveice10.mc.protocol.MinecraftProtocol;
 import com.github.steveice10.packetlib.Client;
 import com.github.steveice10.packetlib.SessionFactory;
@@ -39,16 +40,20 @@ public class ModernClient {
 
             @Override
             public void connected(ConnectedEvent event) {
-                Main.LOGGER.info("Connected to remote server");
                 server.getOnlinePlayers().add(betaSession.getBetaPlayer());
-                Main.LOGGER.info("Online: {}", betaSession.getServer().getOnlinePlayers().size());
+                int online = betaSession.getServer().getOnlinePlayers().size();
+
+                Main.LOGGER.info("{} ({}) connected to remote server [{}]", betaSession.getPlayerName(), betaSession.getAddress(), online);
             }
 
             @Override
             public void disconnected(DisconnectedEvent event) {
-                Main.LOGGER.info("Disconnected from remote server because: {}", event.getReason());
                 server.getOnlinePlayers().remove(betaSession.getBetaPlayer());
+                int online = betaSession.getServer().getOnlinePlayers().size();
+
                 client.getSession().disconnect(event.getReason());
+                betaSession.disconnect(event.getReason());
+                Main.LOGGER.info("{} ({}) disconnected from remote server, reason: {} [{}]", betaSession.getPlayerName(), betaSession.getAddress(), event.getReason(), online);
             }
         });
         client.getSession().connect();
