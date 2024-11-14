@@ -4,6 +4,7 @@ import com.github.dirtpowered.betaprotocollib.BetaLib;
 import com.github.dirtpowered.betaprotocollib.model.AbstractPacket;
 import com.github.dirtpowered.betaprotocollib.model.Packet;
 import com.github.dirtpowered.betatorelease.Main;
+import com.github.dirtpowered.betatorelease.network.handler.VersionDetectionHandler;
 import com.github.dirtpowered.betatorelease.utils.Utils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

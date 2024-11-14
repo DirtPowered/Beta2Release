@@ -6,7 +6,8 @@ import com.github.dirtpowered.betatorelease.data.entity.EntityItem;
 import com.github.dirtpowered.betatorelease.data.entity.cache.PlayerCache;
 import com.github.dirtpowered.betatorelease.data.entity.model.Entity;
 import com.github.dirtpowered.betatorelease.network.codec.PipelineFactory;
-import com.github.dirtpowered.betatorelease.network.codec.VersionDetectionHandler;
+import com.github.dirtpowered.betatorelease.network.handler.ConnectionLimiterHandler;
+import com.github.dirtpowered.betatorelease.network.handler.VersionDetectionHandler;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
@@ -21,6 +22,7 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -91,6 +93,10 @@ public class Server {
                 .childHandler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel channel) {
+                        channel.pipeline().addLast("idle_check", new IdleStateHandler(10, 0, 0, TimeUnit.SECONDS));
+                        channel.pipeline().addLast("conn_limit", new ConnectionLimiterHandler());
+
+                        // minecraft pipeline
                         channel.pipeline().addLast("version_checker", new VersionDetectionHandler());
                         channel.pipeline().addLast("mc_pipeline", new PipelineFactory());
                         channel.pipeline().addLast("user_session", new Session(server, channel, sessionRegistry, betaToModernRegistry));
