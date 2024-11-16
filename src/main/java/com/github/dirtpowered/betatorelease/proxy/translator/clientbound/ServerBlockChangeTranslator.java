@@ -39,8 +39,14 @@ public class ServerBlockChangeTranslator implements ModernToBetaHandler<ServerBl
         storage.setBlockAt(x, y, z, remap.blockId(), remap.blockData());
 
         int remapped = remap.blockData();
-        if (Utils.isDoor(remap.blockId()))
-            remapped = LegacyDoorDataFixer.getLegacyDoorData(betaSession, x, y, z, blockData);
+        if (Utils.isDoor(remap.blockId())) {
+            if ((blockData & 0x8) != 0) {
+                // we can skip it, cuz multi-block change packet will handle it
+                return;
+            } else {
+                remapped = LegacyDoorDataFixer.getLegacyDoorData(betaSession, x, y, z, blockData);
+            }
+        }
 
         betaSession.sendPacket(new V1_7_3BlockChangePacketData(x, y, z, remap.blockId(), remapped));
     }
