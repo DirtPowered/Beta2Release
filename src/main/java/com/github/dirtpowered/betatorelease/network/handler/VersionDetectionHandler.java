@@ -1,4 +1,4 @@
-package com.github.dirtpowered.betatorelease.network.codec;
+package com.github.dirtpowered.betatorelease.network.handler;
 
 import com.github.dirtpowered.betatorelease.Main;
 import io.netty.buffer.ByteBuf;
