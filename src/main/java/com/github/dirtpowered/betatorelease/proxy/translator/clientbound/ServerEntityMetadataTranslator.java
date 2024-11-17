@@ -13,6 +13,7 @@ import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.EntityMetadata;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.ItemStack;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.MetadataType;
+import com.github.steveice10.mc.protocol.data.game.entity.type.MobType;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntityMetadataPacket;
 
 import java.util.ArrayList;
@@ -68,6 +69,12 @@ public class ServerEntityMetadataTranslator implements ModernToBetaHandler<Serve
 
         if ((type != MetadataType.BYTE || id != 13) && (type != MetadataType.INT || id != 12) && (type != MetadataType.BOOLEAN || (id != 12 && id != 13)))
             return;
+
+        if (entity.getMobType() == MobType.CREEPER && id == 13 && type == MetadataType.BOOLEAN) {
+            byte chargedState = (boolean) value ? (byte) 1 : (byte) 0;
+            session.sendPacket(new V1_7_3EntityMetadataPacketData(entity.getEntityId(), List.of(new WatchableObject(0, 17, chargedState))));
+            return;
+        }
 
         if (type == MetadataType.BOOLEAN && id == 13)
             value = (boolean) value ? (byte) 0x01 : (byte) 0x00; // saddled pig
