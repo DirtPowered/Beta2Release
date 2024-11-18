@@ -18,6 +18,7 @@ public class Configuration {
     private final Locale locale;
     private final int renderDistance;
     private final boolean haproxySupport;
+    private final boolean onlineMode;
 
     private static final String CONFIG_FILE_PATH = "config.toml";
 
@@ -30,6 +31,7 @@ public class Configuration {
                 config.setComment("strict-version-check", "If true, the proxy will only accept connections from beta 1.7.3 clients");
                 config.setComment("locale", "Language to use for client translations (en_US, de_DE, etc.)");
                 config.setComment("render-distance", "Number of chunks to render around the player (4-15)");
+                config.setComment("online-mode", "If true, the proxy will authenticate with Mojang servers");
 
                 config.set("bind-address", "127.0.0.1");
                 config.set("bind-port", 25565);
@@ -40,6 +42,7 @@ public class Configuration {
                 config.set("locale", "en_US");
                 config.set("render-distance", 4);
                 config.set("haproxy-support", false);
+                config.set("online-mode", false);
                 config.save();
             } catch (Exception e) {
                 throw new RuntimeException("Failed to create or initialize the config file", e);
@@ -57,6 +60,7 @@ public class Configuration {
         this.locale = Locale.fromCode(config.getOrElse("locale", "en_US"));
         this.renderDistance = Math.max(4, Math.min(config.getOrElse("render-distance", 4), 15)) - 1;
         this.haproxySupport = config.getOrElse("haproxy-support", false);
+        this.onlineMode = config.getOrElse("online-mode", false);
 
         config.close();
     }

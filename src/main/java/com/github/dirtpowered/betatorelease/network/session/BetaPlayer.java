@@ -18,6 +18,12 @@ public class BetaPlayer {
     @Setter
     private int entityId;
 
+    @Setter
+    private String uuid;
+
+    @Setter
+    private String serverId;
+
     private final Session session;
 
     @Setter

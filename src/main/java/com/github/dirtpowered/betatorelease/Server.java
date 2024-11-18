@@ -23,6 +23,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ public class Server {
                     protected void initChannel(SocketChannel channel) {
                         channel.pipeline().addLast("idle_check", new IdleStateHandler(10, 0, 0, TimeUnit.SECONDS));
                         channel.pipeline().addLast("conn_limit", new ConnectionLimiterHandler());
-
+                        channel.pipeline().addLast("timeout", new ReadTimeoutHandler(10));
                         // minecraft pipeline
                         channel.pipeline().addLast("version_checker", new VersionDetectionHandler());
                         channel.pipeline().addLast("mc_pipeline", new PipelineFactory());

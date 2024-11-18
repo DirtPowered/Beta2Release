@@ -15,7 +15,6 @@ public class ServerJoinGameTranslator implements ModernToBetaHandler<ServerJoinG
         int entityId = packet.getEntityId();
         int dimension = packet.getDimension();
 
-        Main.LOGGER.info("Entity player joined (modern server) with id {}", entityId);
         betaPlayer.setEntityId(entityId);
         betaPlayer.setDimension(dimension);
 
@@ -24,5 +23,7 @@ public class ServerJoinGameTranslator implements ModernToBetaHandler<ServerJoinG
 
         long seed = betaSession.getServer().getConfiguration().getWorldSeed();
         betaSession.sendPacket(new V1_7_3LoginPacketData(entityId, "", seed, dimension));
+
+        Main.LOGGER.info("Player {} joined with id {}", betaSession.getPlayerName(), entityId);
     }
 }

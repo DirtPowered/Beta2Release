@@ -72,6 +72,13 @@ public class LangStorage {
         return legacy;
     }
 
+    public static String translateKeyWithParams(String key, Object... params) {
+        String text = TRANSLATIONS.get(key);
+        if (text == null) return key;
+
+        return String.format(text, params);
+    }
+
     public static String translate(String text, boolean forceTranslatable) {
         ATextComponent deserialized = TextComponentSerializer.V1_12.deserializeReader(text);
         if (forceTranslatable) {
