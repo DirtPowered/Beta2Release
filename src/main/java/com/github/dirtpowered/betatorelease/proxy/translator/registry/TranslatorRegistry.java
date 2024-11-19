@@ -95,5 +95,6 @@ public class TranslatorRegistry {
         modernToBetaRegistry.registerTranslator(ServerBlockValuePacket.class, new ServerBlockValueTranslator());
         modernToBetaRegistry.registerTranslator(ServerTitlePacket.class, new ServerTitleTranslator());
         modernToBetaRegistry.registerTranslator(ServerResourcePackSendPacket.class, new ServerResourcePackSendTranslator());
+        modernToBetaRegistry.registerTranslator(ServerPlayBuiltinSoundPacket.class, new ServerPlayBuiltinSoundTranslator());
     }
 }
