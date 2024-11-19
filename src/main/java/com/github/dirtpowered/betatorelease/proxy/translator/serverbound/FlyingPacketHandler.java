@@ -13,6 +13,9 @@ public class FlyingPacketHandler implements BetaToModernHandler<V1_7_3FlyingPack
         BetaPlayer betaPlayer = session.getBetaPlayer();
         betaPlayer.setOnGround(packetClass.isOnGround());
 
+        if (betaPlayer.isInVehicle())
+            return;
+
         session.getModernClient().sendModernPacket(new ClientPlayerMovementPacket(betaPlayer.isOnGround()));
     }
 }

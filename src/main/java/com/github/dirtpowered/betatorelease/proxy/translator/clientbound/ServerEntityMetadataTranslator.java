@@ -70,9 +70,16 @@ public class ServerEntityMetadataTranslator implements ModernToBetaHandler<Serve
         if ((type != MetadataType.BYTE || id != 13) && (type != MetadataType.INT || id != 12) && (type != MetadataType.BOOLEAN || (id != 12 && id != 13)))
             return;
 
-        if (entity.getMobType() == MobType.CREEPER && id == 13 && type == MetadataType.BOOLEAN) {
-            byte chargedState = (boolean) value ? (byte) 1 : (byte) 0;
-            session.sendPacket(new V1_7_3EntityMetadataPacketData(entity.getEntityId(), List.of(new WatchableObject(0, 17, chargedState))));
+        if (entity.getMobType() == MobType.CREEPER) {
+            if (id != 12 || type != MetadataType.INT) {
+                if (id == 13 && type == MetadataType.BOOLEAN) {
+                    byte chargedState = (boolean) value ? (byte) 1 : (byte) 0;
+                    session.sendPacket(new V1_7_3EntityMetadataPacketData(entity.getEntityId(), List.of(new WatchableObject(0, 17, chargedState))));
+                }
+            } else {
+                byte fuseState = (int) value == -1 ? (byte) 0 : (byte) 1;
+                session.sendPacket(new V1_7_3EntityMetadataPacketData(entity.getEntityId(), List.of(new WatchableObject(0, 16, fuseState))));
+            }
             return;
         }
 

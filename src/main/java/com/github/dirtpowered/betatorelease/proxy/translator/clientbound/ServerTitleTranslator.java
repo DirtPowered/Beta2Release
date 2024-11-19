@@ -12,6 +12,9 @@ public class ServerTitleTranslator implements ModernToBetaHandler<ServerTitlePac
 
     @Override
     public void translate(ServerTitlePacket packet, Session betaSession) {
+        if (betaSession.getServer().getConfiguration().isSkipTitleMessages())
+            return;
+
         TitleAction action = packet.getAction();
         String text;
 
