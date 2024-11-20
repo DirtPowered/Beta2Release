@@ -45,7 +45,6 @@ public class ServerMapDataTranslator implements ModernToBetaHandler<ServerMapDat
         }
     }
 
-
     private byte toLegacyIconType(MapIconType iconType) {
         return switch (iconType) {
             case GREEN_ARROW -> 1;

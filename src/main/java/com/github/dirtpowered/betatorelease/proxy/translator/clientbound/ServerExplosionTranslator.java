@@ -27,17 +27,18 @@ public class ServerExplosionTranslator implements ModernToBetaHandler<ServerExpl
         // Apply additional velocity to the player.
         // Not sure if this is needed, server already sends velocity packets separately during the explosion.
         BetaPlayer player = betaSession.getBetaPlayer();
-        int entityId = player.getEntityId();
-
-        int motionX = Utils.toBetaVelocity(packet.getPushX());
-        int motionY = Utils.toBetaVelocity(packet.getPushY());
-        int motionZ = Utils.toBetaVelocity(packet.getPushZ());
 
         float radius = packet.getRadius();
 
         // check if player is in explosion radius
         if (!(player.getLocation().distanceTo(new Location(x, y, z, 0, 0)) <= radius))
             return;
+
+        int entityId = player.getEntityId();
+
+        int motionX = Utils.toBetaVelocity(packet.getPushX());
+        int motionY = Utils.toBetaVelocity(packet.getPushY());
+        int motionZ = Utils.toBetaVelocity(packet.getPushZ());
 
         betaSession.sendPacket(new V1_7_3EntityVelocityPacketData(entityId, motionX, motionY, motionZ));
     }

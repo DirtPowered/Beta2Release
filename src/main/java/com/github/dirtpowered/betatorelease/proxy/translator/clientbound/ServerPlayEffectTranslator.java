@@ -33,6 +33,8 @@ public class ServerPlayEffectTranslator implements ModernToBetaHandler<ServerPla
             effectId = 1000;
         } else if (effect.equals(SoundEffect.BLOCK_DISPENSER_FAIL)) {
             effectId = 1001;
+        } else if (effect.equals(SoundEffect.BLOCK_FIRE_EXTINGUISH)) {
+            effectId = 1004;
         } else if (effect.equals(SoundEffect.RECORD) && packet.getData() instanceof RecordEffectData data) {
             int recordId = data.getRecordId();
             if (recordId != 2256 && recordId != 2257) {

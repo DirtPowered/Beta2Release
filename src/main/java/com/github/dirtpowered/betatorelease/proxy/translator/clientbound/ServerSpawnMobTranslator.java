@@ -31,7 +31,7 @@ public class ServerSpawnMobTranslator implements ModernToBetaHandler<ServerSpawn
         byte pitch = (byte) Utils.toAbsoluteRotation(packet.getPitch());
 
         if (mobType == MobType.VILLAGER) {
-            betaSession.sendPacket(new V1_7_3NamedEntitySpawnPacketData(entityId, NAME, x, y, z, yaw, pitch, 264));
+            betaSession.sendPacket(new V1_7_3NamedEntitySpawnPacketData(entityId, NAME, x, y, z, yaw, pitch, 0));
             return;
         }
         betaSession.getEntityCache().addEntity(new Entity(entityId, mobType) {
