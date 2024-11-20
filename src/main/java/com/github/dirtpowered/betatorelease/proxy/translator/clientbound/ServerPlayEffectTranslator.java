@@ -6,10 +6,7 @@ import com.github.dirtpowered.betatorelease.data.remap.BlockMappings;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.steveice10.mc.protocol.data.game.entity.metadata.Position;
-import com.github.steveice10.mc.protocol.data.game.world.effect.BreakBlockEffectData;
-import com.github.steveice10.mc.protocol.data.game.world.effect.ParticleEffect;
-import com.github.steveice10.mc.protocol.data.game.world.effect.RecordEffectData;
-import com.github.steveice10.mc.protocol.data.game.world.effect.SoundEffect;
+import com.github.steveice10.mc.protocol.data.game.world.effect.*;
 import com.github.steveice10.mc.protocol.packet.ingame.server.world.ServerPlayEffectPacket;
 
 public class ServerPlayEffectTranslator implements ModernToBetaHandler<ServerPlayEffectPacket> {
@@ -17,27 +14,40 @@ public class ServerPlayEffectTranslator implements ModernToBetaHandler<ServerPla
     @Override
     public void translate(ServerPlayEffectPacket packet, Session betaSession) {
         Position position = packet.getPosition();
+        int effectId = -1;
+        int packedData = 0;
 
-        if (packet.getEffect() == ParticleEffect.BREAK_BLOCK && packet.getData() instanceof BreakBlockEffectData data) {
-            byte packedData = (byte) (BlockMappings.getRemappedBlock(data.getBlockState().getId()).blockId() + (data.getBlockState().getData() << 12));
+        WorldEffect effect = packet.getEffect();
 
-            betaSession.sendPacket(new V1_7_3SoundEffectPacketData(2001, position.getX(), position.getY(), position.getZ(), packedData));
-        } else if (packet.getEffect() == ParticleEffect.SMOKE) {
-            betaSession.sendPacket(new V1_7_3SoundEffectPacketData(2000, position.getX(), position.getY(), position.getZ(), 0));
-        }
-
-        // handle jukebox discs
-        if (packet.getEffect() == SoundEffect.RECORD && packet.getData() instanceof RecordEffectData data) {
+        if (effect.equals(ParticleEffect.BREAK_BLOCK)) {
+            if (packet.getData() instanceof BreakBlockEffectData data) {
+                int remappedBlockId = BlockMappings.getRemappedBlock(data.getBlockState().getId()).blockId();
+                packedData = (byte) (remappedBlockId + (data.getBlockState().getData() << 12));
+                effectId = 2001;
+            }
+        } else if (effect.equals(ParticleEffect.SMOKE)) {
+            effectId = 2000;
+        } else if (effect.equals(SoundEffect.BLOCK_DISPENSER_LAUNCH)) {
+            effectId = 1002;
+        } else if (effect.equals(SoundEffect.BLOCK_DISPENSER_DISPENSE)) {
+            effectId = 1000;
+        } else if (effect.equals(SoundEffect.BLOCK_DISPENSER_FAIL)) {
+            effectId = 1001;
+        } else if (effect.equals(SoundEffect.RECORD) && packet.getData() instanceof RecordEffectData data) {
             int recordId = data.getRecordId();
-
             if (recordId != 2256 && recordId != 2257) {
                 Main.LOGGER.warn("Unknown record id: {}", recordId);
                 return;
             }
-            betaSession.sendPacket(new V1_7_3SoundEffectPacketData(1005, position.getX(), position.getY(), position.getZ(), recordId));
-        } else if (packet.getEffect() == SoundEffect.BLOCK_IRON_DOOR_CLOSE) {
+            effectId = 1005;
+            packedData = recordId;
+        } else if (effect.equals(SoundEffect.BLOCK_IRON_DOOR_CLOSE)) {
             // mcprotocollib has wrong mapping for this sound
-            betaSession.sendPacket(new V1_7_3SoundEffectPacketData(1005, position.getX(), position.getY(), position.getZ(), 0));
+            effectId = 1005;
+        }
+
+        if (effectId != -1) {
+            betaSession.sendPacket(new V1_7_3SoundEffectPacketData(effectId, position.getX(), position.getY(), position.getZ(), packedData));
         }
     }
 }
