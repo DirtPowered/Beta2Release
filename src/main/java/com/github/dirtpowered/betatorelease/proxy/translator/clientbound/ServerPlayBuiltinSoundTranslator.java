@@ -16,17 +16,20 @@ public class ServerPlayBuiltinSoundTranslator implements ModernToBetaHandler<Ser
         double y = packet.getY();
         double z = packet.getZ();
 
-        if (sound != BuiltinSound.BLOCK_WOODEN_DOOR_OPEN
-                && sound != BuiltinSound.BLOCK_WOODEN_DOOR_CLOSE
-                && sound != BuiltinSound.BLOCK_IRON_DOOR_OPEN
-                && sound != BuiltinSound.BLOCK_IRON_DOOR_CLOSE
-                && sound != BuiltinSound.BLOCK_IRON_TRAPDOOR_OPEN
-                && sound != BuiltinSound.BLOCK_IRON_TRAPDOOR_CLOSE
-                && sound != BuiltinSound.BLOCK_WOODEN_TRAPDOOR_OPEN
-                && sound != BuiltinSound.BLOCK_WOODEN_TRAPDOOR_CLOSE) {
-            return;
+        if (sound == BuiltinSound.BLOCK_WOODEN_DOOR_OPEN
+                || sound == BuiltinSound.BLOCK_WOODEN_DOOR_CLOSE
+                || sound == BuiltinSound.BLOCK_IRON_DOOR_OPEN
+                || sound == BuiltinSound.BLOCK_IRON_DOOR_CLOSE
+                || sound == BuiltinSound.BLOCK_IRON_TRAPDOOR_OPEN
+                || sound == BuiltinSound.BLOCK_IRON_TRAPDOOR_CLOSE
+                || sound == BuiltinSound.BLOCK_WOODEN_TRAPDOOR_OPEN
+                || sound == BuiltinSound.BLOCK_WOODEN_TRAPDOOR_CLOSE) {
+
+            // fix door, trapdoor sounds
+            betaSession.sendPacket(new V1_7_3SoundEffectPacketData(1003, (int) x, (int) y, (int) z, 0));
+        } else if (sound == BuiltinSound.ENTITY_ARROW_SHOOT
+                || sound == BuiltinSound.ENTITY_SKELETON_SHOOT) {
+            betaSession.sendPacket(new V1_7_3SoundEffectPacketData(1002, (int) x, (int) y, (int) z, 0));
         }
-        // fix door, trapdoor sounds
-        betaSession.sendPacket(new V1_7_3SoundEffectPacketData(1003, (int) x, (int) y, (int) z, 0));
     }
 }
