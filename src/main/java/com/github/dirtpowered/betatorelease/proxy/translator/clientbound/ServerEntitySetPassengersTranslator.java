@@ -6,6 +6,8 @@ import com.github.dirtpowered.betatorelease.data.entity.model.Entity;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
+import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
+import com.github.steveice10.mc.protocol.packet.ingame.client.player.ClientPlayerStatePacket;
 import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntitySetPassengersPacket;
 
 public class ServerEntitySetPassengersTranslator implements ModernToBetaHandler<ServerEntitySetPassengersPacket> {
@@ -46,6 +48,11 @@ public class ServerEntitySetPassengersTranslator implements ModernToBetaHandler<
         BetaPlayer player = session.getServer().getPlayer(playerId);
         if (player == null)
             return;
+
+        if (!state && player.isSneaking()) {
+            session.getModernClient().sendModernPacket(new ClientPlayerStatePacket(playerId, PlayerState.STOP_SNEAKING));
+            player.setSneaking(false);
+        }
 
         player.setInVehicle(state, vehicleId);
     }

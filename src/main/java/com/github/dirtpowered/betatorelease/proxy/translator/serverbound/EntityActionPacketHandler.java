@@ -1,6 +1,7 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.serverbound;
 
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3EntityActionPacketData;
+import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.BetaToModernHandler;
 import com.github.steveice10.mc.protocol.data.game.entity.player.PlayerState;
@@ -12,9 +13,17 @@ public class EntityActionPacketHandler implements BetaToModernHandler<V1_7_3Enti
     public void handlePacket(Session session, V1_7_3EntityActionPacketData packetClass) {
         int state = packetClass.getState();
 
+        BetaPlayer player = session.getBetaPlayer();
+
         PlayerState playerState = switch (state) {
-            case 1 -> PlayerState.START_SNEAKING;
-            case 2 -> PlayerState.STOP_SNEAKING;
+            case 1 -> {
+                player.setSneaking(true);
+                yield PlayerState.START_SNEAKING;
+            }
+            case 2 -> {
+                player.setSneaking(false);
+                yield PlayerState.STOP_SNEAKING;
+            }
             case 3 -> PlayerState.LEAVE_BED;
             default -> null;
         };

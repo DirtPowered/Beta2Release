@@ -14,8 +14,8 @@ public class EntityCache {
         entities.put(entity.getEntityId(), entity);
     }
 
-    public void removeEntity(int entityId) {
-        entities.remove(entityId);
+    public Entity removeEntity(int entityId) {
+        return entities.remove(entityId);
     }
 
     public Entity getEntityById(int entityId) {

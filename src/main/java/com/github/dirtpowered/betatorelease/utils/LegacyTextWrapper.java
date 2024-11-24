@@ -3,7 +3,7 @@ package com.github.dirtpowered.betatorelease.utils;
 public class LegacyTextWrapper {
     private static final int CHAT_WINDOW_WIDTH = 320;
     private static final int CHAT_STRING_LENGTH = 119;
-    private static final char COLOR_CHAR = '§';
+    public static final char COLOR_CHAR = '§';
     private static final char UNKNOWN_CHAR_PLACEHOLDER = '?';
 
     private static final int[] CHARACTER_WIDTHS = new int[]{
@@ -43,21 +43,23 @@ public class LegacyTextWrapper {
                 lineLength += 2;
                 continue;
             }
-            // check if the character doesn't exceed the array length, otherwise skip it
+
+            int width;
             if (charAt < CHARACTER_WIDTHS.length) {
-                int width = CHARACTER_WIDTHS[charAt];
-                if (lineLength + 1 > CHAT_STRING_LENGTH || lineWidth + width >= CHAT_WINDOW_WIDTH) {
-                    out.append('\n').append(defaultColor != 'f' ? COLOR_CHAR + "" + defaultColor : "");
-                    lineLength = defaultColor != 'f' ? 2 : 0;
-                    lineWidth = 0;
-                } else {
-                    lineWidth += width;
-                }
-                out.append(charAt);
-                lineLength++;
+                width = CHARACTER_WIDTHS[charAt];
             } else {
-                out.append(UNKNOWN_CHAR_PLACEHOLDER);
+                width = CHARACTER_WIDTHS[UNKNOWN_CHAR_PLACEHOLDER];
+                charAt = UNKNOWN_CHAR_PLACEHOLDER;
             }
+
+            if (lineLength + 1 > CHAT_STRING_LENGTH || lineWidth + width >= CHAT_WINDOW_WIDTH) {
+                out.append('\n').append(defaultColor != 'f' ? COLOR_CHAR + "" + defaultColor : "");
+                lineLength = defaultColor != 'f' ? 2 : 0;
+                lineWidth = 0;
+            }
+            out.append(charAt);
+            lineLength++;
+            lineWidth += width;
         }
         return out.toString().split("\n");
     }

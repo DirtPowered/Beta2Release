@@ -79,6 +79,10 @@ public class Utils {
         return blockId == 64 || blockId == 71;
     }
 
+    public static boolean isTrapDoor(int blockId) {
+        return blockId == 96 || blockId == 167;
+    }
+
     public static boolean isSign(int blockId) {
         return blockId == 63 || blockId == 68;
     }

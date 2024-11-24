@@ -1,7 +1,6 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3PlayerLookMovePacketData;
-import com.github.dirtpowered.betaprotocollib.utils.Location;
 import com.github.dirtpowered.betatorelease.configuration.Configuration;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
@@ -29,7 +28,7 @@ public class ServerPlayerPositionRotationTranslator implements ModernToBetaHandl
 
         BetaPlayer betaPlayer = betaSession.getBetaPlayer();
         betaPlayer.setOnGround(false);
-        betaPlayer.setLocation(new Location(x, y, z, pitch, yaw));
+        betaPlayer.updateLocation(x, y, z, yaw, pitch);
 
         // send client settings only in the initial login phase
         if (!betaSession.isLoggedIn()) {

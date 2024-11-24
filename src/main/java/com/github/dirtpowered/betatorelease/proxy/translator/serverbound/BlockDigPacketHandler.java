@@ -38,15 +38,14 @@ public class BlockDigPacketHandler implements BetaToModernHandler<V1_7_3BlockDig
         int z = packetClass.getZ();
 
         final Position pos = new Position(x, y, z);
-        // check if player is about to dig a door block
+        // check if player is about to dig a door block or trapdoor
         final Block block = blockStorage.getBlockAt(x, y, z);
 
-        // emulate left-click to open the door
-        if (block != null && Utils.isDoor(block.getBlockId())) {
-            // send an item use packet to open the door
+        // emulate left-click to open the door, trapdoor
+        if (block != null && (Utils.isDoor(block.getBlockId()) || Utils.isTrapDoor(block.getBlockId()))) {
+            // send an item use packet to open the door or trapdoor
             if (!player.isDigging()) { // prevent from sending multiple packets
                 session.getModernClient().sendModernPacket(new ClientPlayerPlaceBlockPacket(pos, blockFace, Hand.MAIN_HAND, 0, 0, 0));
-                return;
             }
         }
 

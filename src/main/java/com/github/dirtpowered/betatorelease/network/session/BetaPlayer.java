@@ -49,10 +49,14 @@ public class BetaPlayer {
     @Setter
     private FurnaceFuelCache furnaceFuelCache;
 
+    @Setter
+    private boolean sneaking;
+
     protected BetaPlayer(Session session) {
         this.session = session;
         this.furnaceFuelCache = new FurnaceFuelCache(1600, 200);
         this.windowTypeMap = new HashMap<>();
+        this.location = new Location(0, 0, 0, 0, 0);
     }
 
     public void tick() {
@@ -85,6 +89,25 @@ public class BetaPlayer {
     public void setInVehicle(boolean inVehicle, int vehicleEntityId) {
         this.inVehicle = inVehicle;
         this.vehicleEntityId = vehicleEntityId;
+    }
+
+    public void updateLocation(double x, double y, double z, float yaw, float pitch) {
+        this.location.setX(x);
+        this.location.setY(y);
+        this.location.setZ(z);
+        this.location.setYaw(yaw);
+        this.location.setPitch(pitch);
+    }
+
+    public void updateLocation(float yaw, float pitch) {
+        this.location.setYaw(yaw);
+        this.location.setPitch(pitch);
+    }
+
+    public void updateLocation(double x, double y, double z) {
+        this.location.setX(x);
+        this.location.setY(y);
+        this.location.setZ(z);
     }
 
     public void cacheWindowType(int windowId, WindowType windowType) {
