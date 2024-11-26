@@ -1,6 +1,7 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3EntityPositionPacketData;
+import com.github.dirtpowered.betatorelease.data.entity.model.Entity;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
 import com.github.dirtpowered.betatorelease.utils.LegacyRelMovementUtil;
@@ -9,15 +10,27 @@ import com.github.steveice10.mc.protocol.packet.ingame.server.entity.ServerEntit
 
 import java.util.List;
 
+
 public class ServerEntityPositionTranslator implements ModernToBetaHandler<ServerEntityPositionPacket> {
 
     @Override
     public void translate(ServerEntityPositionPacket packet, Session betaSession) {
         int entityId = packet.getEntityId();
 
-        int x = Utils.toAbsolutePos(packet.getMovementX());
-        int y = Utils.toAbsolutePos(packet.getMovementY());
-        int z = Utils.toAbsolutePos(packet.getMovementZ());
+        Entity entity = betaSession.getEntityCache().getEntityById(entityId);
+        int x, y, z;
+
+        if (entity != null) {
+            LegacyRelMovementUtil.PosResidual residual = entity.getResidual();
+
+            x = LegacyRelMovementUtil.toAbsolutePosWithRoundingLeftovers(packet.getMovementX(), residual, LegacyRelMovementUtil.Axis.X);
+            y = LegacyRelMovementUtil.toAbsolutePosWithRoundingLeftovers(packet.getMovementY(), residual, LegacyRelMovementUtil.Axis.Y);
+            z = LegacyRelMovementUtil.toAbsolutePosWithRoundingLeftovers(packet.getMovementZ(), residual, LegacyRelMovementUtil.Axis.Z);
+        } else {
+            x = Utils.toAbsolutePos(packet.getMovementX());
+            y = Utils.toAbsolutePos(packet.getMovementY());
+            z = Utils.toAbsolutePos(packet.getMovementZ());
+        }
 
         List<LegacyRelMovementUtil.RelPos> relPos = LegacyRelMovementUtil.toLegacyRelMove(x, y, z);
 

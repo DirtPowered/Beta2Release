@@ -29,6 +29,10 @@ public class ServerEntityTeleportTranslator implements ModernToBetaHandler<Serve
             // apply offset, so the vehicle is not sinking into the ground
             y += yOffset;
         }
+
+        if (entity != null)
+            entity.getResidual().reset();
+
         betaSession.sendPacket(new V1_7_3EntityTeleportPacketData(entityId, x, Utils.toAbsolutePos(y), z, yaw, pitch));
     }
 }

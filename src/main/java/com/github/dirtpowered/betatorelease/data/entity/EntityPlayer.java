@@ -14,4 +14,8 @@ public class EntityPlayer extends Entity {
     public EntityPlayer(UUID uniqueId) {
         super(uniqueId);
     }
+
+    public EntityPlayer(int entityId) {
+        super(entityId);
+    }
 }

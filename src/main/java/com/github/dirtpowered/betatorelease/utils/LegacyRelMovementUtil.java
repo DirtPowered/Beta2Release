@@ -31,7 +31,43 @@ public class LegacyRelMovementUtil {
         return Math.max(-127, Math.min(value, LegacyRelMovementUtil.MAX_RELATIVE_SIZE));
     }
 
+    public static int toAbsolutePosWithRoundingLeftovers(double delta, PosResidual residual, Axis axis) {
+        double total = delta;
+        switch (axis) {
+            case X: total += residual.x; break;
+            case Y: total += residual.y; break;
+            case Z: total += residual.z; break;
+        }
+
+        int scaled = (int) Math.round(total * 32.0D);
+        double leftover = total - (scaled / 32.0D);
+
+        switch (axis) {
+            case X: residual.x = leftover; break;
+            case Y: residual.y = leftover; break;
+            case Z: residual.z = leftover; break;
+        }
+
+        return scaled;
+    }
+
     public record RelPos(int x, int y, int z) {
         // empty
+    }
+
+    public enum Axis {
+        X, Y, Z
+    }
+
+    public static class PosResidual {
+        double x = 0.0;
+        double y = 0.0;
+        double z = 0.0;
+
+        public void reset() {
+            x = 0.0;
+            y = 0.0;
+            z = 0.0;
+        }
     }
 }
