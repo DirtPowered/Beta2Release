@@ -1,6 +1,7 @@
 package com.github.dirtpowered.betatorelease.proxy.translator.clientbound;
 
 import com.github.dirtpowered.betaprotocollib.packet.Version_B1_7.data.V1_7_3AnimationPacketData;
+import com.github.dirtpowered.betatorelease.data.entity.EntityPlayer;
 import com.github.dirtpowered.betatorelease.data.entity.model.Entity;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.ModernToBetaHandler;
@@ -13,8 +14,8 @@ public class ServerEntityAnimationTranslator implements ModernToBetaHandler<Serv
         int entityId = packet.getEntityId();
         Entity entity = betaSession.getEntityCache().getEntityById(entityId);
 
-        if (entity != null)
-            return; // this means that it's not human, so we don't need to send an animation packet
+        if (!(entity instanceof EntityPlayer))
+            return; // only players have animations
 
         int status = switch (packet.getAnimation()) {
             case SWING_ARM -> 1;
