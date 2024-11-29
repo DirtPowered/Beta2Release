@@ -2,6 +2,8 @@ package com.github.dirtpowered.betatorelease.data.chunk;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+
 /**
  * Represents a chunk of the map.
  *
@@ -38,6 +40,8 @@ public class BetaChunk {
         this.metaData = new byte[WIDTH * HEIGHT * DEPTH];
         this.skyLight = new byte[WIDTH * HEIGHT * DEPTH];
         this.blockLight = new byte[WIDTH * HEIGHT * DEPTH];
+
+        Arrays.fill(skyLight, (byte) -1);
     }
 
     public void setBlock(final int x, final int y, final int z, final int type) {

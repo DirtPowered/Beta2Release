@@ -38,7 +38,7 @@ public class BlockMappings {
     }
 
     private static int packBlockKey(int blockId, int blockData) {
-        return (blockId << 4) | (blockData & 0xF);
+        return (blockId << 4) | (blockData & 0xFF);
     }
 
     public static RemappedBlock getRemappedBlock(int blockId, int blockData) {

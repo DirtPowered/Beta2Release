@@ -14,8 +14,10 @@ public class ServerEntityAnimationTranslator implements ModernToBetaHandler<Serv
         int entityId = packet.getEntityId();
         Entity entity = betaSession.getEntityCache().getEntityById(entityId);
 
-        if (!(entity instanceof EntityPlayer))
-            return; // only players have animations
+        int id = betaSession.getBetaPlayer().getEntityId();
+        boolean allow = entityId == id || entity instanceof EntityPlayer;
+
+        if (!allow) return; // only players have animations
 
         int status = switch (packet.getAnimation()) {
             case SWING_ARM -> 1;

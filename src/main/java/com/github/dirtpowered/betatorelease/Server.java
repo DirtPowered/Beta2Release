@@ -7,7 +7,6 @@ import com.github.dirtpowered.betatorelease.data.entity.cache.PlayerCache;
 import com.github.dirtpowered.betatorelease.data.entity.model.Entity;
 import com.github.dirtpowered.betatorelease.network.codec.PipelineFactory;
 import com.github.dirtpowered.betatorelease.network.handler.ConnectionLimiterHandler;
-import com.github.dirtpowered.betatorelease.network.handler.VersionDetectionHandler;
 import com.github.dirtpowered.betatorelease.network.registry.SessionRegistry;
 import com.github.dirtpowered.betatorelease.network.session.BetaPlayer;
 import com.github.dirtpowered.betatorelease.network.session.Session;
@@ -98,7 +97,6 @@ public class Server {
                         channel.pipeline().addLast("conn_limit", new ConnectionLimiterHandler());
                         channel.pipeline().addLast("timeout", new ReadTimeoutHandler(10));
                         // minecraft pipeline
-                        channel.pipeline().addLast("version_checker", new VersionDetectionHandler());
                         channel.pipeline().addLast("mc_pipeline", new PipelineFactory());
                         channel.pipeline().addLast("user_session", new Session(server, channel, sessionRegistry, betaToModernRegistry));
                     }
