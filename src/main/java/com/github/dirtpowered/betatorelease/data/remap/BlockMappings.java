@@ -15,13 +15,15 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class BlockMappings {
     private final static int MAX_SUPPORTED_BLOCK_ID = 97;
     private final static int DEFAULT_BLOCK_ID = 1;
     private final static int DEFAULT_ITEM_ID = 1;
-    private final static Map<Integer, RemappedBlock> blockCache = new HashMap<>();
-    private final static Map<Integer, RemappedItem> itemCache = new HashMap<>();
+    private final static Map<Integer, RemappedBlock> blockCache = new ConcurrentHashMap<>();
+    private final static Map<Integer, RemappedItem> itemCache = new ConcurrentHashMap<>();
+
     private static Map<String, String> blockMappings = new HashMap<>();
     private static Map<String, String> itemMappings = new HashMap<>();
 
@@ -38,7 +40,7 @@ public class BlockMappings {
     }
 
     private static int packBlockKey(int blockId, int blockData) {
-        return (blockId << 4) | (blockData & 0xFF);
+        return (blockId << 8) | (blockData & 0xFF);
     }
 
     public static RemappedBlock getRemappedBlock(int blockId, int blockData) {
@@ -46,8 +48,9 @@ public class BlockMappings {
             throw new IllegalArgumentException("block data must be between 0 and 15");
 
         int key = packBlockKey(blockId, blockData);
-        if (blockCache.containsKey(key))
-            return blockCache.get(key);
+        RemappedBlock cachedBlock = blockCache.get(key);
+        if (cachedBlock != null)
+            return cachedBlock;
 
         String keyStr = blockId + ":" + blockData;
         String remapped = blockMappings.get(keyStr);
@@ -72,8 +75,9 @@ public class BlockMappings {
 
     public static RemappedItem getRemappedItem(int itemId, int itemData) {
         int key = packBlockKey(itemId, itemData);
-        if (itemCache.containsKey(key))
-            return itemCache.get(key);
+        RemappedItem cachedItem = itemCache.get(key);
+        if (cachedItem != null)
+            return cachedItem;
 
         String keyStr = itemId + ":" + itemData;
         String remapped = itemMappings.get(keyStr);
