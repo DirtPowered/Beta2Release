@@ -6,6 +6,7 @@ import com.github.dirtpowered.betaprotocollib.model.Packet;
 import com.github.dirtpowered.betatorelease.Main;
 import com.github.dirtpowered.betatorelease.utils.Utils;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
 
@@ -20,6 +21,7 @@ public class PacketDecoder extends ReplayingDecoder<Packet<?>> {
 
         if (!BetaLib.getRegistry().hasPacket(packetId)) {
             Main.LOGGER.warn("Packet {}[{}] is not registered", Utils.toHex(packetId), packetId);
+            list.add(Unpooled.EMPTY_BUFFER);
             return;
         }
 

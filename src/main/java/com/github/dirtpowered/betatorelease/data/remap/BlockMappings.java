@@ -1,6 +1,7 @@
 package com.github.dirtpowered.betatorelease.data.remap;
 
 import com.github.dirtpowered.betatorelease.Main;
+import com.github.dirtpowered.betatorelease.utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import lombok.Getter;
@@ -40,7 +41,7 @@ public class BlockMappings {
     }
 
     private static int packBlockKey(int blockId, int blockData) {
-        return (blockId << 8) | (blockData & 0xFF);
+        return (blockId << 4) | blockData & 0xF;
     }
 
     public static RemappedBlock getRemappedBlock(int blockId, int blockData) {
@@ -74,7 +75,12 @@ public class BlockMappings {
     }
 
     public static RemappedItem getRemappedItem(int itemId, int itemData) {
+        // skip remapping for damageable items, we need to preserve item data (durability)
+        if (Utils.isDamageable(itemId))
+            return new RemappedItem(itemId, itemData);
+
         int key = packBlockKey(itemId, itemData);
+
         RemappedItem cachedItem = itemCache.get(key);
         if (cachedItem != null)
             return cachedItem;

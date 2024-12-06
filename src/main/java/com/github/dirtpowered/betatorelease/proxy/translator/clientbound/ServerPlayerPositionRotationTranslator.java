@@ -33,7 +33,8 @@ public class ServerPlayerPositionRotationTranslator implements ModernToBetaHandl
         // send client settings only in the initial login phase
         if (!betaSession.isLoggedIn()) {
             Configuration config = betaSession.getServer().getConfiguration();
-            betaSession.getModernClient().sendModernPacket(new ClientSettingsPacket(config.getLocale().getCode(), config.getRenderDistance(), ChatVisibility.FULL, true, SkinPart.values(), Hand.MAIN_HAND));
+            betaSession.getModernClient().sendModernPacket(new ClientSettingsPacket(config.getLocale().getCode(), config.getRenderDistance(), ChatVisibility.FULL, true, SkinPart.values(),
+                    /* 0 - left, 1 - right */ Hand.OFF_HAND));
 
             // send held item change on join because there's no way to send the current server-side slot to the client
             betaSession.getModernClient().sendModernPacket(new ClientPlayerChangeHeldItemPacket(0));
