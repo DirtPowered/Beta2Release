@@ -4,7 +4,7 @@ public class LegacyTextWrapper {
     private static final int CHAT_WINDOW_WIDTH = 320;
     private static final int CHAT_STRING_LENGTH = 119;
     public static final char COLOR_CHAR = '§';
-    private static final char UNKNOWN_CHAR_PLACEHOLDER = '?';
+    public static final char UNKNOWN_CHAR_PLACEHOLDER = '?';
 
     private static final int[] CHARACTER_WIDTHS = new int[]{
             1, 9, 9, 8, 8, 8, 8, 7, 9, 8, 9, 9, 8, 9, 9, 9,
@@ -66,5 +66,9 @@ public class LegacyTextWrapper {
 
     public static String translateAlternateColorCodes(char c, String message) {
         return message.replace(c, COLOR_CHAR);
+    }
+
+    public static boolean isCharSupported(char c) {
+        return c < CHARACTER_WIDTHS.length;
     }
 }

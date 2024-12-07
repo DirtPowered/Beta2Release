@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Utils {
     private final static int[] DAMAGEABLE_ITEMS = {
@@ -57,8 +58,14 @@ public class Utils {
 
         for (int line = 0; line < 4; ++line) {
             try {
-                String nTag = (String) strings.get("Text" + (line + 1)).getValue();
-                signLines[line] = StringUtils.substring(LangStorage.translate(nTag, false), 0, 15);
+                AtomicReference<String> nTag = new AtomicReference<>((String) strings.get("Text" + (line + 1)).getValue());
+                // replace unsupported chars
+                nTag.get().chars().forEach(c -> {
+                    if (!LegacyTextWrapper.isCharSupported((char) c)) {
+                        nTag.set(nTag.get().replace((char) c, LegacyTextWrapper.UNKNOWN_CHAR_PLACEHOLDER));
+                    }
+                });
+                signLines[line] = StringUtils.substring(LangStorage.translate(nTag.get(), false), 0, 15);
             } catch (Exception e) {
                 signLines[line] = "error";
             }
@@ -88,11 +95,6 @@ public class Utils {
         return (int) (pos * 32.0D);
     }
 
-    private static int floor_float(float var0) {
-        int var1 = (int) var0;
-        return var0 < (float) var1 ? var1 - 1 : var1;
-    }
-
     public static boolean isDoor(int blockId) {
         return blockId == 64 || blockId == 71;
     }
@@ -106,7 +108,7 @@ public class Utils {
     }
 
     public static int toAbsoluteRotation(float rotation) {
-        return floor_float(rotation * 256.0F / 360.0F);
+        return (int) (rotation * 256.0F / 360.0F);
     }
 
     public static int toBetaVelocity(double vec) {
