@@ -29,10 +29,10 @@ public class BlockStorage {
     }
 
     public void setBlockAt(int x, int y, int z, int blockId, int blockData) {
+        ChunkPart part = blockStorage.computeIfAbsent(getKey(x >> 4, z >> 4), k -> new ChunkPart());
         if (!Utils.isAllowedCacheBlock(blockId))
             return;
 
-        ChunkPart part = blockStorage.computeIfAbsent(getKey(x >> 4, z >> 4), k -> new ChunkPart());
         part.setBlock(x & 15, y & 255, z & 15, blockId, blockData);
     }
 
