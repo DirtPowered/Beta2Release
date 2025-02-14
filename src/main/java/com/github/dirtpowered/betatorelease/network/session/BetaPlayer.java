@@ -19,9 +19,6 @@ public class BetaPlayer {
     private int entityId;
 
     @Setter
-    private String uuid;
-
-    @Setter
     private String serverId;
 
     private final Session session;
@@ -51,6 +48,9 @@ public class BetaPlayer {
 
     @Setter
     private boolean sneaking;
+
+    @Getter
+    private final byte[] currentMapTable = new byte[128 * 128];
 
     protected BetaPlayer(Session session) {
         this.session = session;
