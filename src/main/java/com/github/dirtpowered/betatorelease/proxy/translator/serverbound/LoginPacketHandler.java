@@ -8,6 +8,7 @@ import com.github.dirtpowered.betatorelease.model.ProtocolState;
 import com.github.dirtpowered.betatorelease.network.session.Session;
 import com.github.dirtpowered.betatorelease.proxy.translator.BetaToModernHandler;
 import com.github.dirtpowered.betatorelease.utils.MojangAuthUtil;
+import com.github.steveice10.mc.auth.util.UUIDSerializer;
 
 public class LoginPacketHandler implements BetaToModernHandler<V1_7_3LoginPacketData> {
 
@@ -45,7 +46,7 @@ public class LoginPacketHandler implements BetaToModernHandler<V1_7_3LoginPacket
 
             if (code != -1 && code != 204 && response.contains("\"id\"") && response.contains("\"name\"")) {
                 String uuid = response.split("\"id\" : \"")[1].split("\",")[0];
-                session.getBetaPlayer().setUuid(uuid); // for future use
+                session.getBetaPlayer().setUuid(UUIDSerializer.fromString(uuid)); // for future use
 
                 // connect immediately after authentication
                 session.getModernClient().connect(session);
