@@ -22,7 +22,9 @@ public class ServerPlayEffectTranslator implements ModernToBetaHandler<ServerPla
         if (effect.equals(ParticleEffect.BREAK_BLOCK)) {
             if (packet.getData() instanceof BreakBlockEffectData data) {
                 int remappedBlockId = BlockMappings.getRemappedBlock(data.getBlockState().getId()).blockId();
-                packedData = (byte) (remappedBlockId + (data.getBlockState().getData() << 12));
+                int dataId = data.getBlockState().getData() & 0xFF;
+
+                packedData = (remappedBlockId + (dataId << 8));
                 effectId = 2001;
             }
         } else if (effect.equals(ParticleEffect.SMOKE)) {
